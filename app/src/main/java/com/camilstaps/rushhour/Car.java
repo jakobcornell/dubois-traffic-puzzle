@@ -2,12 +2,14 @@ package com.camilstaps.rushhour;
 
 import android.content.Context;
 import android.graphics.Color;
+import android.util.Log;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
+import android.widget.TableLayout;
 
 /**
  * Created by camilstaps on 16-4-15.
@@ -22,6 +24,9 @@ public class Car {
     private static final int MARGIN = 5;
 
     private MoveListener moveListener;
+
+    private float widthPerCell;
+    private int calculatedWidth, calculatedHeight;
 
     ImageView iv;
 
@@ -51,23 +56,26 @@ public class Car {
         return (SIZE + MARGIN) * (endCoordinate.getY() - startCoordinate.getY()) + SIZE;
     }
 
-    public void setImageViewMargins() {
-        ViewGroup.MarginLayoutParams marginParams = new ViewGroup.MarginLayoutParams(getWidth(), getHeight());
-        marginParams.setMargins(startCoordinate.getX() * (SIZE + MARGIN), startCoordinate.getY() * (SIZE + MARGIN), MARGIN, MARGIN);
-        RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams(marginParams);
-        iv.setLayoutParams(layoutParams);
+    public void setLayoutParams() {
+        ViewGroup.MarginLayoutParams marginParams = new RelativeLayout.LayoutParams(calculatedWidth, calculatedHeight);
+        marginParams.setMargins((int) (startCoordinate.getX() * (widthPerCell + MARGIN) + MARGIN), (int) (startCoordinate.getY() * (widthPerCell + MARGIN) + MARGIN), MARGIN, MARGIN);
+        iv.setLayoutParams(marginParams);
     }
 
-    public ImageView getImageView(Context context) {
+    public ImageView getImageView(Context context, float widthPerCell) {
+
+        Log.d("Car", Float.toString(widthPerCell));
+
+        this.widthPerCell = widthPerCell - MARGIN;
+        calculatedWidth = (int) ((endCoordinate.getX() - startCoordinate.getX() + 1) * (this.widthPerCell + MARGIN) - MARGIN);
+        calculatedHeight = (int) ((endCoordinate.getY() - startCoordinate.getY() + 1) * (this.widthPerCell + MARGIN) - MARGIN);
 
         iv = new ImageView(context);
         iv.setBackgroundColor(colour);
-        int width = getWidth();
-        int height = getHeight();
-        iv.setMinimumWidth(width);
-        iv.setMinimumHeight(height);
+        iv.setMinimumWidth(calculatedWidth);
+        iv.setMinimumHeight(calculatedHeight);
 
-        setImageViewMargins();
+        setLayoutParams();
 
         final GestureDetector gdt = new GestureDetector(new GestureListener());
         iv.setOnTouchListener(new View.OnTouchListener() {
@@ -101,14 +109,14 @@ public class Car {
         startCoordinate.move(offset, 0);
         endCoordinate.move(offset, 0);
 
-        setImageViewMargins();
+        setLayoutParams();
     }
 
     public void moveVertically(int offset) {
         startCoordinate.move(0, offset);
         endCoordinate.move(0, offset);
 
-        setImageViewMargins();
+        setLayoutParams();
     }
 
     public Coordinate wouldMoveTo(int offset) {

@@ -2,6 +2,7 @@ package com.camilstaps.rushhour;
 
 import android.content.Context;
 import android.util.Log;
+import android.view.ViewGroup;
 import android.widget.RelativeLayout;
 
 import java.util.HashSet;
@@ -46,9 +47,11 @@ public class Board {
         cars.add(car);
     }
 
-    public void addToLayout(Context context, RelativeLayout layout) {
+    public void addToLayout(Context context, ViewGroup layout) {
+        Log.d("Board", Integer.toString(layout.getWidth()));
+
         for (Car car : cars) {
-            layout.addView(car.getImageView(context));
+            layout.addView(car.getImageView(context, (layout.getWidth() - layout.getPaddingLeft() - layout.getPaddingRight()) / DIMENSION));
         }
     }
 
