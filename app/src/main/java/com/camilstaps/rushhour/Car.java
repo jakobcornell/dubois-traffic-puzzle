@@ -16,7 +16,6 @@ import android.widget.TableLayout;
  */
 public class Car {
 
-    //private int startCoordinate.getX(), startCoordinate.getY(), endCoordinate.getX(), endCoordinate.getY();
     private Coordinate startCoordinate, endCoordinate;
     private final int colour;
 
@@ -42,18 +41,8 @@ public class Car {
         this.colour = colour;
     }
 
-    public int getColour() { return colour; }
-
     public void setMoveListener(MoveListener listener) {
         moveListener = listener;
-    }
-
-    private int getWidth() {
-        return (SIZE + MARGIN) * (endCoordinate.getX() - startCoordinate.getX()) + SIZE;
-    }
-
-    private int getHeight() {
-        return (SIZE + MARGIN) * (endCoordinate.getY() - startCoordinate.getY()) + SIZE;
     }
 
     public void setLayoutParams() {

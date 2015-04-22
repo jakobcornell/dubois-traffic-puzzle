@@ -24,12 +24,9 @@ public class Board {
         public void onMove(Car car, int offset) {
             Coordinate newC = car.wouldMoveTo(offset);
             if (newC.getY() > DIMENSION - 1 || newC.getX() > DIMENSION - 1 || newC.getX() < 0 || newC.getY() < 0) return;
-            for (Car iter : cars) {
-                if (iter.occupies(newC)) {
-                    Log.d("Board", "Can't move");
+            for (Car iter : cars)
+                if (iter.occupies(newC))
                     return;
-                }
-            }
             car.move(offset);
             driveListener.onDrive();
         }
@@ -51,8 +48,6 @@ public class Board {
     }
 
     public void addToLayout(Context context, ViewGroup layout) {
-        Log.d("Board", Integer.toString(layout.getWidth()));
-
         for (Car car : cars) {
             layout.addView(car.getImageView(context, (layout.getWidth() - layout.getPaddingLeft() - layout.getPaddingRight()) / DIMENSION));
         }
