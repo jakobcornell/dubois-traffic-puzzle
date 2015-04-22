@@ -17,6 +17,8 @@ public class Board {
 
     public static final int DIMENSION = 6;
 
+    private DriveListener driveListener;
+
     private MoveListener moveListener = new MoveListener() {
         @Override
         public void onMove(Car car, int offset) {
@@ -29,6 +31,7 @@ public class Board {
                 }
             }
             car.move(offset);
+            driveListener.onDrive();
         }
     };
 
@@ -53,6 +56,10 @@ public class Board {
         for (Car car : cars) {
             layout.addView(car.getImageView(context, (layout.getWidth() - layout.getPaddingLeft() - layout.getPaddingRight()) / DIMENSION));
         }
+    }
+
+    public void setDriveListener(DriveListener dl) {
+        driveListener = dl;
     }
 
 }

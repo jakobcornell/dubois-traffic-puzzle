@@ -2,6 +2,8 @@ package com.camilstaps.rushhour;
 
 import android.app.Activity;
 import android.graphics.Color;
+import android.media.AudioManager;
+import android.media.SoundPool;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.ViewTreeObserver;
@@ -18,6 +20,10 @@ import com.camilstaps.rushhour.util.SystemUiHider;
  * @see SystemUiHider
  */
 public class FullscreenActivity extends Activity {
+
+    private SoundPool soundPool;
+    private boolean soundBackgroundLoaded = false;
+    private int soundBackgroundId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,6 +57,20 @@ public class FullscreenActivity extends Activity {
             }
         });
 
-        //board.addToLayout(this, boardLayout);
+        soundPool = new SoundPool(2, AudioManager.STREAM_MUSIC, 0);
+        soundPool.setOnLoadCompleteListener(new SoundPool.OnLoadCompleteListener() {
+            @Override
+            public void onLoadComplete(SoundPool soundPool, int sampleId, int status) {
+                soundBackgroundLoaded = true;
+            }
+        });
+        soundBackgroundId = soundPool.load(this, R.raw.car_drive, 1);
+
+        board.setDriveListener(new DriveListener() {
+            @Override
+            public void onDrive() {
+                soundPool.play(soundBackgroundId, 1, 1, 1, 0, 1f);
+            }
+        });
     }
 }

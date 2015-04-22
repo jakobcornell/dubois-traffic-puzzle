@@ -64,8 +64,6 @@ public class Car {
 
     public ImageView getImageView(Context context, float widthPerCell) {
 
-        Log.d("Car", Float.toString(widthPerCell));
-
         this.widthPerCell = widthPerCell - MARGIN;
         calculatedWidth = (int) ((endCoordinate.getX() - startCoordinate.getX() + 1) * (this.widthPerCell + MARGIN) - MARGIN);
         calculatedHeight = (int) ((endCoordinate.getY() - startCoordinate.getY() + 1) * (this.widthPerCell + MARGIN) - MARGIN);
