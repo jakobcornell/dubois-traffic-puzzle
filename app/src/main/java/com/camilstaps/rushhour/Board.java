@@ -23,10 +23,16 @@ public class Board {
         @Override
         public void onMove(Car car, int offset) {
             Coordinate newC = car.wouldMoveTo(offset);
-            if (newC.getY() > DIMENSION - 1 || newC.getX() > DIMENSION - 1 || newC.getX() < 0 || newC.getY() < 0) return;
-            for (Car iter : cars)
-                if (iter.occupies(newC))
+            if (newC.getY() > DIMENSION - 1 || newC.getX() > DIMENSION - 1 || newC.getX() < 0 || newC.getY() < 0) {
+                driveListener.onBlocked();
+                return;
+            }
+            for (Car iter : cars) {
+                if (iter.occupies(newC)) {
+                    driveListener.onBlocked();
                     return;
+                }
+            }
             car.move(offset);
             driveListener.onDrive();
         }

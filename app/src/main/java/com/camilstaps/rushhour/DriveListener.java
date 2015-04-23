@@ -5,4 +5,5 @@ package com.camilstaps.rushhour;
  */
 public abstract class DriveListener {
     public abstract void onDrive();
+    public abstract void onBlocked();
 }

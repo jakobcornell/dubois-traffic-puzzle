@@ -1,7 +1,6 @@
 package com.camilstaps.rushhour;
 
 import android.app.Activity;
-import android.graphics.Color;
 import android.media.AudioManager;
 import android.media.SoundPool;
 import android.os.Bundle;
@@ -13,7 +12,7 @@ import java.io.InputStream;
 public class GamePlayActivity extends Activity {
 
     private SoundPool soundPool;
-    private int soundBackgroundId, soundCarDriveId;
+    private int soundBackgroundId, soundCarDriveId, soundCantMoveId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,8 +47,9 @@ public class GamePlayActivity extends Activity {
                 }
             }
         });
-        soundCarDriveId = soundPool.load(this, R.raw.car_drive, 1);
         soundBackgroundId = soundPool.load(this, R.raw.tune, 2);
+        soundCarDriveId = soundPool.load(this, R.raw.car_drive, 1);
+        soundCantMoveId = soundPool.load(this, R.raw.cantmove, 1);
 
         final RelativeLayout boardLayout = (RelativeLayout) findViewById(R.id.board);
         ViewTreeObserver vto = boardLayout.getViewTreeObserver();
@@ -65,6 +65,11 @@ public class GamePlayActivity extends Activity {
             @Override
             public void onDrive() {
                 soundPool.play(soundCarDriveId, 1, 1, 1, 0, 1);
+            }
+
+            @Override
+            public void onBlocked() {
+                soundPool.play(soundCantMoveId, 1, 1, 1, 0, 1);
             }
         });
     }
