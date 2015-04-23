@@ -17,6 +17,14 @@ public class BoardLoader {
 
     public Board loadBoard(InputStream file)
     {
+        /*
+        Level formaat:
+        1 regel: Aantal auto's
+
+        voor iedere auto:
+        x1 y1 x2 y2 op een regel.
+        r g b op een regel.
+         */
         Scanner scan = new Scanner(file);
 
         Board board = new Board();
