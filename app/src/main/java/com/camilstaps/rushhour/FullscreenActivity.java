@@ -5,20 +5,9 @@ import android.graphics.Color;
 import android.media.AudioManager;
 import android.media.SoundPool;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.ViewTreeObserver;
-import android.widget.GridLayout;
-import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 
-import com.camilstaps.rushhour.util.SystemUiHider;
-
-/**
- * An example full-screen activity that shows and hides the system UI (i.e.
- * status bar and navigation/system bar) with user interaction.
- *
- * @see SystemUiHider
- */
 public class FullscreenActivity extends Activity {
 
     private SoundPool soundPool;
@@ -48,7 +37,6 @@ public class FullscreenActivity extends Activity {
         soundPool.setOnLoadCompleteListener(new SoundPool.OnLoadCompleteListener() {
             @Override
             public void onLoadComplete(SoundPool soundPool, int sampleId, int status) {
-                Log.d("FA", "Loaded: " + sampleId);
                 if (sampleId == soundBackgroundId) {
                     soundPool.play(soundBackgroundId, 1, 1, 2, -1, 1);
                 }
