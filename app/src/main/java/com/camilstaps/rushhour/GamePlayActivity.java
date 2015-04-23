@@ -8,7 +8,7 @@ import android.os.Bundle;
 import android.view.ViewTreeObserver;
 import android.widget.RelativeLayout;
 
-public class FullscreenActivity extends Activity {
+public class GamePlayActivity extends Activity {
 
     private SoundPool soundPool;
     private int soundBackgroundId, soundCarDriveId;
