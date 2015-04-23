@@ -19,6 +19,9 @@ public class Board {
 
     private DriveListener driveListener;
 
+    /**
+     * Move a car if possible, and call the appropriate listeners
+     */
     private MoveListener moveListener = new MoveListener() {
         @Override
         public void onMove(Car car, int offset) {
@@ -38,14 +41,14 @@ public class Board {
         }
     };
 
-    public Board() {
-        this(new HashSet<Car>());
-    }
-
     public Board(Set<Car> cars) {
         for (Car car : cars) {
             add(car);
         }
+    }
+
+    public Board() {
+        this(new HashSet<Car>());
     }
 
     public void add(Car car) {
@@ -53,10 +56,38 @@ public class Board {
         cars.add(car);
     }
 
+    /**
+     * Add all cars to an existing layout
+     * RelativeLayout is assumed, although this may work with other Layouts
+     * @param context
+     * @param layout
+     */
     public void addToLayout(Context context, ViewGroup layout) {
         for (Car car : cars) {
-            layout.addView(car.getImageView(context, (layout.getWidth() - layout.getPaddingLeft() - layout.getPaddingRight()) / DIMENSION));
+            layout.addView(car.getImageView(
+                    context,
+                    (layout.getWidth() - layout.getPaddingLeft() - layout.getPaddingRight()) / DIMENSION
+            ));
         }
+    }
+
+    /**
+     * True iff the red car can move out without problems
+     * @return
+     */
+    public boolean isSolved() {
+        for (int x = DIMENSION - 1; x >= 0; x++) {
+            for (Car car : cars) {
+                if (car.occupies(new Coordinate(x, 3))) {
+                    if (car.canMoveHorizontally()) {
+                        return true;
+                    } else {
+                        return false;
+                    }
+                }
+            }
+        }
+        return false;
     }
 
     public void setDriveListener(DriveListener dl) {
