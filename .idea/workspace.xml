@@ -17,7 +17,17 @@
     <option name="TOOL_WINDOW_CONFIGURED_FILTER" value="app: com.camilstaps.thesettingsun" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="2889a970-265a-4184-9574-a44d5cc9412e" name="Default" comment="" />
+    <list default="true" id="2889a970-265a-4184-9574-a44d5cc9412e" name="Default" comment="">
+      <change type="DELETED" beforePath="$PROJECT_DIR$/RushHour.iml" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/app/app.iml" afterPath="" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/java/com/camilstaps/rushhour/FullscreenActivity.java" afterPath="$PROJECT_DIR$/app/src/main/java/com/camilstaps/rushhour/FullscreenActivity.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/libraries/appcompat_v7_22_0_0.xml" afterPath="$PROJECT_DIR$/.idea/libraries/appcompat_v7_22_0_0.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/gradlew.bat" afterPath="$PROJECT_DIR$/gradlew.bat" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/misc.xml" afterPath="$PROJECT_DIR$/.idea/misc.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/libraries/support_v4_22_0_0.xml" afterPath="$PROJECT_DIR$/.idea/libraries/support_v4_22_0_0.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/vcs.xml" afterPath="$PROJECT_DIR$/.idea/vcs.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
+    </list>
     <ignored path="The Setting Sun.iws" />
     <ignored path=".idea/workspace.xml" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -42,16 +52,24 @@
       <file leaf-file-name="FullscreenActivity.java" pinned="false" current="true" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/app/src/main/java/com/camilstaps/rushhour/FullscreenActivity.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.86918604" vertical-offset="601" max-vertical-offset="1065">
-              <caret line="71" column="17" selection-start-line="71" selection-start-column="17" selection-end-line="71" selection-end-column="17" />
+            <state vertical-scroll-proportion="0.61627907" vertical-offset="478" max-vertical-offset="1035">
+              <caret line="57" column="59" selection-start-line="57" selection-start-column="59" selection-end-line="57" selection-end-column="59" />
               <folding>
-                <element signature="e#2162#2382#0" expanded="true" />
-                <element signature="e#2371#2372#0" expanded="true" />
-                <element signature="e#2646#2934#0" expanded="true" />
-                <element signature="e#2923#2924#0" expanded="true" />
-                <element signature="e#2969#3206#0" expanded="true" />
-                <element signature="e#3195#3196#0" expanded="true" />
+                <element signature="e#2128#2496#0" expanded="true" />
+                <element signature="e#2485#2486#0" expanded="true" />
+                <element signature="e#3146#3313#0" expanded="true" />
+                <element signature="e#3302#3303#0" expanded="true" />
               </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="Car.java" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/app/src/main/java/com/camilstaps/rushhour/Car.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="0.0" vertical-offset="225" max-vertical-offset="2130">
+              <caret line="37" column="32" selection-start-line="37" selection-start-column="32" selection-end-line="37" selection-end-column="32" />
+              <folding />
             </state>
           </provider>
         </entry>
@@ -62,6 +80,9 @@
     <FindUsagesManager>
       <setting name="OPEN_NEW_TAB" value="true" />
     </FindUsagesManager>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
   <component name="GradleLocalSettings">
     <option name="tasksExpandState">
@@ -1330,14 +1351,30 @@
     <option name="width" value="1313" />
     <option name="height" value="744" />
   </component>
-  <component name="ProjectLevelVcsManager" settingsEditedManually="false">
+  <component name="ProjectInspectionProfilesVisibleTreeState">
+    <entry key="Project Default">
+      <profile-state>
+        <expanded-state>
+          <State>
+            <id />
+          </State>
+        </expanded-state>
+        <selected-state>
+          <State>
+            <id>Abstraction issues</id>
+          </State>
+        </selected-state>
+      </profile-state>
+    </entry>
+  </component>
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true">
     <OptionsSetting value="true" id="Add" />
     <OptionsSetting value="true" id="Remove" />
     <OptionsSetting value="true" id="Checkout" />
     <OptionsSetting value="true" id="Update" />
     <OptionsSetting value="true" id="Status" />
     <OptionsSetting value="true" id="Edit" />
-    <ConfirmationsSetting value="0" id="Add" />
+    <ConfirmationsSetting value="1" id="Add" />
     <ConfirmationsSetting value="0" id="Remove" />
   </component>
   <component name="ProjectReloadState">
@@ -1357,26 +1394,6 @@
     </navigator>
     <panes>
       <pane id="PackagesPane" />
-      <pane id="ProjectPane">
-        <subPane>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="RushHour" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="RushHour" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="RushHour" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-        </subPane>
-      </pane>
       <pane id="Scope" />
       <pane id="AndroidView">
         <subPane>
@@ -1384,6 +1401,10 @@
             <PATH_ELEMENT>
               <option name="myItemId" value="RushHour" />
               <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="Gradle Scripts" />
+              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidBuildScriptsGroupNode" />
             </PATH_ELEMENT>
           </PATH>
           <PATH>
@@ -1398,6 +1419,24 @@
             <PATH_ELEMENT>
               <option name="myItemId" value="res" />
               <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidResFolderNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="RushHour" />
+              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="app" />
+              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidModuleNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="res" />
+              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidResFolderNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="raw" />
+              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidResFolderTypeNode" />
             </PATH_ELEMENT>
           </PATH>
           <PATH>
@@ -1444,6 +1483,110 @@
           </PATH>
         </subPane>
       </pane>
+      <pane id="ProjectPane">
+        <subPane>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="RushHour" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="RushHour" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="RushHour" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="RushHour" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="RushHour" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="app" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="RushHour" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="RushHour" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="app" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="src" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="main" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="RushHour" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="RushHour" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="app" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="src" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="main" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="java" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="rushhour" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="RushHour" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="RushHour" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="app" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="src" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+        </subPane>
+      </pane>
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -1460,6 +1603,12 @@
     <property name="FullScreen" value="false" />
     <property name="OverrideImplement.combined" value="true" />
     <property name="OverrideImplement.overriding.sorted" value="false" />
+    <property name="android.project.structure.last.selected" value="SDK Location" />
+    <property name="android.project.structure.proportion" value="0.15" />
+    <property name="options.lastSelected" value="project.propVCSSupport.Mappings" />
+    <property name="options.splitter.main.proportions" value="0.3" />
+    <property name="options.splitter.details.proportions" value="0.2" />
+    <property name="options.searchVisible" value="true" />
   </component>
   <component name="RecentsManager">
     <key name="MoveClassesOrPackagesDialog.RECENTS_KEY">
@@ -1638,7 +1787,6 @@
       <window_info id="Palette&#9;" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Changes" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Designer" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
-      <window_info id="Preview" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="15" side_tool="false" content_ui="tabs" />
       <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="8" side_tool="true" content_ui="tabs" />
@@ -1660,6 +1808,7 @@
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
+      <window_info id="Preview" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
@@ -1687,15 +1836,52 @@
   <component name="editorHistoryManager">
     <entry file="file://$PROJECT_DIR$/app/src/main/java/com/camilstaps/rushhour/FullscreenActivity.java">
       <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="1230">
+          <caret line="54" column="69" selection-start-line="54" selection-start-column="69" selection-end-line="54" selection-end-column="69" />
+          <folding>
+            <element signature="e#2128#2496#0" expanded="true" />
+            <element signature="e#2485#2486#0" expanded="true" />
+            <element signature="e#3146#3313#0" expanded="true" />
+            <element signature="e#3302#3303#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/camilstaps/rushhour/FullscreenActivity.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="780" max-vertical-offset="930">
+          <caret line="71" column="17" selection-start-line="71" selection-start-column="17" selection-end-line="71" selection-end-column="17" />
+          <folding>
+            <element signature="e#2128#2496#0" expanded="true" />
+            <element signature="e#2485#2486#0" expanded="true" />
+            <element signature="e#3146#3313#0" expanded="true" />
+            <element signature="e#3302#3303#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/camilstaps/rushhour/FullscreenActivity.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="1065">
+          <caret line="71" column="17" selection-start-line="71" selection-start-column="17" selection-end-line="71" selection-end-column="17" />
+          <folding>
+            <element signature="e#2128#2496#0" expanded="true" />
+            <element signature="e#2485#2486#0" expanded="true" />
+            <element signature="e#3146#3313#0" expanded="true" />
+            <element signature="e#3302#3303#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/camilstaps/rushhour/FullscreenActivity.java">
+      <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0" vertical-offset="285" max-vertical-offset="720">
           <caret line="19" column="41" selection-start-line="19" selection-start-column="41" selection-end-line="19" selection-end-column="41" />
           <folding>
-            <element signature="e#2162#2382#0" expanded="true" />
-            <element signature="e#2371#2372#0" expanded="true" />
-            <element signature="e#2646#2934#0" expanded="true" />
-            <element signature="e#2923#2924#0" expanded="true" />
-            <element signature="e#2969#3206#0" expanded="true" />
-            <element signature="e#3195#3196#0" expanded="true" />
+            <element signature="e#2128#2496#0" expanded="true" />
+            <element signature="e#2485#2486#0" expanded="true" />
+            <element signature="e#3146#3313#0" expanded="true" />
+            <element signature="e#3302#3303#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -1704,10 +1890,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0" vertical-offset="870" max-vertical-offset="2280">
           <caret line="67" column="36" selection-start-line="67" selection-start-column="36" selection-end-line="67" selection-end-column="36" />
-          <folding>
-            <element signature="e#1104#1105#0" expanded="true" />
-            <element signature="e#1143#1144#0" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -1715,7 +1897,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0" vertical-offset="240" max-vertical-offset="585">
           <caret line="16" column="21" selection-start-line="16" selection-start-column="21" selection-end-line="16" selection-end-column="21" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1723,7 +1904,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0" vertical-offset="120" max-vertical-offset="210">
           <caret line="8" column="0" selection-start-line="8" selection-start-column="0" selection-end-line="8" selection-end-column="0" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1732,12 +1912,10 @@
         <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="645">
           <caret line="28" column="39" selection-start-line="28" selection-start-column="39" selection-end-line="28" selection-end-column="39" />
           <folding>
-            <element signature="e#2162#2382#0" expanded="true" />
-            <element signature="e#2371#2372#0" expanded="true" />
-            <element signature="e#2646#2934#0" expanded="true" />
-            <element signature="e#2923#2924#0" expanded="true" />
-            <element signature="e#2969#3206#0" expanded="true" />
-            <element signature="e#3195#3196#0" expanded="true" />
+            <element signature="e#2128#2496#0" expanded="true" />
+            <element signature="e#2485#2486#0" expanded="true" />
+            <element signature="e#3146#3313#0" expanded="true" />
+            <element signature="e#3302#3303#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -1746,10 +1924,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0" vertical-offset="1425" max-vertical-offset="2475">
           <caret line="95" column="33" selection-start-line="95" selection-start-column="33" selection-end-line="95" selection-end-column="33" />
-          <folding>
-            <element signature="e#1104#1105#0" expanded="true" />
-            <element signature="e#1143#1144#0" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -1757,7 +1931,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0" vertical-offset="240" max-vertical-offset="585">
           <caret line="16" column="21" selection-start-line="16" selection-start-column="21" selection-end-line="16" selection-end-column="21" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1765,7 +1938,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0" vertical-offset="120" max-vertical-offset="210">
           <caret line="8" column="0" selection-start-line="8" selection-start-column="0" selection-end-line="8" selection-end-column="0" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1774,12 +1946,10 @@
         <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="645">
           <caret line="28" column="39" selection-start-line="28" selection-start-column="39" selection-end-line="28" selection-end-column="39" />
           <folding>
-            <element signature="e#2162#2382#0" expanded="true" />
-            <element signature="e#2371#2372#0" expanded="true" />
-            <element signature="e#2646#2934#0" expanded="true" />
-            <element signature="e#2923#2924#0" expanded="true" />
-            <element signature="e#2969#3206#0" expanded="true" />
-            <element signature="e#3195#3196#0" expanded="true" />
+            <element signature="e#2128#2496#0" expanded="true" />
+            <element signature="e#2485#2486#0" expanded="true" />
+            <element signature="e#3146#3313#0" expanded="true" />
+            <element signature="e#3302#3303#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -1788,10 +1958,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0" vertical-offset="1284" max-vertical-offset="2475">
           <caret line="95" column="33" selection-start-line="95" selection-start-column="33" selection-end-line="95" selection-end-column="33" />
-          <folding>
-            <element signature="e#1104#1105#0" expanded="true" />
-            <element signature="e#1143#1144#0" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -1799,7 +1965,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0" vertical-offset="240" max-vertical-offset="585">
           <caret line="16" column="21" selection-start-line="16" selection-start-column="21" selection-end-line="16" selection-end-column="21" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1807,7 +1972,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0" vertical-offset="120" max-vertical-offset="210">
           <caret line="8" column="0" selection-start-line="8" selection-start-column="0" selection-end-line="8" selection-end-column="0" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1816,12 +1980,10 @@
         <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="720">
           <caret line="28" column="39" selection-start-line="28" selection-start-column="39" selection-end-line="28" selection-end-column="39" />
           <folding>
-            <element signature="e#2162#2382#0" expanded="true" />
-            <element signature="e#2371#2372#0" expanded="true" />
-            <element signature="e#2646#2934#0" expanded="true" />
-            <element signature="e#2923#2924#0" expanded="true" />
-            <element signature="e#2969#3206#0" expanded="true" />
-            <element signature="e#3195#3196#0" expanded="true" />
+            <element signature="e#2128#2496#0" expanded="true" />
+            <element signature="e#2485#2486#0" expanded="true" />
+            <element signature="e#3146#3313#0" expanded="true" />
+            <element signature="e#3302#3303#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -1837,10 +1999,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0" vertical-offset="1284" max-vertical-offset="2475">
           <caret line="95" column="33" selection-start-line="95" selection-start-column="33" selection-end-line="95" selection-end-column="33" />
-          <folding>
-            <element signature="e#1104#1105#0" expanded="true" />
-            <element signature="e#1143#1144#0" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -1848,7 +2006,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0" vertical-offset="240" max-vertical-offset="585">
           <caret line="16" column="21" selection-start-line="16" selection-start-column="21" selection-end-line="16" selection-end-column="21" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1856,7 +2013,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0" vertical-offset="120" max-vertical-offset="210">
           <caret line="8" column="0" selection-start-line="8" selection-start-column="0" selection-end-line="8" selection-end-column="0" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1865,12 +2021,10 @@
         <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="735">
           <caret line="38" column="59" selection-start-line="38" selection-start-column="59" selection-end-line="38" selection-end-column="59" />
           <folding>
-            <element signature="e#2162#2382#0" expanded="true" />
-            <element signature="e#2371#2372#0" expanded="true" />
-            <element signature="e#2646#2934#0" expanded="true" />
-            <element signature="e#2923#2924#0" expanded="true" />
-            <element signature="e#2969#3206#0" expanded="true" />
-            <element signature="e#3195#3196#0" expanded="true" />
+            <element signature="e#2128#2496#0" expanded="true" />
+            <element signature="e#2485#2486#0" expanded="true" />
+            <element signature="e#3146#3313#0" expanded="true" />
+            <element signature="e#3302#3303#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -1886,10 +2040,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0" vertical-offset="2070" max-vertical-offset="2235">
           <caret line="138" column="17" selection-start-line="138" selection-start-column="17" selection-end-line="138" selection-end-column="17" />
-          <folding>
-            <element signature="e#1104#1105#0" expanded="true" />
-            <element signature="e#1143#1144#0" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -1897,7 +2047,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.053956833" vertical-offset="0" max-vertical-offset="278">
           <caret line="1" column="46" selection-start-line="1" selection-start-column="46" selection-end-line="1" selection-end-column="46" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1905,7 +2054,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.3488372" vertical-offset="0" max-vertical-offset="602">
           <caret line="14" column="47" selection-start-line="14" selection-start-column="47" selection-end-line="14" selection-end-column="47" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1913,7 +2061,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.3986711" vertical-offset="0" max-vertical-offset="602">
           <caret line="16" column="21" selection-start-line="16" selection-start-column="21" selection-end-line="16" selection-end-column="21" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1921,7 +2068,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.19933555" vertical-offset="0" max-vertical-offset="602">
           <caret line="8" column="0" selection-start-line="8" selection-start-column="0" selection-end-line="8" selection-end-column="0" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1929,7 +2075,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.33139536" vertical-offset="531" max-vertical-offset="23700">
           <caret line="93" column="16" selection-start-line="93" selection-start-column="16" selection-end-line="93" selection-end-column="25" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1937,7 +2082,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0" vertical-offset="17151" max-vertical-offset="26565">
           <caret line="1197" column="64" selection-start-line="1197" selection-start-column="64" selection-end-line="1197" selection-end-column="64" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1945,7 +2089,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.41860464" vertical-offset="165486" max-vertical-offset="306960">
           <caret line="11375" column="37" selection-start-line="11375" selection-start-column="37" selection-end-line="11375" selection-end-column="37" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1953,7 +2096,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.33139536" vertical-offset="1581" max-vertical-offset="42195">
           <caret line="160" column="13" selection-start-line="160" selection-start-column="13" selection-end-line="160" selection-end-column="13" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1961,7 +2103,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0" vertical-offset="27126" max-vertical-offset="27855">
           <caret line="1891" column="15" selection-start-line="1891" selection-start-column="15" selection-end-line="1891" selection-end-column="15" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1969,26 +2110,23 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0" vertical-offset="9891" max-vertical-offset="11175">
           <caret line="705" column="15" selection-start-line="705" selection-start-column="15" selection-end-line="705" selection-end-column="15" />
-          <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/app/src/main/res/layout/activity_fullscreen.xml">
-      <provider editor-type-id="android-designer">
-        <state />
-      </provider>
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="-4.6153846" vertical-offset="0" max-vertical-offset="300">
           <caret line="8" column="29" selection-start-line="8" selection-start-column="29" selection-end-line="8" selection-end-column="29" />
-          <folding />
         </state>
+      </provider>
+      <provider editor-type-id="android-designer">
+        <state />
       </provider>
     </entry>
     <entry file="file://$USER_HOME$/Android/Sdk/sources/android-21/android/view/ViewGroup.java">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.33139536" vertical-offset="53436" max-vertical-offset="107310">
           <caret line="3652" column="16" selection-start-line="3652" selection-start-column="16" selection-end-line="3652" selection-end-column="16" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1996,18 +2134,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.1744186" vertical-offset="0" max-vertical-offset="344">
           <caret line="4" column="3" selection-start-line="4" selection-start-column="3" selection-end-line="4" selection-end-column="3" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/camilstaps/rushhour/Car.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.36253777" vertical-offset="0" max-vertical-offset="2160">
-          <caret line="17" column="0" selection-start-line="17" selection-start-column="0" selection-end-line="17" selection-end-column="0" />
-          <folding>
-            <element signature="e#1104#1105#0" expanded="true" />
-            <element signature="e#1143#1144#0" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -2015,32 +2141,73 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.9063444" vertical-offset="0" max-vertical-offset="900">
           <caret line="26" column="25" selection-start-line="26" selection-start-column="21" selection-end-line="26" selection-end-column="25" />
-          <folding>
-            <element signature="e#441#892#0" expanded="true" />
-            <element signature="e#885#886#0" expanded="true" />
-            <element signature="e#914#915#0" expanded="true" />
-            <element signature="e#954#955#0" expanded="true" />
-            <element signature="e#1470#1471#0" expanded="true" />
-            <element signature="e#1504#1505#0" expanded="true" />
-          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/build.gradle">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.049833886" vertical-offset="0" max-vertical-offset="602">
+          <caret line="2" column="9" selection-start-line="2" selection-start-column="9" selection-end-line="2" selection-end-column="9" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/camilstaps/rushhour/Car.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="225" max-vertical-offset="2130">
+          <caret line="37" column="32" selection-start-line="37" selection-start-column="32" selection-end-line="37" selection-end-column="32" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$USER_HOME$/Android/Sdk/sources/android-21/android/media/SoundPool.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="3771" max-vertical-offset="10710">
+          <caret line="299" column="21" selection-start-line="299" selection-start-column="21" selection-end-line="299" selection-end-column="21" />
+          <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/app/src/main/java/com/camilstaps/rushhour/FullscreenActivity.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.86918604" vertical-offset="601" max-vertical-offset="1065">
-          <caret line="71" column="17" selection-start-line="71" selection-start-column="17" selection-end-line="71" selection-end-column="17" />
+        <state vertical-scroll-proportion="0.61627907" vertical-offset="478" max-vertical-offset="1035">
+          <caret line="57" column="59" selection-start-line="57" selection-start-column="59" selection-end-line="57" selection-end-column="59" />
           <folding>
-            <element signature="e#2162#2382#0" expanded="true" />
-            <element signature="e#2371#2372#0" expanded="true" />
-            <element signature="e#2646#2934#0" expanded="true" />
-            <element signature="e#2923#2924#0" expanded="true" />
-            <element signature="e#2969#3206#0" expanded="true" />
-            <element signature="e#3195#3196#0" expanded="true" />
+            <element signature="e#2128#2496#0" expanded="true" />
+            <element signature="e#2485#2486#0" expanded="true" />
+            <element signature="e#3146#3313#0" expanded="true" />
+            <element signature="e#3302#3303#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
+  </component>
+  <component name="masterDetails">
+    <states>
+      <state key="ProjectJDKs.UI">
+        <settings>
+          <last-edited>1.7</last-edited>
+          <splitter-proportions>
+            <option name="proportions">
+              <list>
+                <option value="0.2" />
+              </list>
+            </option>
+          </splitter-proportions>
+        </settings>
+      </state>
+      <state key="ScopeChooserConfigurable.UI">
+        <settings>
+          <splitter-proportions>
+            <option name="proportions">
+              <list>
+                <option value="0.2" />
+              </list>
+            </option>
+          </splitter-proportions>
+        </settings>
+      </state>
+    </states>
   </component>
 </project>
 

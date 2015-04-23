@@ -22,8 +22,7 @@ import com.camilstaps.rushhour.util.SystemUiHider;
 public class FullscreenActivity extends Activity {
 
     private SoundPool soundPool;
-    private boolean soundBackgroundLoaded = false;
-    private int soundBackgroundId;
+    private int soundBackgroundId, soundCarDriveId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,10 +48,14 @@ public class FullscreenActivity extends Activity {
         soundPool.setOnLoadCompleteListener(new SoundPool.OnLoadCompleteListener() {
             @Override
             public void onLoadComplete(SoundPool soundPool, int sampleId, int status) {
-                soundBackgroundLoaded = true;
+                Log.d("FA", "Loaded: " + sampleId);
+                if (sampleId == soundBackgroundId) {
+                    soundPool.play(soundBackgroundId, 1, 1, 2, -1, 1);
+                }
             }
         });
-        soundBackgroundId = soundPool.load(this, R.raw.car_drive, 1);
+        soundCarDriveId = soundPool.load(this, R.raw.car_drive, 1);
+        soundBackgroundId = soundPool.load(this, R.raw.tune, 2);
 
         final RelativeLayout boardLayout = (RelativeLayout) findViewById(R.id.board);
         ViewTreeObserver vto = boardLayout.getViewTreeObserver();
@@ -67,9 +70,7 @@ public class FullscreenActivity extends Activity {
         board.setDriveListener(new DriveListener() {
             @Override
             public void onDrive() {
-                if (soundBackgroundLoaded) {
-                    soundPool.play(soundBackgroundId, 1, 1, 1, 0, 1f);
-                }
+                soundPool.play(soundCarDriveId, 1, 1, 1, 0, 1);
             }
         });
     }
