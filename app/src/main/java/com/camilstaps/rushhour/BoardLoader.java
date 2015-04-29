@@ -30,6 +30,7 @@ import java.util.Scanner;
  * Created by Jos on 23-4-2015.
  */
 public class BoardLoader {
+
     public BoardLoader()
     {}
 

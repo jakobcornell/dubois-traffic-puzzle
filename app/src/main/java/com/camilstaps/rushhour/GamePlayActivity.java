@@ -31,9 +31,6 @@ import java.io.InputStream;
 
 public class GamePlayActivity extends Activity implements Board.SolveListener {
 
-    private SoundPool soundPool;
-    private int soundBackgroundId, soundCarDriveId, soundCantMoveId;
-
     Board board;
 
     boolean isFirstTime = true;
@@ -44,7 +41,6 @@ public class GamePlayActivity extends Activity implements Board.SolveListener {
 
         setContentView(R.layout.activity_fullscreen);
 
-        setupSoundPool();
         setupBoard();
     }
 
@@ -76,12 +72,12 @@ public class GamePlayActivity extends Activity implements Board.SolveListener {
         board.setDriveListener(new DriveListener() {
             @Override
             public void onDrive() {
-                soundPool.play(soundCarDriveId, 1, 1, 1, 0, 1);
+                TheSoundPool.getSoundPool(getBaseContext()).play(TheSoundPool.soundCarDriveId, 1, 1, 1, 0, 1);
             }
 
             @Override
             public void onBlocked() {
-                soundPool.play(soundCantMoveId, 1, 1, 1, 0, 1);
+                TheSoundPool.getSoundPool(getBaseContext()).play(TheSoundPool.soundCantMoveId, 1, 1, 1, 0, 1);
             }
         });
 
@@ -96,24 +92,6 @@ public class GamePlayActivity extends Activity implements Board.SolveListener {
         if (resultCode == Activity.RESULT_OK) {
             finish();
         }
-    }
-
-    /**
-     * Load sounds; start background music
-     */
-    protected void setupSoundPool() {
-        soundPool = new SoundPool(2, AudioManager.STREAM_MUSIC, 0);
-        soundPool.setOnLoadCompleteListener(new SoundPool.OnLoadCompleteListener() {
-            @Override
-            public void onLoadComplete(SoundPool soundPool, int sampleId, int status) {
-                if (sampleId == soundBackgroundId) {
-                    soundPool.play(soundBackgroundId, 1, 1, 2, -1, 1);
-                }
-            }
-        });
-        soundBackgroundId = soundPool.load(this, R.raw.tune, 2);
-        soundCarDriveId = soundPool.load(this, R.raw.car_drive, 1);
-        soundCantMoveId = soundPool.load(this, R.raw.cantmove, 1);
     }
 
     @Override
