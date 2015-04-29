@@ -56,6 +56,14 @@ public class GamePlayActivity extends Activity implements Board.SolveListener {
         board.setSolveListener(this);
     }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        // See http://stackoverflow.com/a/13483049/1544337
+        if (resultCode == Activity.RESULT_OK) {
+            finish();
+        }
+    }
+
     /**
      * Load sounds; start background music
      */
@@ -78,6 +86,6 @@ public class GamePlayActivity extends Activity implements Board.SolveListener {
     public void onSolve(int score) {
         Intent intent = new Intent(this, FinishedActivity.class);
         intent.putExtra("score", score);
-        startActivity(intent);
+        startActivityForResult(intent, 0);
     }
 }

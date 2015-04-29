@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.text.Editable;
@@ -35,25 +36,39 @@ public class FinishedActivity extends ActionBarActivity {
 
         final HighScoreList list = new HighScoreList(this);
 
-        final int score = getIntent().getIntExtra("score", Integer.MAX_VALUE);
-        final EditText input = new EditText(this);
-        new AlertDialog.Builder(this)
-                .setTitle("Enter name")
-                .setView(input)
-                .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int whichButton) {
-                        Editable value = input.getText();
-                        list.addToList(new HighScore(score, value.toString()));
-                        list.save(context);
-                    }
-                })
-                .show();
+        final int score = getIntent().getIntExtra("score", -1);
+        if (score != -1) {
+            final EditText input = new EditText(this);
+            new AlertDialog.Builder(this)
+                    .setTitle("Enter name")
+                    .setView(input)
+                    .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int whichButton) {
+                            Editable value = input.getText();
+                            list.addToList(new HighScore(score, value.toString()));
+                            list.save(context);
+                        }
+                    })
+                    .show();
+        }
 
         ListView highscoresListView = (ListView) findViewById(R.id.highscoresListView);
 
         HighScoreAdapter arrayAdapter = new HighScoreAdapter(this, R.layout.highscore_item, list.getList());
 
         highscoresListView.setAdapter(arrayAdapter);
+    }
+
+    @Override
+    public void onBackPressed() {
+        // See http://stackoverflow.com/a/13483049/1544337
+        Intent intent = new Intent();
+        if (getParent() == null) {
+            setResult(Activity.RESULT_OK, intent);
+        } else {
+            getParent().setResult(Activity.RESULT_OK, intent);
+        }
+        finish();
     }
 
     private class HighScoreAdapter extends ArrayAdapter<HighScore> {

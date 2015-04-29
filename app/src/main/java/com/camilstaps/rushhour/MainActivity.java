@@ -15,9 +15,14 @@ public class MainActivity extends ActionBarActivity {
     }
 
     public void onClickHandler(View v) {
+        Intent intent;
         switch (v.getId()) {
             case R.id.action_start:
-                Intent intent = new Intent(this, GamePlayActivity.class);
+                intent = new Intent(this, GamePlayActivity.class);
+                startActivity(intent);
+                break;
+            case R.id.action_highscores:
+                intent = new Intent(this, FinishedActivity.class);
                 startActivity(intent);
                 break;
         }
