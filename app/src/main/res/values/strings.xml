@@ -2,4 +2,8 @@
     <string name="app_name">Rush Hour</string>
     <string name="title_activity_main">@string/app_name</string>
     <string name="action_start">Start</string>
+    <string name="title_activity_finished">FinishedActivity</string>
+
+    <string name="hello_world">Hello world!</string>
+    <string name="action_settings">Settings</string>
 </resources>

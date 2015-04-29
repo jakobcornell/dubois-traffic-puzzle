@@ -47,7 +47,7 @@ public class HighScore implements Comparable<HighScore> {
     public int compareTo(HighScore other_score) {
         if (other_score.score < score)
         {
-            return -1;
+            return 1;
         }
         else if (other_score.score == score)
         {
@@ -55,7 +55,7 @@ public class HighScore implements Comparable<HighScore> {
         }
         else
         {
-            return 1;
+            return -1;
         }
     }
 

@@ -1,0 +1,101 @@
+package com.camilstaps.rushhour;
+
+import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.Context;
+import android.content.DialogInterface;
+import android.support.v7.app.ActionBarActivity;
+import android.os.Bundle;
+import android.text.Editable;
+import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuItem;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
+import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.ListView;
+import android.widget.TextView;
+
+import com.camilstaps.rushhour.R;
+
+import java.util.ArrayList;
+
+public class FinishedActivity extends ActionBarActivity {
+
+    Context context;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_finished);
+
+        context = this;
+
+        final HighScoreList list = new HighScoreList(this);
+
+        final int score = getIntent().getIntExtra("score", Integer.MAX_VALUE);
+        final EditText input = new EditText(this);
+        new AlertDialog.Builder(this)
+                .setTitle("Enter name")
+                .setView(input)
+                .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int whichButton) {
+                        Editable value = input.getText();
+                        list.addToList(new HighScore(score, value.toString()));
+                        list.save(context);
+                    }
+                })
+                .show();
+
+        ListView highscoresListView = (ListView) findViewById(R.id.highscoresListView);
+
+        HighScoreAdapter arrayAdapter = new HighScoreAdapter(this, R.layout.highscore_item, list.getList());
+
+        highscoresListView.setAdapter(arrayAdapter);
+    }
+
+    private class HighScoreAdapter extends ArrayAdapter<HighScore> {
+        Context context;
+        int layoutResourceId;
+        ArrayList<HighScore> data;
+
+        public HighScoreAdapter(Context context, int layoutResourceId, ArrayList<HighScore> data) {
+            super(context, layoutResourceId, data);
+            this.layoutResourceId = layoutResourceId;
+            this.context = context;
+            this.data = data;
+        }
+
+        @Override
+        public View getView(int position, View convertView, ViewGroup parent) {
+            View row = convertView;
+            HighScoreHolder holder;
+
+            if(row == null) {
+                LayoutInflater inflater = ((Activity)context).getLayoutInflater();
+                row = inflater.inflate(layoutResourceId, parent, false);
+
+                holder = new HighScoreHolder();
+                holder.score = (TextView)row.findViewById(R.id.score);
+                holder.name = (TextView)row.findViewById(R.id.name);
+
+                row.setTag(holder);
+            } else {
+                holder = (HighScoreHolder)row.getTag();
+            }
+
+            HighScore highscore = data.get(position);
+            holder.name.setText(highscore.getName());
+            holder.score.setText(Integer.toString(highscore.getScore()));
+
+            return row;
+        }
+
+        private class HighScoreHolder {
+            TextView score, name;
+        }
+    }
+
+}

@@ -1,6 +1,7 @@
 package com.camilstaps.rushhour;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.media.AudioManager;
 import android.media.SoundPool;
 import android.os.Bundle;
@@ -9,7 +10,7 @@ import android.widget.RelativeLayout;
 
 import java.io.InputStream;
 
-public class GamePlayActivity extends Activity {
+public class GamePlayActivity extends Activity implements Board.SolveListener {
 
     private SoundPool soundPool;
     private int soundBackgroundId, soundCarDriveId, soundCantMoveId;
@@ -51,6 +52,8 @@ public class GamePlayActivity extends Activity {
                 soundPool.play(soundCantMoveId, 1, 1, 1, 0, 1);
             }
         });
+
+        board.setSolveListener(this);
     }
 
     /**
@@ -69,5 +72,12 @@ public class GamePlayActivity extends Activity {
         soundBackgroundId = soundPool.load(this, R.raw.tune, 2);
         soundCarDriveId = soundPool.load(this, R.raw.car_drive, 1);
         soundCantMoveId = soundPool.load(this, R.raw.cantmove, 1);
+    }
+
+    @Override
+    public void onSolve(int score) {
+        Intent intent = new Intent(this, FinishedActivity.class);
+        intent.putExtra("score", score);
+        startActivity(intent);
     }
 }

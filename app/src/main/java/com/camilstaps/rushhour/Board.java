@@ -1,9 +1,11 @@
 package com.camilstaps.rushhour;
 
 import android.content.Context;
+import android.content.Intent;
 import android.util.Log;
 import android.view.ViewGroup;
 import android.widget.RelativeLayout;
+import android.widget.Toast;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -18,6 +20,9 @@ public class Board {
     public static final int DIMENSION = 6;
 
     private DriveListener driveListener;
+    private SolveListener solveListener;
+
+    private int score;
 
     /**
      * Move a car if possible, and call the appropriate listeners
@@ -37,6 +42,10 @@ public class Board {
                 }
             }
             car.move(offset);
+            score++;
+            if (isSolved() && solveListener != null) {
+                solveListener.onSolve(score);
+            }
             driveListener.onDrive();
         }
     };
@@ -76,9 +85,9 @@ public class Board {
      * @return
      */
     public boolean isSolved() {
-        for (int x = DIMENSION - 1; x >= 0; x++) {
+        for (int x = DIMENSION - 1; x >= 0; x--) {
             for (Car car : cars) {
-                if (car.occupies(new Coordinate(x, 3))) {
+                if (car.occupies(new Coordinate(x, 2))) {
                     if (car.canMoveHorizontally()) {
                         return true;
                     } else {
@@ -92,6 +101,14 @@ public class Board {
 
     public void setDriveListener(DriveListener dl) {
         driveListener = dl;
+    }
+
+    public interface SolveListener {
+        public void onSolve(int score);
+    }
+
+    public void setSolveListener(SolveListener sl) {
+        solveListener = sl;
     }
 
 }

@@ -8,6 +8,7 @@ package com.camilstaps.rushhour;
 import android.content.Context;
 import android.preference.PreferenceManager;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
@@ -21,9 +22,9 @@ public class HighScoreList {
 
     private final String PREFERENCES_KEY = "highscores";
     
-    private List<HighScore> list;
+    private ArrayList<HighScore> list;
     
-    public HighScoreList (List<HighScore> some_list) {
+    public HighScoreList (ArrayList<HighScore> some_list) {
         this.list = some_list;
     }
 
@@ -32,13 +33,17 @@ public class HighScoreList {
      * @param context
      */
     public HighScoreList(Context context) {
-        Set<String> jsonList = PreferenceManager.getDefaultSharedPreferences(context).getStringSet(PREFERENCES_KEY, new HashSet<String>());
+        Set<String> jsonList = PreferenceManager
+                .getDefaultSharedPreferences(context)
+                .getStringSet(PREFERENCES_KEY, new HashSet<String>());
+        list = new ArrayList<>();
         for (String json : jsonList) {
             list.add(new HighScore(json));
         }
+        Collections.sort(list);
     }
 
-    public List<HighScore> getList() {
+    public ArrayList<HighScore> getList() {
         return list;
     }
     
@@ -57,7 +62,11 @@ public class HighScoreList {
         for (HighScore hs : list) {
             jsonList.add(hs.toString());
         }
-        PreferenceManager.getDefaultSharedPreferences(context).edit().putStringSet(PREFERENCES_KEY, jsonList).apply();
+        PreferenceManager
+                .getDefaultSharedPreferences(context)
+                .edit()
+                .putStringSet(PREFERENCES_KEY, jsonList)
+                .apply();
     }
    
 }
