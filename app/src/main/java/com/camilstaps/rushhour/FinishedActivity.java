@@ -23,6 +23,10 @@ import com.camilstaps.rushhour.R;
 
 import java.util.ArrayList;
 
+/**
+ * The user has finished the game / wants to see the highscores
+ * @author Camil Staps
+ */
 public class FinishedActivity extends ActionBarActivity {
 
     Context context;

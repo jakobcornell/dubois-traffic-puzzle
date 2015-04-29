@@ -24,6 +24,9 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 
+/**
+ * Launcher activity
+ */
 public class MainActivity extends ActionBarActivity {
 
     @Override

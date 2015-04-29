@@ -20,8 +20,6 @@ package com.camilstaps.rushhour;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.media.AudioManager;
-import android.media.SoundPool;
 import android.os.Bundle;
 import android.view.View;
 import android.view.ViewTreeObserver;
@@ -29,6 +27,9 @@ import android.widget.RelativeLayout;
 
 import java.io.InputStream;
 
+/**
+ * Playing the game
+ */
 public class GamePlayActivity extends Activity implements Board.SolveListener {
 
     Board board;

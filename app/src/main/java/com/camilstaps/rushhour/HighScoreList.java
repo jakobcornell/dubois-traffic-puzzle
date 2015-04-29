@@ -28,7 +28,7 @@ import java.util.List;
 import java.util.Set;
 
 /**
- *
+ * A list of highscores from SharedPreferences
  * @author Created by halzyn on 23-4-15.
  */
 public class HighScoreList {

@@ -34,6 +34,11 @@ public class BoardLoader {
     public BoardLoader()
     {}
 
+    /**
+     * Load a board from a file
+     * @param file
+     * @return
+     */
     public Board loadBoard(InputStream file)
     {
         /*

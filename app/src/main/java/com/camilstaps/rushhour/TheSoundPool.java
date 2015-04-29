@@ -5,6 +5,7 @@ import android.media.AudioManager;
 import android.media.SoundPool;
 
 /**
+ * Wrapper for SoundPool for app-wide sounds
  * Created by camilstaps on 29-4-15.
  */
 public class TheSoundPool {
