@@ -19,22 +19,27 @@ public class Board {
 
     private DriveListener driveListener;
 
+    /**
+     * Move a car if possible, and call the appropriate listeners
+     */
     private MoveListener moveListener = new MoveListener() {
         @Override
         public void onMove(Car car, int offset) {
             Coordinate newC = car.wouldMoveTo(offset);
-            if (newC.getY() > DIMENSION - 1 || newC.getX() > DIMENSION - 1 || newC.getX() < 0 || newC.getY() < 0) return;
-            for (Car iter : cars)
-                if (iter.occupies(newC))
+            if (newC.getY() > DIMENSION - 1 || newC.getX() > DIMENSION - 1 || newC.getX() < 0 || newC.getY() < 0) {
+                driveListener.onBlocked();
+                return;
+            }
+            for (Car iter : cars) {
+                if (iter.occupies(newC)) {
+                    driveListener.onBlocked();
                     return;
+                }
+            }
             car.move(offset);
             driveListener.onDrive();
         }
     };
-
-    public Board() {
-        this(new HashSet<Car>());
-    }
 
     public Board(Set<Car> cars) {
         for (Car car : cars) {
@@ -42,15 +47,47 @@ public class Board {
         }
     }
 
+    public Board() {
+        this(new HashSet<Car>());
+    }
+
     public void add(Car car) {
         car.setMoveListener(moveListener);
         cars.add(car);
     }
 
+    /**
+     * Add all cars to an existing layout
+     * RelativeLayout is assumed, although this may work with other Layouts
+     * @param context
+     * @param layout
+     */
     public void addToLayout(Context context, ViewGroup layout) {
         for (Car car : cars) {
-            layout.addView(car.getImageView(context, (layout.getWidth() - layout.getPaddingLeft() - layout.getPaddingRight()) / DIMENSION));
+            layout.addView(car.getImageView(
+                    context,
+                    (layout.getWidth() - layout.getPaddingLeft() - layout.getPaddingRight()) / DIMENSION
+            ));
         }
+    }
+
+    /**
+     * True iff the red car can move out without problems
+     * @return
+     */
+    public boolean isSolved() {
+        for (int x = DIMENSION - 1; x >= 0; x++) {
+            for (Car car : cars) {
+                if (car.occupies(new Coordinate(x, 3))) {
+                    if (car.canMoveHorizontally()) {
+                        return true;
+                    } else {
+                        return false;
+                    }
+                }
+            }
+        }
+        return false;
     }
 
     public void setDriveListener(DriveListener dl) {

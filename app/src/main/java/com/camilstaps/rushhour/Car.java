@@ -11,6 +11,8 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TableLayout;
 
+import java.util.Random;
+
 /**
  * Created by camilstaps on 16-4-15.
  */
@@ -58,7 +60,40 @@ public class Car {
         calculatedHeight = (int) ((endCoordinate.getY() - startCoordinate.getY() + 1) * (this.widthPerCell + MARGIN) - MARGIN);
 
         iv = new ImageView(context);
-        iv.setBackgroundColor(colour);
+
+        int[] images = null;
+        if(canMoveHorizontally()) {
+            if(getCarLength() == 2) {
+                images = new int[] {
+                        R.drawable.car_1_white,
+                        R.drawable.car_2_white,
+                        R.drawable.car_3_white,
+                        R.drawable.car_4_white};
+            }else{
+                images = new int[] {
+                        R.drawable.truck_1_white,
+                        R.drawable.truck_2_white,
+                        R.drawable.truck_3_white,
+                        R.drawable.truck_4_white};
+            }
+        }else{
+            if(getCarLength() == 2) {
+                images = new int[] {
+                        R.drawable.car_1_white_vertical,
+                        R.drawable.car_2_white_vertical,
+                        R.drawable.car_3_white_vertical,
+                        R.drawable.car_4_white_vertical};
+            }else{
+                images = new int[] {
+                        R.drawable.truck_1_white_vertical,
+                        R.drawable.truck_2_white_vertical,
+                        R.drawable.truck_3_white_vertical,
+                        R.drawable.truck_4_white_vertical};
+            }
+        }
+
+        iv.setImageResource(choose(images));
+        iv.setColorFilter(colour);
         iv.setMinimumWidth(calculatedWidth);
         iv.setMinimumHeight(calculatedHeight);
 
@@ -74,6 +109,30 @@ public class Car {
         });
 
         return iv;
+    }
+
+    private static int choose(int[] a)
+    {
+        Random r = new Random();
+        return a[r.nextInt(a.length)];
+    }
+
+    private float getCarDirection()
+    {
+        final double TWOPI = Math.PI * 2;
+        double radians = ((Math.atan2(startCoordinate.getY() - endCoordinate.getY(), endCoordinate.getX() - startCoordinate.getX()) + TWOPI) % TWOPI);
+        double degrees = radians / Math.PI * 180.0;
+
+        return (float)degrees;
+    }
+    private int getCarLength()
+    {
+        if(startCoordinate.getX() == endCoordinate.getX())
+        {
+            return endCoordinate.getY() - startCoordinate.getY() + 1;
+        }else{
+            return endCoordinate.getX() - startCoordinate.getX() + 1;
+        }
     }
 
     public boolean canMoveHorizontally() {

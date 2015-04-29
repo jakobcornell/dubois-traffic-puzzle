@@ -1,5 +1,8 @@
 package com.camilstaps.rushhour;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 /**
  * Created by camilstaps on 23-4-15.
  * Edited by Halzyn on 23-4-15.
@@ -14,6 +17,24 @@ public class HighScore implements Comparable<HighScore> {
         this.name = name;
     }
 
+    /**
+     * HighScore from json
+     * @see #toString()
+     * @param jsonString
+     */
+    public HighScore(String jsonString) {
+        int temp_score = -1;
+        String temp_name = null;
+        try {
+            JSONObject json = new JSONObject(jsonString);
+            temp_score = json.getInt("score");
+            temp_name = json.getString("name");
+        } catch (JSONException e) {
+        }
+        score = temp_score;
+        name = temp_name;
+    }
+
     public int getScore() {
         return score;
     }
@@ -24,11 +45,11 @@ public class HighScore implements Comparable<HighScore> {
 
     @Override
     public int compareTo(HighScore other_score) {
-        if (other_score.getScore() < score)
+        if (other_score.score < score)
         {
             return -1;
         }
-        else if (other_score.getScore() == score)
+        else if (other_score.score == score)
         {
             return 0;
         }
@@ -36,6 +57,21 @@ public class HighScore implements Comparable<HighScore> {
         {
             return 1;
         }
+    }
+
+    /**
+     * JSON representation
+     * @see #HighScore(String)
+     * @return
+     */
+    public String toString() {
+        JSONObject json = new JSONObject();
+        try {
+            json.put("score", score);
+            json.put("name", name);
+        } catch (JSONException ex) {
+        }
+        return json.toString();
     }
 
 }
