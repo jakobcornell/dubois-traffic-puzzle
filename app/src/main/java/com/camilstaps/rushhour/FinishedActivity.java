@@ -40,7 +40,8 @@ public class FinishedActivity extends ActionBarActivity {
         if (score != -1) {
             final EditText input = new EditText(this);
             new AlertDialog.Builder(this)
-                    .setTitle("Enter name")
+                    .setTitle("Congratulations!")
+                    .setMessage("Enter name:")
                     .setView(input)
                     .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int whichButton) {

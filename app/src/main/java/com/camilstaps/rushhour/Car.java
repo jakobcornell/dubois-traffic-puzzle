@@ -43,6 +43,12 @@ public class Car {
         this.colour = colour;
     }
 
+    public Car(Car car) {
+        startCoordinate = car.startCoordinate;
+        endCoordinate = car.endCoordinate;
+        colour = car.colour;
+    }
+
     public void setMoveListener(MoveListener listener) {
         moveListener = listener;
     }

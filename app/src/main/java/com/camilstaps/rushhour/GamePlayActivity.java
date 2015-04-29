@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.media.AudioManager;
 import android.media.SoundPool;
 import android.os.Bundle;
+import android.view.View;
 import android.view.ViewTreeObserver;
 import android.widget.RelativeLayout;
 
@@ -15,6 +16,10 @@ public class GamePlayActivity extends Activity implements Board.SolveListener {
     private SoundPool soundPool;
     private int soundBackgroundId, soundCarDriveId, soundCantMoveId;
 
+    Board board;
+
+    boolean isFirstTime = true;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -22,21 +27,30 @@ public class GamePlayActivity extends Activity implements Board.SolveListener {
         setContentView(R.layout.activity_fullscreen);
 
         setupSoundPool();
+        setupBoard();
+    }
 
+    private void setupBoard() {
         InputStream input = getResources().openRawResource(R.raw.level);
 
         BoardLoader loader = new BoardLoader();
-        final Board board = loader.loadBoard(input);
+        board = loader.loadBoard(input);
 
         final RelativeLayout boardLayout = (RelativeLayout) findViewById(R.id.board);
-        ViewTreeObserver vto = boardLayout.getViewTreeObserver();
-        vto.addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
-            @Override
-            public void onGlobalLayout() {
-                boardLayout.getViewTreeObserver().removeGlobalOnLayoutListener(this);
-                board.addToLayout(getBaseContext(), boardLayout);
-            }
-        });
+        if (isFirstTime) {
+            ViewTreeObserver vto = boardLayout.getViewTreeObserver();
+            vto.addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+                @Override
+                public void onGlobalLayout() {
+                    boardLayout.removeAllViews();
+                    boardLayout.getViewTreeObserver().removeGlobalOnLayoutListener(this);
+                    board.addToLayout(getBaseContext(), boardLayout);
+                }
+            });
+        } else {
+            boardLayout.removeAllViews();
+            board.addToLayout(getBaseContext(), boardLayout);
+        }
 
         /*
          * Sounds on move and attempt to move
@@ -54,6 +68,8 @@ public class GamePlayActivity extends Activity implements Board.SolveListener {
         });
 
         board.setSolveListener(this);
+
+        isFirstTime = false;
     }
 
     @Override
@@ -88,4 +104,13 @@ public class GamePlayActivity extends Activity implements Board.SolveListener {
         intent.putExtra("score", score);
         startActivityForResult(intent, 0);
     }
+
+    public void onClickHandler(View v) {
+        switch (v.getId()) {
+            case R.id.action_reset:
+                setupBoard();
+                break;
+        }
+    }
+
 }

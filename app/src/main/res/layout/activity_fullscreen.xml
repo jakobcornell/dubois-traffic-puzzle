@@ -1,14 +1,30 @@
 <RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/board"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="#eeeeee"
     tools:context=".FullscreenActivity"
-    android:paddingLeft="50dp"
-    android:paddingRight="50dp"
-    android:paddingBottom="50dp"
-    android:paddingTop="80dp">
+    android:layout_height="match_parent"
+    android:layout_width="match_parent"
+    android:orientation="vertical">
+
+    <RelativeLayout
+        android:id="@+id/board"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#eeeeee"
+        android:paddingLeft="50dp"
+        android:paddingRight="50dp"
+        android:paddingBottom="50dp"
+        android:paddingTop="50dp">
+    </RelativeLayout>
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/action_reset"
+        android:text="@string/action_reset"
+        android:onClick="onClickHandler"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="10dp"/>
 
 </RelativeLayout>
