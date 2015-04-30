@@ -13,6 +13,11 @@ public class TheSoundPool {
     private static SoundPool soundPool;
     public static int soundBackgroundId, soundCarDriveId, soundCantMoveId, soundVictoryId;
 
+    /**
+     * Initialise everything if not done yet
+     * @param context
+     * @return
+     */
     public static SoundPool getSoundPool(Context context) {
         if (soundPool == null) {
             soundPool = new SoundPool(2, AudioManager.STREAM_MUSIC, 0);

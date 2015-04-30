@@ -40,6 +40,7 @@ public class FinishedActivity extends ActionBarActivity {
 
         final HighScoreList list = new HighScoreList(this);
 
+        // If there is a score, we add a new highscore (user can enter name)
         final int score = getIntent().getIntExtra("score", -1);
         if (score != -1) {
             TheSoundPool.getSoundPool(getBaseContext()).play(TheSoundPool.soundVictoryId, 1, 1, 1, 0, 1);
@@ -58,10 +59,9 @@ public class FinishedActivity extends ActionBarActivity {
                     .show();
         }
 
+        // Populate listview with highscores
         ListView highscoresListView = (ListView) findViewById(R.id.highscoresListView);
-
         HighScoreAdapter arrayAdapter = new HighScoreAdapter(this, R.layout.highscore_item, list.getList());
-
         highscoresListView.setAdapter(arrayAdapter);
     }
 

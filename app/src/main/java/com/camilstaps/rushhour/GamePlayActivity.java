@@ -45,6 +45,9 @@ public class GamePlayActivity extends Activity implements Board.SolveListener {
         setupBoard();
     }
 
+    /**
+     * Create board, initialise listeners etc.
+     */
     private void setupBoard() {
         InputStream input = getResources().openRawResource(R.raw.level);
 
@@ -102,6 +105,10 @@ public class GamePlayActivity extends Activity implements Board.SolveListener {
         startActivityForResult(intent, 0);
     }
 
+    /**
+     * Just set up everything again for a reset
+     * @param v
+     */
     public void onClickHandler(View v) {
         switch (v.getId()) {
             case R.id.action_reset:

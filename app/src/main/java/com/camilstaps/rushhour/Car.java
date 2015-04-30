@@ -49,6 +49,12 @@ public class Car {
 
     ImageView iv;
 
+    /**
+     * The start coordinate should be to the north west of the end coordinate
+     * Default colour: black
+     * @param start
+     * @param end
+     */
     public Car(Coordinate start, Coordinate end) {
         startCoordinate = start;
         endCoordinate = end;
@@ -61,12 +67,6 @@ public class Car {
         this.colour = colour;
     }
 
-    public Car(Car car) {
-        startCoordinate = car.startCoordinate;
-        endCoordinate = car.endCoordinate;
-        colour = car.colour;
-    }
-
     public void setMoveListener(MoveListener listener) {
         moveListener = listener;
     }
@@ -77,6 +77,12 @@ public class Car {
         iv.setLayoutParams(marginParams);
     }
 
+    /**
+     * Give the car a random imageview
+     * @param context
+     * @param widthPerCell
+     * @return
+     */
     public ImageView getImageView(Context context, float widthPerCell) {
 
         this.widthPerCell = widthPerCell - MARGIN;
@@ -149,6 +155,7 @@ public class Car {
 
         return (float)degrees;
     }
+
     private int getCarLength()
     {
         if(startCoordinate.getX() == endCoordinate.getX())
@@ -189,6 +196,11 @@ public class Car {
         setLayoutParams();
     }
 
+    /**
+     * Coordinate the car would move to if it would move with the specified offset
+     * @param offset
+     * @return
+     */
     public Coordinate wouldMoveTo(int offset) {
         Coordinate movedCoordinate;
         if (offset < 0) {
@@ -204,10 +216,21 @@ public class Car {
         return movedCoordinate;
     }
 
+    /**
+     * Whether the car occupies c or not
+     * @param c
+     * @return
+     */
     public boolean occupies(Coordinate c) {
-        return c.getX() >= startCoordinate.getX() && c.getX() <= endCoordinate.getX() && c.getY() >= startCoordinate.getY() && c.getY() <= endCoordinate.getY();
+        return c.getX() >= startCoordinate.getX()
+                && c.getX() <= endCoordinate.getX()
+                && c.getY() >= startCoordinate.getY()
+                && c.getY() <= endCoordinate.getY();
     }
 
+    /**
+     * Request to move on swipe
+     */
     private class GestureListener extends GestureDetector.SimpleOnGestureListener {
         private static final int SWIPE_MIN_DISTANCE = SIZE;
         private static final int SWIPE_THRESHOLD_VELOCITY = SIZE;

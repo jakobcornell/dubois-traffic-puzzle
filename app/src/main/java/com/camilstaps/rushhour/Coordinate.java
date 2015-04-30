@@ -19,6 +19,7 @@
 package com.camilstaps.rushhour;
 
 /**
+ * This is pretty straightforward.
  * Created by camilstaps on 16-4-15.
  */
 public class Coordinate {

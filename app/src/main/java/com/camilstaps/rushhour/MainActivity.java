@@ -29,6 +29,10 @@ import android.view.View;
  */
 public class MainActivity extends ActionBarActivity {
 
+    /**
+     * Set contentView and start music
+     * @param savedInstanceState
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -37,6 +41,10 @@ public class MainActivity extends ActionBarActivity {
         TheSoundPool.getSoundPool(this);
     }
 
+    /**
+     * Handler for Start & Highscores button
+     * @param v
+     */
     public void onClickHandler(View v) {
         Intent intent;
         switch (v.getId()) {

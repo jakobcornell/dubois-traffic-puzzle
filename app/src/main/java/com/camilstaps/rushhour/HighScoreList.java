@@ -36,10 +36,6 @@ public class HighScoreList {
     private final String PREFERENCES_KEY = "highscores";
     
     private ArrayList<HighScore> list;
-    
-    public HighScoreList (ArrayList<HighScore> some_list) {
-        this.list = some_list;
-    }
 
     /**
      * Get highscores from sharedpreferences

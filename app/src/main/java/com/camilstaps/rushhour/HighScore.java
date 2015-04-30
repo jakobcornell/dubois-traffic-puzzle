@@ -22,6 +22,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 /**
+ * Highscore exists of name and score (amount of moves; so lower is better)
  * Created by camilstaps on 23-4-15.
  * Edited by Halzyn on 23-4-15.
  */
