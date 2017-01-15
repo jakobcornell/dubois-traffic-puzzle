@@ -1,4 +1,4 @@
-package com.camilstaps.rushhour;
+package com.duboisproject.rushhour;
 
 import android.content.Context;
 import android.media.AudioManager;

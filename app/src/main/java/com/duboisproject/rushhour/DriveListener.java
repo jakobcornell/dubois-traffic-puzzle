@@ -1,6 +1,6 @@
 /*
- * Dubois Traffic Puzzle
- * Jakob Cornell, 2017
+ *     Rush Hour Android app
+ * Copyright (C) 2015 Randy Wanga, Jos Craaijo, Camil Staps
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -16,18 +16,19 @@
  * with this program; if not, write to the Free Software Foundation, Inc.,
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  */
+package com.duboisproject.rushhour;
 
-package com.camilstaps.rushhour.id;
+/**
+ * Created by camilstaps on 22-4-15.
+ */
+public abstract class DriveListener {
+    /**
+     * Called when a car moves
+     */
+    public abstract void onDrive();
 
-import android.widget.TextView;
-import android.os.Bundle;
-import com.camilstaps.rushhour.R;
-
-public final class MathleteIDActivity extends NFCIDActivity {
-	@Override
-	public void onCreate(Bundle savedState) {
-		super.onCreate(savedState);
-		TextView textView = (TextView) findViewById(R.id.fragment_text);
-		textView.setText("Scan mathlete tag");
-	}
+    /**
+     * Called when a car attempted to move, but couldn't
+     */
+    public abstract void onBlocked();
 }

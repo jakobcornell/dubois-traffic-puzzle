@@ -16,19 +16,12 @@
  * with this program; if not, write to the Free Software Foundation, Inc.,
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  */
-package com.camilstaps.rushhour;
+package com.duboisproject.rushhour;
 
 /**
- * Created by camilstaps on 22-4-15.
+ * Created by camilstaps on 16-4-15.
  */
-public abstract class DriveListener {
-    /**
-     * Called when a car moves
-     */
-    public abstract void onDrive();
-
-    /**
-     * Called when a car attempted to move, but couldn't
-     */
-    public abstract void onBlocked();
+public abstract class MoveListener {
+    // Called when a car moves
+    public abstract void onMove(Car car, int offset);
 }

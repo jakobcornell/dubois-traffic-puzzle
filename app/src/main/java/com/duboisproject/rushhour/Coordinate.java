@@ -1,6 +1,6 @@
 /*
- * Dubois Traffic Puzzle
- * Jakob Cornell, 2017
+ *     Rush Hour Android app
+ * Copyright (C) 2015 Randy Wanga, Jos Craaijo, Camil Staps
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -16,21 +16,37 @@
  * with this program; if not, write to the Free Software Foundation, Inc.,
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  */
-
-package com.camilstaps.rushhour.id;
-
-import android.app.Activity;
-import android.os.Bundle;
-import com.camilstaps.rushhour.R;
+package com.duboisproject.rushhour;
 
 /**
- * Parent class for activities that identify participants and coaches
+ * This is pretty straightforward.
+ * Created by camilstaps on 16-4-15.
  */
+public class Coordinate {
 
-public abstract class NFCIDActivity extends Activity {
-	@Override
-	public void onCreate(Bundle savedState) {
-		super.onCreate(savedState);
-		setContentView(R.layout.id_activity);
-	}
+    private int x, y;
+
+    public Coordinate(int x, int y) {
+        this.x = x;
+        this.y = y;
+    }
+
+    public Coordinate(Coordinate c) {
+        this.x = c.x;
+        this.y = c.y;
+    }
+
+    public void move(int offsetX, int offsetY) {
+        this.x += offsetX;
+        this.y += offsetY;
+    }
+
+    public int getX() {
+        return x;
+    }
+
+    public int getY() {
+        return y;
+    }
+
 }

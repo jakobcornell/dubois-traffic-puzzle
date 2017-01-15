@@ -9,7 +9,7 @@ android {
 	buildToolsVersion "23.0.2"
 
 	defaultConfig {
-		applicationId "com.camilstaps.thesettingsun"
+		applicationId "com.duboisproject.rushhour"
 		minSdkVersion 14
 		targetSdkVersion 21
 		versionCode 1

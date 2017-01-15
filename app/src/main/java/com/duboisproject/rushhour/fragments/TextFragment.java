@@ -17,14 +17,14 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
-package com.camilstaps.rushhour.fragments;
+package com.duboisproject.rushhour.fragments;
 
 import android.app.Fragment;
 import android.os.Bundle;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.LayoutInflater;
-import com.camilstaps.rushhour.R;
+import com.duboisproject.rushhour.R;
 
 public final class TextFragment extends Fragment {
 	@Override
