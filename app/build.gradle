@@ -1,8 +1,8 @@
 apply plugin: 'com.android.application'
 
-def ksPropsFile = rootProject.file("keystore.properties")
-def ksProps = new Properties()
-ksProps.load(new FileInputStream(ksPropsFile))
+//def ksPropsFile = rootProject.file("keystore.properties")
+//def ksProps = new Properties()
+//ksProps.load(new FileInputStream(ksPropsFile))
 
 android {
 	compileSdkVersion 21
@@ -18,10 +18,10 @@ android {
 
 	signingConfigs {
 		release {
-			keyAlias ksProps['keyAlias']
-			keyPassword ksProps['keyPassword']
-			storeFile file(ksProps['storeFile'])
-			storePassword ksProps['storePassword']
+//			keyAlias ksProps['keyAlias']
+//			keyPassword ksProps['keyPassword']
+//			storeFile file(ksProps['storeFile'])
+//			storePassword ksProps['storePassword']
 		}
 	}
 
@@ -40,6 +40,6 @@ android {
 
 dependencies {
 	compile fileTree(dir: 'libs', include: ['*.jar'])
-	compile 'com.android.support:appcompat-v7:22.0.0'
-	compile 'com.android.support:support-v4:22.0.0'
+	compile 'com.android.support:appcompat-v7:21.0.0'
+	compile 'com.android.support:support-v4:21.0.0'
 }
