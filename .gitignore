@@ -1,5 +1,6 @@
 keystore.properties
 .kateproject*
+/app/src/main/res/values/sdb_credentials.xml
 
 # Built application files
 *.apk

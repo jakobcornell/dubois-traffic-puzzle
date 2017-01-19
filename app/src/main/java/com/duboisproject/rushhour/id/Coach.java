@@ -19,4 +19,12 @@
 
 package com.duboisproject.rushhour.id;
 
-public interface DuboisIdentity extends android.os.Parcelable {}
+public final class Coach {//implements DuboisIdentity {
+	public final String id;
+	public final String name;
+
+	public Coach(String id, String name) {
+		this.id = id;
+		this.name = name;
+	}
+}

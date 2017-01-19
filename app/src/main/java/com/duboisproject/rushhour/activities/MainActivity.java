@@ -16,13 +16,17 @@
  * with this program; if not, write to the Free Software Foundation, Inc.,
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  */
-package com.duboisproject.rushhour;
+
+package com.duboisproject.rushhour.activities;
 
 import android.content.Intent;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+
+import com.duboisproject.rushhour.TheSoundPool;
+import com.duboisproject.rushhour.R;
 
 /**
  * Launcher activity

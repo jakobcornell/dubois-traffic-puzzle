@@ -17,72 +17,77 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
-package com.duboisproject.rushhour.id;
+package com.duboisproject.rushhour.activities;
 
 import android.app.Activity;
 import android.app.PendingIntent;
+import android.app.FragmentTransaction;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.widget.TextView;
+import android.widget.Toast;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.nfc.NfcAdapter;
 import android.nfc.NdefMessage;
 import android.nfc.NdefRecord;
+
+import com.duboisproject.rushhour.Application;
+import com.duboisproject.rushhour.id.NfcId;
+import com.duboisproject.rushhour.database.SdbInterface;
+import com.duboisproject.rushhour.fragments.LoaderFragment;
 import com.duboisproject.rushhour.R;
 
-// temp
-import android.widget.Toast;
-
-public final class MathleteIDActivity extends Activity {
+public abstract class IdActivity extends Activity {
 	protected PendingIntent nfcPendingIntent;
 	protected IntentFilter[] nfcFilters;
 	protected NfcAdapter nfcAdapter;
+	protected SdbInterface sdbInterface;
 
 	@Override
 	public void onCreate(Bundle savedState) {
 		super.onCreate(savedState);
 		setContentView(R.layout.id_activity);
-		TextView textView = (TextView) findViewById(R.id.fragment_text);
-		textView.setText("Scan mathlete tag");
 
-		nfcPendingIntent = PendingIntent.getActivity(this, 0, new Intent(this, getClass()).addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP), 0);
+		final Intent innerIntent = new Intent(this, getClass());
+		innerIntent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
+		nfcPendingIntent = PendingIntent.getActivity(this, 0, innerIntent, 0);
 
-		IntentFilter f = new IntentFilter(NfcAdapter.ACTION_NDEF_DISCOVERED);
+		final IntentFilter f = new IntentFilter(NfcAdapter.ACTION_NDEF_DISCOVERED);
 		try {
-			f.addDataType("text/plain");
+			f.addDataType(NfcId.MIME_TYPE);
 		} catch (IntentFilter.MalformedMimeTypeException e) {
 			throw new RuntimeException(e);
 		}
 		nfcFilters = new IntentFilter[] { f };
 
 		nfcAdapter = NfcAdapter.getDefaultAdapter(getApplicationContext());
+		
+		if (sdbInterface == null) {
+			sdbInterface = ((Application) getApplicationContext()).getSdbInterface();
+		}
 	}
 
 	@Override
 	protected void onNewIntent(Intent intent) {
 		super.onNewIntent(intent);
-		String action = intent.getAction();
+		final String action = intent.getAction();
 		if (intent != null && action.equals(NfcAdapter.ACTION_NDEF_DISCOVERED)) {
-			if (intent.getType().equals("text/plain")) {
-				Parcelable[] rawMessages = intent.getParcelableArrayExtra(NfcAdapter.EXTRA_NDEF_MESSAGES);
-				if (rawMessages == null || rawMessages.length == 0) {
-					Toast.makeText(getApplicationContext(), "No messages!", Toast.LENGTH_SHORT).show();
-				} else {
-					NdefRecord[] records = ((NdefMessage) rawMessages[0]).getRecords();
-					if (records == null || records.length == 0) {
-						Toast.makeText(getApplicationContext(), "No records in first message!", Toast.LENGTH_SHORT).show();
-					} else {
-						NdefRecord r = records[0];
-						if (r.getTnf() != NdefRecord.TNF_WELL_KNOWN) {
-							Toast.makeText(getApplicationContext(), "Unrecognized TNF!", Toast.LENGTH_SHORT).show();
-						}
-						Toast.makeText(getApplicationContext(), new String(records[0].getPayload()), Toast.LENGTH_SHORT).show();
-					}
+			if (intent.getType().equals(NfcId.MIME_TYPE)) {
+				final Parcelable[] rawMessages = intent.getParcelableArrayExtra(NfcAdapter.EXTRA_NDEF_MESSAGES);
+				String id;
+				try {
+					id = NfcId.getId(rawMessages);
+				} catch (IllegalArgumentException | java.io.UnsupportedEncodingException e) {
+					final String message = "Error: " + e.getMessage();
+					Toast.makeText(getApplicationContext(), message, Toast.LENGTH_LONG).show();
+					return;
 				}
+				onNewId(id);
 			}
 		}
 	}
+
+	protected abstract void onNewId(String id);
 
 	@Override
 	public void onPause() {

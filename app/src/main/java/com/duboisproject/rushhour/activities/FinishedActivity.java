@@ -1,4 +1,4 @@
-package com.duboisproject.rushhour;
+package com.duboisproject.rushhour.activities;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -19,6 +19,9 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.duboisproject.rushhour.HighScore;
+import com.duboisproject.rushhour.HighScoreList;
+import com.duboisproject.rushhour.TheSoundPool;
 import com.duboisproject.rushhour.R;
 
 import java.util.ArrayList;

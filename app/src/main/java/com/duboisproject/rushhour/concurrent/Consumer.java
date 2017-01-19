@@ -17,6 +17,11 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
-package com.duboisproject.rushhour.id;
+package com.duboisproject.rushhour.concurrent;
 
-public interface DuboisIdentity extends android.os.Parcelable {}
+/**
+ * Stand-in for java.util.function.Consumer
+ */
+public interface Consumer<T> extends java.io.Serializable {
+	public void accept(T t);
+}

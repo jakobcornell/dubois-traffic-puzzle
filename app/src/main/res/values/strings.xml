@@ -1,8 +1,13 @@
 <resources>
-    <string name="app_name">Rush Hour</string>
-    <string name="title_activity_main">@string/app_name</string>
-    <string name="action_start">Start</string>
-    <string name="action_highscores">Highscores</string>
-    <string name="action_reset">Reset</string>
-    <string name="title_activity_finished">Highscores</string>
+	<string name="app_name">Rush Hour</string>
+	<string name="title_activity_main">@string/app_name</string>
+	<string name="action_start">Start</string>
+	<string name="action_highscores">Highscores</string>
+	<string name="action_reset">Reset</string>
+	<string name="title_activity_finished">Highscores</string>
+
+	<!-- mathlete scan activity -->
+	<string name="mathlete_scan_message">Scan mathlete tag</string>
+	<string name="welcome_message">Welcome, %1$s!</string>
+	<string name="anonymous_welcome_message">Welcome!</string>
 </resources>

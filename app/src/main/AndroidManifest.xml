@@ -4,37 +4,44 @@ Modified by Jakob Cornell, 2017-01-09 to -01-15
 
 <manifest
 	xmlns:android="http://schemas.android.com/apk/res/android"
-	package="com.duboisproject.rushhour" >
+	package="com.duboisproject.rushhour"
+>
 	<uses-permission android:name="android.permission.NFC" />
-	<uses-sdk android:minSdkVersion="10" />
+	<uses-permission android:name="android.permission.INTERNET" />
+	<uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 	<application
+		android:name="com.duboisproject.rushhour.Application"
 		android:allowBackup="true"
 		android:icon="@mipmap/ic_launcher"
 		android:label="@string/app_name"
 		android:theme="@style/AppTheme" >
-		<activity android:name="com.duboisproject.rushhour.id.MathleteIDActivity"
-			android:launchMode="singleTop" >
+		<activity android:name="com.duboisproject.rushhour.activities.MathleteIdActivity"
+			android:launchMode="singleTop"
+		>
 			<intent-filter>
 				<action android:name="android.intent.action.MAIN" />
 				<category android:name="android.intent.category.LAUNCHER" />
 			</intent-filter>
 		</activity>
 		<activity
-			android:name=".GamePlayActivity"
+			android:name="com.duboisproject.rushhour.activities.GamePlayActivity"
 			android:configChanges="orientation|keyboardHidden|screenSize"
 			android:label="@string/app_name"
-			android:screenOrientation="portrait">
+			android:screenOrientation="portrait"
+		>
 		</activity>
 		<activity
-			android:name=".MainActivity"
+			android:name="com.duboisproject.rushhour.activities.MainActivity"
 			android:configChanges="orientation|keyboardHidden|screenSize"
 			android:label="@string/title_activity_main"
-			android:screenOrientation="portrait" >
+			android:screenOrientation="portrait"
+		>
 		</activity>
 		<activity
-			android:name=".FinishedActivity"
+			android:name="com.duboisproject.rushhour.activities.FinishedActivity"
 			android:screenOrientation="portrait"
-			android:label="@string/title_activity_finished" >
+			android:label="@string/title_activity_finished"
+		>
 		</activity>
 	</application>
 </manifest>

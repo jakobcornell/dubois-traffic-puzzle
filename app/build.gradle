@@ -38,8 +38,17 @@ android {
 	}
 }
 
+gradle.projectsEvaluated {
+	tasks.withType(JavaCompile) {
+		options.deprecation = true
+	}
+}
+
 dependencies {
 	compile fileTree(dir: 'libs', include: ['*.jar'])
 	compile 'com.android.support:appcompat-v7:22.0.0'
 	compile 'com.android.support:support-v4:22.0.0'
+	
+	compile 'com.amazonaws:aws-android-sdk-core:2.1.+'
+	compile 'com.amazonaws:aws-android-sdk-sdb:2.1.+'
 }

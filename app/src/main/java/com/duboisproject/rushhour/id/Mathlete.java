@@ -19,4 +19,44 @@
 
 package com.duboisproject.rushhour.id;
 
-public interface DuboisIdentity extends android.os.Parcelable {}
+import android.os.Parcel;
+
+public final class Mathlete implements DuboisIdentity {
+	public final String id;
+	public final String firstName, lastName;
+
+	public Mathlete(String id, String firstName, String lastName) {
+		this.id = id;
+		this.firstName = firstName;
+		this.lastName = lastName;
+	}
+
+	private int mData;
+	/*
+	private Mathlete(Parcel in) {
+		mData = in.readInt();
+	}
+	*/
+
+	@Override
+	public void writeToParcel(Parcel out, int flags) {
+		out.writeInt(mData);
+	}
+
+	public static final Creator<Mathlete> CREATOR = new Creator<Mathlete>() {
+		@Override
+		public Mathlete createFromParcel(Parcel in) {
+			return null;//new Mathlete(in);
+		}
+
+		@Override
+		public Mathlete[] newArray(int size) {
+			return new Mathlete[size];
+		}
+	};
+
+	@Override
+	public int describeContents() {
+		return 0;
+	}
+}

@@ -17,6 +17,29 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
-package com.duboisproject.rushhour.id;
+package com.duboisproject.rushhour.database;
 
-public interface DuboisIdentity extends android.os.Parcelable {}
+import java.util.concurrent.FutureTask;
+import java.util.concurrent.Callable;
+import com.amazonaws.services.simpledb.AmazonSimpleDBClient;
+import com.amazonaws.auth.AWSCredentials;
+
+import com.duboisproject.rushhour.id.Mathlete;
+import com.duboisproject.rushhour.id.Coach;
+import com.duboisproject.rushhour.R;
+
+public final class SdbInterface {
+	protected final AmazonSimpleDBClient client;
+
+	public SdbInterface(AWSCredentials credentials) {
+		client = new AmazonSimpleDBClient(credentials);
+	}
+
+	public Mathlete fetchMathlete(String id) throws IllegalArgumentException {
+		return null;
+	}
+
+	public Coach fetchCoach(String id) throws IllegalArgumentException {
+		return null;
+	}
+}

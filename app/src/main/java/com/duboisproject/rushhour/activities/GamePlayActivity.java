@@ -16,7 +16,8 @@
  * with this program; if not, write to the Free Software Foundation, Inc.,
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  */
-package com.duboisproject.rushhour;
+
+package com.duboisproject.rushhour.activities;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -26,6 +27,12 @@ import android.view.ViewTreeObserver;
 import android.widget.RelativeLayout;
 
 import java.io.InputStream;
+
+import com.duboisproject.rushhour.Board;
+import com.duboisproject.rushhour.BoardLoader;
+import com.duboisproject.rushhour.DriveListener;
+import com.duboisproject.rushhour.TheSoundPool;
+import com.duboisproject.rushhour.R;
 
 /**
  * Playing the game
