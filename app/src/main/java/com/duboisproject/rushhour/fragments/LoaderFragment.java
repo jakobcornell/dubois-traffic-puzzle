@@ -19,88 +19,26 @@
 
 package com.duboisproject.rushhour.fragments;
 
-import java.util.Collection;
-import java.util.HashSet;
 import java.io.Serializable;
 import android.app.Fragment;
+import android.app.LoaderManager;
 import android.os.Bundle;
 import android.os.AsyncTask;
+import android.content.Loader;
+import android.content.AsyncTaskLoader;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.LayoutInflater;
 
-import com.duboisproject.rushhour.concurrent.Function;
-import com.duboisproject.rushhour.concurrent.Consumer;
 import com.duboisproject.rushhour.R;
 
-public final class LoaderFragment<Param, Result> extends Fragment {
-	/**
-	 * Argument bundle key for task parameter from client activity.
-	 */
-	public static final String PARAM_KEY = "LOADER_FRAGMENT_PARAM";
-
-	/**
-	 * Bundle keys for saving and restoring state
-	 */
-	protected static final String TASK_KEY = "LOADER_FRAGMENT_TASK";
-	protected static final String LISTENERS_KEY = "LOADER_FRAGMENT_LISTENERS";
-	
-	protected final class Task extends AsyncTask<Param, Void, Result> implements Serializable {
-		protected Function<Param, Result> task;
-		protected Consumer<Result> callback;
-		
-		public Task(Function<Param, Result> task, Consumer<Result> callback) {
-			super();
-			this.task = task;
-			this.callback = callback;
-		}
-		
-		@Override
-		protected Result doInBackground(Param... params) {
-			// used with exactly one parameter
-			return task.apply(params[0]);
-		}
-
-		@Override
-		protected void onPostExecute(Result result) {
-			callback.accept(result);
-			for (Listener l : completionListeners) {
-				l.onLoadFinish();
-			}
-		}
-	}
-
-	protected Task task;
-
-	public LoaderFragment() {}
-
-	public LoaderFragment(Function<Param, Result> task, Consumer<Result> callback) {
-		super();
-		this.task = new Task(task, callback);
-	}
-
-	public static interface Listener {
-		public void onLoadFinish();
-	}
-
-	protected Collection<Listener> completionListeners = new HashSet<Listener>();
-	public void registerListener(Listener l) {
-		completionListeners.add(l);
-	}
-	public void unregisterListener(Listener l) {
-		completionListeners.remove(l);
-	}
+public abstract class LoaderFragment<Result> extends Fragment implements LoaderManager.LoaderCallbacks<Result> {
+	protected AsyncTaskLoader<Result> loader;
 
 	@Override
 	public void onCreate(Bundle savedState) {
 		super.onCreate(savedState);
-		if (savedState == null) {
-			Param param = (Param) getArguments().getSerializable(PARAM_KEY);
-			task.execute(param);
-		} else {
-			task = (Task) savedState.getSerializable(TASK_KEY);
-			completionListeners = (Collection<Listener>) savedState.getSerializable(LISTENERS_KEY);
-		}
+		// TODO
 	}
 
 	@Override
@@ -109,17 +47,7 @@ public final class LoaderFragment<Param, Result> extends Fragment {
 	}
 
 	@Override
-	public void onSaveInstanceState(Bundle state) {
-		super.onSaveInstanceState(state);
-		state.putSerializable(TASK_KEY, task);
-		state.putSerializable(LISTENERS_KEY, (Serializable) completionListeners);
+	public void onLoaderReset(Loader<Result> loader) {
+		return;
 	}
-
-	// Is this necessary?
-	/*
-	@Override
-	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-		return inflater.inflate(R.layout.loader_fragment, container, false);
-	}
-	*/
 }

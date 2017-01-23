@@ -64,7 +64,7 @@ public final class NfcId {
 				byte control = payload[0];
 				int offset = 1 + control & 0b11111; // index of actual payload
 				String encoding = ((control >> 7 & 1) == 0) ? "UTF-8" : "UTF-16";
-				
+
 				String content = new String(payload, offset, payload.length - offset, encoding);
 				String[] tokens = content.split(DELIMITER);
 				Integer idPosition = idPositions.get(tokens[0]);

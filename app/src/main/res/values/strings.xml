@@ -5,6 +5,8 @@
 	<string name="action_highscores">Highscores</string>
 	<string name="action_reset">Reset</string>
 	<string name="title_activity_finished">Highscores</string>
+	
+	<string name="error_prefix">"Error: "</string>
 
 	<!-- mathlete scan activity -->
 	<string name="mathlete_scan_message">Scan mathlete tag</string>

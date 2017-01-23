@@ -30,7 +30,7 @@ public final class Application extends android.app.Application {
 	public SdbInterface getSdbInterface() {
 		return sdbInterface;
 	}
-	
+
 	@Override
 	public void onCreate() {
 		String accessKey = getString(R.string.access_key);

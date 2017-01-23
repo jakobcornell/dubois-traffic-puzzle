@@ -21,20 +21,20 @@ package com.duboisproject.rushhour.activities;
 
 import android.app.Activity;
 import android.app.PendingIntent;
-import android.app.FragmentTransaction;
+import android.app.LoaderManager;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.Loader;
 import android.widget.Toast;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.nfc.NfcAdapter;
-import android.nfc.NdefMessage;
-import android.nfc.NdefRecord;
 
 import com.duboisproject.rushhour.Application;
+import com.duboisproject.rushhour.id.DuboisIdentity;
 import com.duboisproject.rushhour.id.NfcId;
-import com.duboisproject.rushhour.database.SdbInterface;
 import com.duboisproject.rushhour.fragments.LoaderFragment;
+import com.duboisproject.rushhour.database.SdbInterface;
 import com.duboisproject.rushhour.R;
 
 public abstract class IdActivity extends Activity {
@@ -61,7 +61,7 @@ public abstract class IdActivity extends Activity {
 		nfcFilters = new IntentFilter[] { f };
 
 		nfcAdapter = NfcAdapter.getDefaultAdapter(getApplicationContext());
-		
+
 		if (sdbInterface == null) {
 			sdbInterface = ((Application) getApplicationContext()).getSdbInterface();
 		}
@@ -78,7 +78,8 @@ public abstract class IdActivity extends Activity {
 				try {
 					id = NfcId.getId(rawMessages);
 				} catch (IllegalArgumentException | java.io.UnsupportedEncodingException e) {
-					final String message = "Error: " + e.getMessage();
+					String errorPrefix = getString(R.string.error_prefix);
+					String message = errorPrefix + e.getMessage();
 					Toast.makeText(getApplicationContext(), message, Toast.LENGTH_LONG).show();
 					return;
 				}

@@ -17,11 +17,27 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
-package com.duboisproject.rushhour.concurrent;
+package com.duboisproject.rushhour.fragments;
 
 /**
- * Stand-in for java.util.function.Function
+ * Wrapper to enable passing of errors from loader.
  */
-public interface Function<T, R> extends java.io.Serializable {
-	public R apply(T t);
+public final class ResultWrapper<Result> {
+	protected Result result;
+	protected Exception exception;
+
+	public void setResult(Result result) {
+		this.result = result;
+	}
+
+	public void setException(Exception exception) {
+		this.exception = exception;
+	}
+
+	public Result getResult() throws Exception {
+		if (exception != null) {
+			throw exception;
+		}
+		return result;
+	}
 }
