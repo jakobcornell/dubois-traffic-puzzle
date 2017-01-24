@@ -75,7 +75,7 @@ public final class MathleteIdActivity extends IdActivity {
 			FragmentTransaction uiTransaction = manager.beginTransaction();
 			uiTransaction.add(R.id.loader_container, uiFragment, UI_FRAGMENT_ID);
 			uiTransaction.addToBackStack(UI_FRAGMENT_ID);
-			uiTransaction.commitAllowingStateLoss();
+			uiTransaction.commit();
 
 			FragmentTransaction loaderTransaction = manager.beginTransaction();
 			loaderTransaction.add(loaderFragment, LOADER_FRAGMENT_ID);
