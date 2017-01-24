@@ -25,16 +25,18 @@ import android.util.Log;
 import java.util.Collection;
 import java.util.HashSet;
 import android.os.Bundle;
+import android.os.Message;
 import android.content.Context;
 import android.content.Loader;
 import android.content.AsyncTaskLoader;
 
 import com.duboisproject.rushhour.Application;
 import com.duboisproject.rushhour.id.Mathlete;
+import com.duboisproject.rushhour.activities.MathleteIdActivity;
 import com.duboisproject.rushhour.database.SdbInterface;
 
 public final class MathleteLoaderFragment extends LoaderFragment<ResultWrapper<Mathlete>> {
-	protected static final String MATHLETE_ID_KEY = "mathleteId";
+	protected static final String MATHLETE_ID_KEY = "MATHLETE_ID";
 
 	/**
 	 * ID of this loader, used by the LoaderManager.
@@ -43,13 +45,8 @@ public final class MathleteLoaderFragment extends LoaderFragment<ResultWrapper<M
 	protected static final int LOADER_ID = MathleteLoader.class.hashCode();
 
 	protected String mathleteId;
-	protected Collection<Listener> completionListeners = new HashSet<Listener>();
 
 	public MathleteLoaderFragment() {}
-
-	public interface Listener {
-		public void onLoadFinished(ResultWrapper<Mathlete> wrapper);
-	}
 
 	protected static final class MathleteLoader extends AsyncTaskLoader<ResultWrapper<Mathlete>> {
 		protected final Context context;
@@ -63,8 +60,6 @@ public final class MathleteLoaderFragment extends LoaderFragment<ResultWrapper<M
 
 		public ResultWrapper<Mathlete> loadInBackground() {
 			Log.d("rushhour", "starting to calc result");
-			// use mathleteId of outer class
-			// TODO
 			ResultWrapper<Mathlete> wrapper = new ResultWrapper<Mathlete>();
 			Application app = (Application) context.getApplicationContext();
 			try {
@@ -75,24 +70,10 @@ public final class MathleteLoaderFragment extends LoaderFragment<ResultWrapper<M
 			Log.d("rushhour", "calculated a result");
 			return wrapper;
 		}
-
-		// TODO remove
-		public void deliverResult(ResultWrapper<Mathlete> wrapper) {
-			Log.d("rushhour", "got a result");
-			super.deliverResult(wrapper);
-		}
 	}
 
 	public MathleteLoaderFragment(String mathleteId) {
 		this.mathleteId = mathleteId;
-	}
-
-	public void registerListener(Listener l) {
-		completionListeners.add(l);
-	}
-
-	public void unregisterListener(Listener l) {
-		completionListeners.remove(l);
 	}
 
 	@Override
@@ -122,10 +103,10 @@ public final class MathleteLoaderFragment extends LoaderFragment<ResultWrapper<M
 
 	@Override
 	public void onLoadFinished(Loader<ResultWrapper<Mathlete>> loader, ResultWrapper<Mathlete> wrapper) {
-		Log.d("rushhour", "fragment notifying listener");
-		for (Listener l : completionListeners) {
-			l.onLoadFinished(wrapper);
-		}
+		MathleteIdActivity activity = (MathleteIdActivity) host;
+		Message message = activity.handler.obtainMessage(MathleteIdActivity.MESSAGE_WHAT);
+		message.obj = wrapper;
+		activity.handler.sendMessage(message);
 	}
 
 	@Override

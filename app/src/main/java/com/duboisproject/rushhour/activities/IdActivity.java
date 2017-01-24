@@ -22,6 +22,7 @@ package com.duboisproject.rushhour.activities;
 import android.app.Activity;
 import android.app.PendingIntent;
 import android.app.LoaderManager;
+import android.app.FragmentManager;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.Loader;
@@ -42,6 +43,7 @@ public abstract class IdActivity extends Activity {
 	protected IntentFilter[] nfcFilters;
 	protected NfcAdapter nfcAdapter;
 	protected SdbInterface sdbInterface;
+	protected LoaderFragment<?> loaderFragment;
 
 	@Override
 	public void onCreate(Bundle savedState) {

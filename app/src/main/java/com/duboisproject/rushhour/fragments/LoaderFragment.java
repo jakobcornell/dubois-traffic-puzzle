@@ -19,35 +19,50 @@
 
 package com.duboisproject.rushhour.fragments;
 
+import java.util.Collection;
+import java.util.HashSet;
 import java.io.Serializable;
 import android.app.Fragment;
+import android.app.Activity;
 import android.app.LoaderManager;
 import android.os.Bundle;
 import android.os.AsyncTask;
 import android.content.Loader;
-import android.content.AsyncTaskLoader;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.LayoutInflater;
 
 import com.duboisproject.rushhour.R;
 
+/**
+ * Headless fragment for fetching data asynchronously with a Loader.
+ * See <http://www.androiddesignpatterns.com/2013/04/retaining-objects-across-config-changes.html>
+ */
 public abstract class LoaderFragment<Result> extends Fragment implements LoaderManager.LoaderCallbacks<Result> {
-	protected AsyncTaskLoader<Result> loader;
+	protected Activity host;
 
 	@Override
 	public void onCreate(Bundle savedState) {
+		// keep this fragment alive across configuration changes
+		setRetainInstance(true);
+
 		super.onCreate(savedState);
-		// TODO
 	}
 
 	@Override
-	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedState) {
-		return inflater.inflate(R.layout.loader_fragment, container, false);
+	public void onAttach(Activity host) {
+		super.onAttach(host);
+		this.host = host;
+	}
+
+	@Override
+	public void onDetach() {
+		super.onDetach();
+		host = null;
 	}
 
 	@Override
 	public void onLoaderReset(Loader<Result> loader) {
-		return;
+		// TODO implement
 	}
 }

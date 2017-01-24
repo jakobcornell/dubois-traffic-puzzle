@@ -24,12 +24,14 @@ import java.util.concurrent.ConcurrentLinkedQueue;
 import android.os.Handler;
 import android.os.Message;
 
-// See http://stackoverflow.com/a/8122789/2729736
-
+/*
+ * Buffers messages when paused, replays on resume.
+ * See <http://stackoverflow.com/a/8122789/2729736>.
+ */
 public abstract class BufferedHandler extends Handler {
 	protected final Queue<Message> messages = new ConcurrentLinkedQueue<Message>();
 	protected boolean paused;
-	
+
 	public final void resume() {
 		paused = false;
 		while (!messages.isEmpty()) {
@@ -41,8 +43,6 @@ public abstract class BufferedHandler extends Handler {
 		paused = true;
 	}
 
-	protected abstract boolean storeMessage(Message message);
-	
 	protected abstract void processMessage(Message message);
 
 	@Override

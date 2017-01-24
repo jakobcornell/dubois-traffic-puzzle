@@ -20,6 +20,8 @@
 package com.duboisproject.rushhour.activities;
 
 import android.os.Bundle;
+import android.os.Message;
+import android.app.Activity;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.widget.Toast;
@@ -31,15 +33,29 @@ import android.content.AsyncTaskLoader;
 import android.util.Log;
 
 import com.duboisproject.rushhour.Application;
+import com.duboisproject.rushhour.BufferedHandler;
 import com.duboisproject.rushhour.id.Mathlete;
+import com.duboisproject.rushhour.fragments.LoaderUiFragment;
 import com.duboisproject.rushhour.fragments.MathleteLoaderFragment;
 import com.duboisproject.rushhour.fragments.ResultWrapper;
 import com.duboisproject.rushhour.database.SdbInterface;
 import com.duboisproject.rushhour.R;
 
-public final class MathleteIdActivity extends IdActivity implements MathleteLoaderFragment.Listener {
-	protected static final String FRAGMENT_ID = "MATHLETE_ID";
-	protected int loaderFragmentId;
+public final class MathleteIdActivity extends IdActivity {
+	protected static final String LOADER_FRAGMENT_ID = "MATHLETE_ID";
+	protected static final String UI_FRAGMENT_ID = "LOADER";
+	public static final int MESSAGE_WHAT = MathleteIdActivity.class.hashCode();
+	public LoadHandler handler = new LoadHandler();
+
+	public final class LoadHandler extends BufferedHandler {
+		@Override
+		protected void processMessage(Message message) {
+			if (message.what == MESSAGE_WHAT) {
+				ResultWrapper<Mathlete> result = (ResultWrapper<Mathlete>) message.obj;
+				MathleteIdActivity.this.onLoadFinished(result);
+			}
+		}
+	}
 
 	@Override
 	public void onCreate(Bundle savedState) {
@@ -50,15 +66,23 @@ public final class MathleteIdActivity extends IdActivity implements MathleteLoad
 
 	@Override
 	protected void onNewId(String id) {
-		MathleteLoaderFragment fragment = new MathleteLoaderFragment(id);
-		fragment.registerListener(this);
-		FragmentTransaction transaction = getFragmentManager().beginTransaction();
-		transaction.add(R.id.loader_container, fragment);
-		transaction.addToBackStack(FRAGMENT_ID);
-		loaderFragmentId = transaction.commit();
+		FragmentManager manager = getFragmentManager();
+		loaderFragment = (MathleteLoaderFragment) manager.findFragmentByTag(LOADER_FRAGMENT_ID);
+		if (loaderFragment == null) {
+			loaderFragment = new MathleteLoaderFragment(id);
+			LoaderUiFragment uiFragment = new LoaderUiFragment();
+
+			FragmentTransaction uiTransaction = manager.beginTransaction();
+			uiTransaction.add(R.id.loader_container, uiFragment, UI_FRAGMENT_ID);
+			uiTransaction.addToBackStack(UI_FRAGMENT_ID);
+			uiTransaction.commitAllowingStateLoss();
+
+			FragmentTransaction loaderTransaction = manager.beginTransaction();
+			loaderTransaction.add(loaderFragment, LOADER_FRAGMENT_ID);
+			loaderTransaction.commit();
+		}
 	}
 
-	@Override
 	public void onLoadFinished(ResultWrapper<Mathlete> wrapper) {
 		Mathlete mathlete;
 		String errorPrefix = getResources().getString(R.string.error_prefix);
@@ -79,6 +103,6 @@ public final class MathleteIdActivity extends IdActivity implements MathleteLoad
 		String messageFormat = getResources().getString(R.string.welcome_message);
 		String message = String.format(messageFormat, mathlete.firstName);
 		Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT).show();
-		getFragmentManager().popBackStack(FRAGMENT_ID, FragmentManager.POP_BACK_STACK_INCLUSIVE);
+		getFragmentManager().popBackStack(UI_FRAGMENT_ID, FragmentManager.POP_BACK_STACK_INCLUSIVE);
 	}
 }
