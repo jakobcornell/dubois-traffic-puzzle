@@ -42,7 +42,7 @@ import com.duboisproject.rushhour.database.SdbInterface;
 import com.duboisproject.rushhour.R;
 
 public final class MathleteIdActivity extends IdActivity {
-	protected static final String LOADER_FRAGMENT_ID = "MATHLETE_ID";
+	protected static final String LOADER_FRAGMENT_TAG = "MATHLETE_ID";
 	protected static final String UI_FRAGMENT_ID = "LOADER";
 	public static final int MESSAGE_WHAT = MathleteIdActivity.class.hashCode();
 	public LoadHandler handler = new LoadHandler();
@@ -67,7 +67,7 @@ public final class MathleteIdActivity extends IdActivity {
 	@Override
 	protected void onNewId(String id) {
 		FragmentManager manager = getFragmentManager();
-		loaderFragment = (MathleteLoaderFragment) manager.findFragmentByTag(LOADER_FRAGMENT_ID);
+		loaderFragment = (MathleteLoaderFragment) manager.findFragmentByTag(LOADER_FRAGMENT_TAG);
 		if (loaderFragment == null) {
 			loaderFragment = new MathleteLoaderFragment(id);
 			LoaderUiFragment uiFragment = new LoaderUiFragment();
@@ -78,31 +78,37 @@ public final class MathleteIdActivity extends IdActivity {
 			uiTransaction.commit();
 
 			FragmentTransaction loaderTransaction = manager.beginTransaction();
-			loaderTransaction.add(loaderFragment, LOADER_FRAGMENT_ID);
+			loaderTransaction.add(loaderFragment, LOADER_FRAGMENT_TAG);
 			loaderTransaction.commit();
 		}
 	}
 
 	public void onLoadFinished(ResultWrapper<Mathlete> wrapper) {
-		Mathlete mathlete;
+		Mathlete mathlete = null;
 		String errorPrefix = getResources().getString(R.string.error_prefix);
 		Context appContext = getApplicationContext();
+
 		try {
 			mathlete = wrapper.getResult();
 		} catch (IllegalArgumentException e) {
 			Toast.makeText(appContext, errorPrefix + e.getMessage(), Toast.LENGTH_LONG).show();
-			return;
 		} catch (SdbInterface.RequestException e) {
 			String message = errorPrefix + "Request failed. Check network connection.";
 			Toast.makeText(appContext, message, Toast.LENGTH_LONG).show();
-			return;
 		} catch (Exception e) {
 			Toast.makeText(appContext, "What happened?", Toast.LENGTH_SHORT).show();
-			return;
 		}
-		String messageFormat = getResources().getString(R.string.welcome_message);
-		String message = String.format(messageFormat, mathlete.firstName);
-		Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT).show();
-		getFragmentManager().popBackStack(UI_FRAGMENT_ID, FragmentManager.POP_BACK_STACK_INCLUSIVE);
+		
+		if (mathlete != null) {
+			String messageFormat = getResources().getString(R.string.welcome_message);
+			String message = String.format(messageFormat, mathlete.firstName);
+			Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT).show();
+		}
+
+		FragmentManager manager = getFragmentManager();
+		manager.popBackStack(UI_FRAGMENT_ID, FragmentManager.POP_BACK_STACK_INCLUSIVE);
+		FragmentTransaction uiRemoval = manager.beginTransaction();
+		uiRemoval.remove(manager.findFragmentByTag(LOADER_FRAGMENT_TAG));
+		uiRemoval.commit();
 	}
 }
