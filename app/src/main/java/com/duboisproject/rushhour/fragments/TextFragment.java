@@ -19,14 +19,14 @@
 
 package com.duboisproject.rushhour.fragments;
 
-import android.app.Fragment;
 import android.os.Bundle;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.LayoutInflater;
+
 import com.duboisproject.rushhour.R;
 
-public final class TextFragment extends Fragment {
+public final class TextFragment extends android.app.Fragment {
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		return inflater.inflate(R.layout.text_fragment, container, false);

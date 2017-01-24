@@ -21,18 +21,12 @@ package com.duboisproject.rushhour.activities;
 
 import android.os.Bundle;
 import android.os.Message;
-import android.app.Activity;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.widget.Toast;
 import android.widget.TextView;
-import android.content.res.Resources;
 import android.content.Context;
-import android.content.Loader;
-import android.content.AsyncTaskLoader;
-import android.util.Log;
 
-import com.duboisproject.rushhour.Application;
 import com.duboisproject.rushhour.BufferedHandler;
 import com.duboisproject.rushhour.id.Mathlete;
 import com.duboisproject.rushhour.fragments.LoaderUiFragment;

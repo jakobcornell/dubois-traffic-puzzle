@@ -24,9 +24,6 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.HashMap;
-import java.util.concurrent.FutureTask;
-import java.util.concurrent.Callable;
-import android.util.Log; // TODO remove
 import com.amazonaws.services.simpledb.AmazonSimpleDBClient;
 import com.amazonaws.auth.AWSCredentials;
 import com.amazonaws.services.simpledb.model.GetAttributesRequest;
@@ -35,7 +32,6 @@ import com.amazonaws.services.simpledb.model.Attribute;
 
 import com.duboisproject.rushhour.id.Mathlete;
 import com.duboisproject.rushhour.id.Coach;
-import com.duboisproject.rushhour.R;
 
 public final class SdbInterface {
 	protected static final String MATHLETE_NAME = "name";

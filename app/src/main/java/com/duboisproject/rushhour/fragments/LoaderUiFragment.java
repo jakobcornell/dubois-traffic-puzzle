@@ -20,7 +20,6 @@
 package com.duboisproject.rushhour.fragments;
 
 import android.os.Bundle;
-import android.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -30,7 +29,7 @@ import com.duboisproject.rushhour.R;
 /**
  * UI-only fragment for showing a progress indicator.
  */
-public class LoaderUiFragment extends Fragment {
+public class LoaderUiFragment extends android.app.Fragment {
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedState) {
 		// Don't attach the inflated view to its container, as Android will do that for us.

@@ -19,4 +19,4 @@
 
 package com.duboisproject.rushhour.id;
 
-public interface DuboisIdentity extends android.os.Parcelable {}
+public interface DuboisIdentity {}

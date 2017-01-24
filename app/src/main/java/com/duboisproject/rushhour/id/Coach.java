@@ -19,7 +19,7 @@
 
 package com.duboisproject.rushhour.id;
 
-public final class Coach {//implements DuboisIdentity {
+public final class Coach implements DuboisIdentity {
 	public final String id;
 	public final String name;
 

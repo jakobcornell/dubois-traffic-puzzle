@@ -21,14 +21,13 @@ package com.duboisproject.rushhour;
 
 import java.util.Queue;
 import java.util.concurrent.ConcurrentLinkedQueue;
-import android.os.Handler;
 import android.os.Message;
 
 /*
  * Buffers messages when paused, replays on resume.
  * See <http://stackoverflow.com/a/8122789/2729736>.
  */
-public abstract class BufferedHandler extends Handler {
+public abstract class BufferedHandler extends android.os.Handler {
 	protected final Queue<Message> messages = new ConcurrentLinkedQueue<Message>();
 	protected boolean paused;
 

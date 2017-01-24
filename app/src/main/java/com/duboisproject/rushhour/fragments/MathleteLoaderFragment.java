@@ -19,11 +19,6 @@
 
 package com.duboisproject.rushhour.fragments;
 
-// test
-import android.util.Log;
-
-import java.util.Collection;
-import java.util.HashSet;
 import android.os.Bundle;
 import android.os.Message;
 import android.content.Context;
@@ -33,7 +28,6 @@ import android.content.AsyncTaskLoader;
 import com.duboisproject.rushhour.Application;
 import com.duboisproject.rushhour.id.Mathlete;
 import com.duboisproject.rushhour.activities.MathleteIdActivity;
-import com.duboisproject.rushhour.database.SdbInterface;
 
 public final class MathleteLoaderFragment extends LoaderFragment<ResultWrapper<Mathlete>> {
 	protected static final String MATHLETE_ID_KEY = "MATHLETE_ID";
@@ -59,7 +53,6 @@ public final class MathleteLoaderFragment extends LoaderFragment<ResultWrapper<M
 		}
 
 		public ResultWrapper<Mathlete> loadInBackground() {
-			Log.d("rushhour", "starting to calc result");
 			ResultWrapper<Mathlete> wrapper = new ResultWrapper<Mathlete>();
 			Application app = (Application) context.getApplicationContext();
 			try {
@@ -67,7 +60,6 @@ public final class MathleteLoaderFragment extends LoaderFragment<ResultWrapper<M
 			} catch (Exception exception) {
 				wrapper.setException(exception);
 			}
-			Log.d("rushhour", "calculated a result");
 			return wrapper;
 		}
 	}
@@ -83,9 +75,9 @@ public final class MathleteLoaderFragment extends LoaderFragment<ResultWrapper<M
 		if (savedState != null) {
 			mathleteId = (String) savedState.getCharSequence(MATHLETE_ID_KEY);
 		}
-		Log.d("rushhour", "initting loader");
 		Loader l = getLoaderManager().initLoader(LOADER_ID, null, this);
 		if (savedState == null) {
+			// necessary due to bug in Android
 			l.forceLoad();
 		}
 	}
@@ -97,7 +89,6 @@ public final class MathleteLoaderFragment extends LoaderFragment<ResultWrapper<M
 
 	@Override
 	public Loader<ResultWrapper<Mathlete>> onCreateLoader(int id, Bundle args) {
-		Log.d("rushhour", "created a loader");
 		return new MathleteLoader(getActivity(), mathleteId);
 	}
 

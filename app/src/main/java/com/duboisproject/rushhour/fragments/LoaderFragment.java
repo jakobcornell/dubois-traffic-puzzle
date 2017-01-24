@@ -19,20 +19,11 @@
 
 package com.duboisproject.rushhour.fragments;
 
-import java.util.Collection;
-import java.util.HashSet;
-import java.io.Serializable;
 import android.app.Fragment;
 import android.app.Activity;
 import android.app.LoaderManager;
 import android.os.Bundle;
-import android.os.AsyncTask;
 import android.content.Loader;
-import android.view.View;
-import android.view.ViewGroup;
-import android.view.LayoutInflater;
-
-import com.duboisproject.rushhour.R;
 
 /**
  * Headless fragment for fetching data asynchronously with a Loader.
