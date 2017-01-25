@@ -29,25 +29,26 @@ import android.content.Context;
 import android.content.Intent;
 
 import com.duboisproject.rushhour.BufferedHandler;
-import com.duboisproject.rushhour.id.Mathlete;
+import com.duboisproject.rushhour.id.Coach;
+import com.duboisproject.rushhour.activities.GamePlayActivity;
 import com.duboisproject.rushhour.fragments.LoaderUiFragment;
-import com.duboisproject.rushhour.fragments.MathleteLoaderFragment;
+import com.duboisproject.rushhour.fragments.CoachLoaderFragment;
 import com.duboisproject.rushhour.fragments.ResultWrapper;
 import com.duboisproject.rushhour.database.SdbInterface;
 import com.duboisproject.rushhour.R;
 
-public final class MathleteIdActivity extends IdActivity {
-	protected static final String LOADER_FRAGMENT_TAG = "MATHLETE_ID";
+public final class CoachIdActivity extends IdActivity {
+	protected static final String LOADER_FRAGMENT_TAG = "COACH_ID";
 	protected static final String UI_FRAGMENT_ID = "LOADER";
-	public static final int MESSAGE_WHAT = MathleteIdActivity.class.hashCode();
+	public static final int MESSAGE_WHAT = CoachIdActivity.class.hashCode();
 	public LoadHandler handler = new LoadHandler();
 
 	public final class LoadHandler extends BufferedHandler {
 		@Override
 		protected void processMessage(Message message) {
 			if (message.what == MESSAGE_WHAT) {
-				ResultWrapper<Mathlete> result = (ResultWrapper<Mathlete>) message.obj;
-				MathleteIdActivity.this.onLoadFinished(result);
+				ResultWrapper<Coach> result = (ResultWrapper<Coach>) message.obj;
+				CoachIdActivity.this.onLoadFinished(result);
 			}
 		}
 	}
@@ -56,15 +57,15 @@ public final class MathleteIdActivity extends IdActivity {
 	public void onCreate(Bundle savedState) {
 		super.onCreate(savedState);
 		TextView textView = (TextView) findViewById(R.id.fragment_text);
-		textView.setText(R.string.mathlete_scan_message);
+		textView.setText(R.string.coach_scan_message);
 	}
 
 	@Override
 	protected void onNewId(String id) {
 		FragmentManager manager = getFragmentManager();
-		loaderFragment = (MathleteLoaderFragment) manager.findFragmentByTag(LOADER_FRAGMENT_TAG);
+		loaderFragment = (CoachLoaderFragment) manager.findFragmentByTag(LOADER_FRAGMENT_TAG);
 		if (loaderFragment == null) {
-			loaderFragment = new MathleteLoaderFragment(id);
+			loaderFragment = new CoachLoaderFragment(id);
 			LoaderUiFragment uiFragment = new LoaderUiFragment();
 
 			FragmentTransaction uiTransaction = manager.beginTransaction();
@@ -78,13 +79,13 @@ public final class MathleteIdActivity extends IdActivity {
 		}
 	}
 
-	public void onLoadFinished(ResultWrapper<Mathlete> wrapper) {
-		Mathlete mathlete = null;
+	public void onLoadFinished(ResultWrapper<Coach> wrapper) {
+		Coach coach = null;
 		String errorPrefix = getResources().getString(R.string.error_prefix);
 		Context appContext = getApplicationContext();
 
 		try {
-			mathlete = wrapper.getResult();
+			coach = wrapper.getResult();
 		} catch (IllegalArgumentException e) {
 			Toast.makeText(appContext, errorPrefix + e.getMessage(), Toast.LENGTH_LONG).show();
 		} catch (SdbInterface.RequestException e) {
@@ -93,18 +94,15 @@ public final class MathleteIdActivity extends IdActivity {
 		} catch (Exception e) {
 			Toast.makeText(appContext, "What happened?", Toast.LENGTH_SHORT).show();
 		}
-
+	
 		FragmentManager manager = getFragmentManager();
 		manager.popBackStack(UI_FRAGMENT_ID, FragmentManager.POP_BACK_STACK_INCLUSIVE);
 		FragmentTransaction uiRemoval = manager.beginTransaction();
 		uiRemoval.remove(manager.findFragmentByTag(LOADER_FRAGMENT_TAG));
 		uiRemoval.commit();
 
-		if (mathlete != null) {
-			String messageFormat = getResources().getString(R.string.welcome_message);
-			String message = String.format(messageFormat, mathlete.firstName);
-			Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT).show();
-			startActivity(new Intent(this, CoachIdActivity.class));
+		if (coach != null) {
+			startActivity(new Intent(this, GamePlayActivity.class));
 		}
 	}
 }

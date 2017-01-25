@@ -20,36 +20,43 @@
 package com.duboisproject.rushhour.fragments;
 
 import android.os.Bundle;
+import android.os.Message;
 import android.content.Context;
 import android.content.Loader;
 import android.content.AsyncTaskLoader;
 
+import com.duboisproject.rushhour.Application;
 import com.duboisproject.rushhour.id.Coach;
+import com.duboisproject.rushhour.activities.CoachIdActivity;
 
 public final class CoachLoaderFragment extends LoaderFragment<ResultWrapper<Coach>> {
-	protected final String coachId;
+	protected static final String COACH_ID_KEY = "COACH_ID";
 
-	public interface Listener {
-		public void onLoadFinished(ResultWrapper<Coach> wrapper);
-	}
+	/**
+	 * ID of this loader, used by the LoaderManager.
+	 * This identifies the type of loader rather than any particular loader.
+	 */
+	protected static final int LOADER_ID = CoachLoader.class.hashCode();
+
+	protected String coachId;
+
+	public CoachLoaderFragment() {}
 
 	protected static final class CoachLoader extends AsyncTaskLoader<ResultWrapper<Coach>> {
-		/**
-		 * ID of this loader, used by the LoaderManager.
-		 * This seems to identify the type of loader rather than any particular loader.
-		 */
-		public static final int id = CoachLoader.class.hashCode();
+		protected final Context context;
+		protected final String coachId;
 
-		public CoachLoader(Context context) {
+		public CoachLoader(Context context, String coachId) {
 			super(context);
+			this.context = context;
+			this.coachId = coachId;
 		}
 
 		public ResultWrapper<Coach> loadInBackground() {
-			// use coachId of outer class
-			// TODO
 			ResultWrapper<Coach> wrapper = new ResultWrapper<Coach>();
+			Application app = (Application) context.getApplicationContext();
 			try {
-				wrapper.setResult(new Coach("DEADBEEF", "Joe"));
+				wrapper.setResult(app.getSdbInterface().fetchCoach(coachId));
 			} catch (Exception exception) {
 				wrapper.setException(exception);
 			}
@@ -62,14 +69,39 @@ public final class CoachLoaderFragment extends LoaderFragment<ResultWrapper<Coac
 	}
 
 	@Override
+	public void onCreate(Bundle savedState) {
+		setRetainInstance(true);
+		super.onCreate(savedState);
+		if (savedState != null) {
+			coachId = (String) savedState.getCharSequence(COACH_ID_KEY);
+		}
+		Loader l = getLoaderManager().initLoader(LOADER_ID, null, this);
+		if (savedState == null) {
+			// necessary due to bug in Android
+			l.forceLoad();
+		}
+	}
+
+	@Override
+	public void onActivityCreated(Bundle savedState) {
+		super.onActivityCreated(savedState);
+	}
+
+	@Override
 	public Loader<ResultWrapper<Coach>> onCreateLoader(int id, Bundle args) {
-		return new CoachLoader(getActivity());
+		return new CoachLoader(getActivity(), coachId);
 	}
 
 	@Override
 	public void onLoadFinished(Loader<ResultWrapper<Coach>> loader, ResultWrapper<Coach> wrapper) {
-		try {
-			wrapper.getResult();
-		} catch (Exception e) {}
+		CoachIdActivity activity = (CoachIdActivity) host;
+		Message message = activity.handler.obtainMessage(CoachIdActivity.MESSAGE_WHAT);
+		message.obj = wrapper;
+		activity.handler.sendMessage(message);
+	}
+
+	@Override
+	public void onSaveInstanceState(Bundle state) {
+		state.putCharSequence(COACH_ID_KEY, coachId);
 	}
 }

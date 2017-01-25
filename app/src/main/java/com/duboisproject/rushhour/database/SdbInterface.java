@@ -38,12 +38,14 @@ public final class SdbInterface {
 	protected static final String MATHLETE_LAST_NAME = "last_name";
 	protected static final String COACH_NAME = "Name";
 
+	protected static final String REQUEST_FAILED_MESSAGE = "Unable to complete request";
+
 	protected static enum RequestDetails {
-		MATHLETE_IDENTIFY(
+		MATHLETE_ID(
 			"dubois_mathlete_identities",
 			new String[] { MATHLETE_NAME, MATHLETE_LAST_NAME }
 		),
-		COACH_IDENTITY(
+		COACH_ID(
 			"dubois_coach_identities",
 			new String[] { COACH_NAME }
 		);
@@ -60,6 +62,7 @@ public final class SdbInterface {
 			GetAttributesRequest request = new GetAttributesRequest();
 			request.setDomainName(domainName);
 			request.setAttributeNames(attributeNames);
+			request.setConsistentRead(true);
 			return request;
 		}
 	}
@@ -79,25 +82,37 @@ public final class SdbInterface {
 	}
 
 	public Mathlete fetchMathlete(String id) throws IllegalArgumentException, RequestException {
-		GetAttributesRequest request = RequestDetails.MATHLETE_IDENTIFY.toAttributesRequest();
+		GetAttributesRequest request = RequestDetails.MATHLETE_ID.toAttributesRequest();
 		request.setItemName(id);
-		request.setConsistentRead(true);
 		GetAttributesResult result;
 		try {
 			result = client.getAttributes(request);
 		} catch (com.amazonaws.AmazonClientException e) {
-			throw new RequestException("Unable to complete request");
+			throw new RequestException(REQUEST_FAILED_MESSAGE);
 		}
 		List<Attribute> attributesList = result.getAttributes();
 		if (attributesList.size() == 0) {
-			throw new IllegalArgumentException("Anonymous or missing mathlete");
+			throw new IllegalArgumentException("No such mathlete in database");
 		}
 		Map<String, String> attributes = mapify(attributesList);
 		return new Mathlete(id, attributes.get(MATHLETE_NAME), attributes.get(MATHLETE_LAST_NAME));
 	}
 
-	public Coach fetchCoach(String id) throws IllegalArgumentException {
-		return null;
+	public Coach fetchCoach(String id) throws IllegalArgumentException, RequestException {
+		GetAttributesRequest request = RequestDetails.COACH_ID.toAttributesRequest();
+		request.setItemName(id);
+		GetAttributesResult result;
+		try {
+			result = client.getAttributes(request);
+		} catch (com.amazonaws.AmazonClientException e) {
+			throw new RequestException(REQUEST_FAILED_MESSAGE);
+		}
+		List<Attribute> attributesList = result.getAttributes();
+		if (attributesList.size() == 0) {
+			throw new IllegalArgumentException("No such coach in database");
+		}
+		Map<String, String> attributes = mapify(attributesList);
+		return new Coach(id, attributes.get(COACH_NAME));
 	}
 
 	protected static Map<String, String> mapify(List<Attribute> attributes) {

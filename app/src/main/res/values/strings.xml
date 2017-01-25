@@ -12,4 +12,7 @@
 	<string name="mathlete_scan_message">Scan mathlete tag</string>
 	<string name="welcome_message">Welcome, %1$s!</string>
 	<string name="anonymous_welcome_message">Welcome!</string>
+
+	<!-- coach scan activity -->
+	<string name="coach_scan_message">Scan coach tag</string>
 </resources>

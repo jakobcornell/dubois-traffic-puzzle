@@ -22,10 +22,12 @@ package com.duboisproject.rushhour;
 import com.amazonaws.auth.AWSCredentials;
 import com.amazonaws.auth.BasicAWSCredentials;
 
+import com.duboisproject.rushhour.id.Mathlete;
 import com.duboisproject.rushhour.database.SdbInterface;
 
 public final class Application extends android.app.Application {
 	protected SdbInterface sdbInterface;
+	public Mathlete player;
 
 	public SdbInterface getSdbInterface() {
 		return sdbInterface;
