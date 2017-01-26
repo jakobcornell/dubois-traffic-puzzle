@@ -24,30 +24,45 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.HashMap;
+import java.io.StringReader;
+import com.amazonaws.AmazonClientException;
 import com.amazonaws.services.simpledb.AmazonSimpleDBClient;
 import com.amazonaws.auth.AWSCredentials;
 import com.amazonaws.services.simpledb.model.GetAttributesRequest;
 import com.amazonaws.services.simpledb.model.GetAttributesResult;
 import com.amazonaws.services.simpledb.model.Attribute;
 
+import com.duboisproject.rushhour.Board;
+import com.duboisproject.rushhour.BoardLoader;
 import com.duboisproject.rushhour.id.Mathlete;
 import com.duboisproject.rushhour.id.Coach;
 
 public final class SdbInterface {
+	// domain names
+	protected static final String MATHLETE_DOMAIN = "dubois_mathlete_identities";
+	protected static final String COACH_DOMAIN = "dubois_coach_identities";
+	protected static final String LEVELS_DOMAIN = "dubois_rushhour_levels";
+
+	// attribute names
 	protected static final String MATHLETE_NAME = "name";
 	protected static final String MATHLETE_LAST_NAME = "last_name";
 	protected static final String COACH_NAME = "Name";
+	protected static final String LEVEL_MAP = "map";
 
 	protected static final String REQUEST_FAILED_MESSAGE = "Unable to complete request";
 
 	protected static enum RequestDetails {
 		MATHLETE_ID(
-			"dubois_mathlete_identities",
+			MATHLETE_DOMAIN,
 			new String[] { MATHLETE_NAME, MATHLETE_LAST_NAME }
 		),
 		COACH_ID(
-			"dubois_coach_identities",
+			COACH_DOMAIN,
 			new String[] { COACH_NAME }
+		),
+		MAP_FETCH(
+			LEVELS_DOMAIN,
+			new String[] { LEVEL_MAP }
 		);
 
 		public final String domainName;
@@ -87,7 +102,7 @@ public final class SdbInterface {
 		GetAttributesResult result;
 		try {
 			result = client.getAttributes(request);
-		} catch (com.amazonaws.AmazonClientException e) {
+		} catch (AmazonClientException e) {
 			throw new RequestException(REQUEST_FAILED_MESSAGE);
 		}
 		List<Attribute> attributesList = result.getAttributes();
@@ -104,7 +119,7 @@ public final class SdbInterface {
 		GetAttributesResult result;
 		try {
 			result = client.getAttributes(request);
-		} catch (com.amazonaws.AmazonClientException e) {
+		} catch (AmazonClientException e) {
 			throw new RequestException(REQUEST_FAILED_MESSAGE);
 		}
 		List<Attribute> attributesList = result.getAttributes();
@@ -113,6 +128,24 @@ public final class SdbInterface {
 		}
 		Map<String, String> attributes = mapify(attributesList);
 		return new Coach(id, attributes.get(COACH_NAME));
+	}
+
+	public Board fetchBoard(int id) throws IllegalArgumentException, RequestException {
+		GetAttributesRequest request = RequestDetails.MAP_FETCH.toAttributesRequest();
+		request.setItemName(Integer.toString(id));
+		GetAttributesResult result;
+		try {
+			result = client.getAttributes(request);
+		} catch (AmazonClientException e) {
+			throw new RequestException(REQUEST_FAILED_MESSAGE);
+		}
+		List<Attribute> attributesList = result.getAttributes();
+		if (attributesList.size() == 0) {
+			throw new IllegalArgumentException("No such level in database");
+		}
+		Map<String, String> attributes = mapify(attributesList);
+		String map = attributes.get(LEVEL_MAP);
+		return BoardLoader.loadBoard(new StringReader(map));
 	}
 
 	protected static Map<String, String> mapify(List<Attribute> attributes) {

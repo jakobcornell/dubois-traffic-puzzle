@@ -30,13 +30,16 @@ import com.duboisproject.rushhour.id.Coach;
 import com.duboisproject.rushhour.activities.CoachIdActivity;
 
 public final class CoachLoaderFragment extends LoaderFragment<ResultWrapper<Coach>> {
-	protected static final String COACH_ID_KEY = "COACH_ID";
-
 	/**
 	 * ID of this loader, used by the LoaderManager.
 	 * This identifies the type of loader rather than any particular loader.
 	 */
 	protected static final int LOADER_ID = CoachLoader.class.hashCode();
+
+	/**
+	 * The "what" field of messages this fragment sends to its host on completion.
+	 */
+	public static final int MESSAGE_WHAT = CoachLoader.class.hashCode();
 
 	protected String coachId;
 
@@ -72,9 +75,6 @@ public final class CoachLoaderFragment extends LoaderFragment<ResultWrapper<Coac
 	public void onCreate(Bundle savedState) {
 		setRetainInstance(true);
 		super.onCreate(savedState);
-		if (savedState != null) {
-			coachId = (String) savedState.getCharSequence(COACH_ID_KEY);
-		}
 		Loader l = getLoaderManager().initLoader(LOADER_ID, null, this);
 		if (savedState == null) {
 			// necessary due to bug in Android
@@ -94,14 +94,8 @@ public final class CoachLoaderFragment extends LoaderFragment<ResultWrapper<Coac
 
 	@Override
 	public void onLoadFinished(Loader<ResultWrapper<Coach>> loader, ResultWrapper<Coach> wrapper) {
-		CoachIdActivity activity = (CoachIdActivity) host;
-		Message message = activity.handler.obtainMessage(CoachIdActivity.MESSAGE_WHAT);
+		Message message = host.getHandler().obtainMessage(MESSAGE_WHAT);
 		message.obj = wrapper;
-		activity.handler.sendMessage(message);
-	}
-
-	@Override
-	public void onSaveInstanceState(Bundle state) {
-		state.putCharSequence(COACH_ID_KEY, coachId);
+		host.getHandler().sendMessage(message);
 	}
 }

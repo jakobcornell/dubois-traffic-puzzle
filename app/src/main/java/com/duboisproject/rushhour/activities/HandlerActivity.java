@@ -17,27 +17,14 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
-package com.duboisproject.rushhour.fragments;
+package com.duboisproject.rushhour.activities;
 
-import android.os.Bundle;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-
-import com.duboisproject.rushhour.R;
+import android.os.Handler;
 
 /**
- * UI-only fragment for showing a progress indicator.
+ * Describes an activity that can handle messages.
+ * Implemented by activities that manage asynchronous tasks.
  */
-public class LoaderUiFragment extends android.app.Fragment {
-	/**
-	 * For tagging fragment transactions
-	 */
-	public static final String TAG = "LOADER_UI";
-
-	@Override
-	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedState) {
-		// Don't attach the inflated view to its container, as Android will do that for us.
-		return inflater.inflate(R.layout.loader_fragment, container, false);
-	}
+public interface HandlerActivity {
+	public Handler getHandler();
 }

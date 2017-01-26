@@ -2,6 +2,8 @@
  *     Rush Hour Android app
  * Copyright (C) 2015 Randy Wanga, Jos Craaijo, Camil Staps
  *
+ * Modified by Jakob Cornell, 2017-01-25 to -01-26
+ *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation; either version 2 of the License, or
@@ -16,64 +18,56 @@
  * with this program; if not, write to the Free Software Foundation, Inc.,
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  */
+
 package com.duboisproject.rushhour;
 
-import android.graphics.Color;
-
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.InputStream;
+import java.io.Reader;
 import java.util.Scanner;
+import android.graphics.Color;
 
 /**
  * Created by Jos on 23-4-2015.
  */
-public class BoardLoader {
+public final class BoardLoader {
+	/*
+	Level format:
+	1 line: number of cars
 
-    public BoardLoader()
-    {}
+	2 lines for each car:
+		x1 y1 x2 y2
+		r g b
+	*/
 
-    /**
-     * Load a board from a file
-     * @param file
-     * @return
-     */
-    public Board loadBoard(InputStream file)
-    {
-        /*
-        Level formaat:
-        1 regel: Aantal auto's
+	protected BoardLoader() {}
 
-        voor iedere auto:
-        x1 y1 x2 y2 op een regel.
-        r g b op een regel.
-         */
-        Scanner scan = new Scanner(file);
+	/**
+	 * Load a board from a Reader (e.g. FileReader or StringReader).
+	 * @param reader  the Reader to read the level map from
+	 * @return
+	 */
+	public static Board loadBoard(Reader reader) {
+		Board board = new Board();
+		Scanner scanner = new Scanner(reader);
 
-        Board board = new Board();
+		// Allow semicolons in place of line breaks (for SdbNavigator compat)
+		scanner.useDelimiter("\\p{javaWhitespace}+|;");
 
-        int numCars = scan.nextInt();
-        scan.nextLine();
+		int numCars = scanner.nextInt();
 
-        for(int carN = 0; carN < numCars; carN++)
-        {
-            int x1 = scan.nextInt();
-            int y1 = scan.nextInt();
-            int x2 = scan.nextInt();
-            int y2 = scan.nextInt();
-            scan.nextLine();
+		for (int carN = 0; carN < numCars; carN += 1) {
+			int x1 = scanner.nextInt();
+			int y1 = scanner.nextInt();
+			int x2 = scanner.nextInt();
+			int y2 = scanner.nextInt();
 
-            int r = scan.nextInt();
-            int g = scan.nextInt();
-            int b = scan.nextInt();
+			int r = scanner.nextInt();
+			int g = scanner.nextInt();
+			int b = scanner.nextInt();
 
-            Car c = new Car(new Coordinate(x1, y1), new Coordinate(x2, y2), Color.rgb(r, g, b));
-            board.add(c);
+			Car c = new Car(new Coordinate(x1, y1), new Coordinate(x2, y2), Color.rgb(r, g, b));
+			board.add(c);
+		}
 
-            if(scan.hasNext()) scan.nextLine();
-        }
-
-        return board;
-    }
+		return board;
+	}
 }

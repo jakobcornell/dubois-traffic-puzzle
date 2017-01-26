@@ -25,12 +25,14 @@ import android.app.LoaderManager;
 import android.os.Bundle;
 import android.content.Loader;
 
+import com.duboisproject.rushhour.activities.HandlerActivity;
+
 /**
  * Headless fragment for fetching data asynchronously with a Loader.
  * See <http://www.androiddesignpatterns.com/2013/04/retaining-objects-across-config-changes.html>
  */
 public abstract class LoaderFragment<Result> extends Fragment implements LoaderManager.LoaderCallbacks<Result> {
-	protected Activity host;
+	protected HandlerActivity host;
 
 	@Override
 	public void onCreate(Bundle savedState) {
@@ -43,7 +45,7 @@ public abstract class LoaderFragment<Result> extends Fragment implements LoaderM
 	@Override
 	public void onAttach(Activity host) {
 		super.onAttach(host);
-		this.host = host;
+		this.host = (HandlerActivity) host;
 	}
 
 	@Override

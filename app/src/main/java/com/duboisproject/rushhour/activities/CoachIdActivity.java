@@ -19,8 +19,10 @@
 
 package com.duboisproject.rushhour.activities;
 
+import java.io.Serializable;
 import android.os.Bundle;
 import android.os.Message;
+import android.os.Handler;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.widget.Toast;
@@ -28,7 +30,9 @@ import android.widget.TextView;
 import android.content.Context;
 import android.content.Intent;
 
+import com.duboisproject.rushhour.Application;
 import com.duboisproject.rushhour.BufferedHandler;
+import com.duboisproject.rushhour.Board;
 import com.duboisproject.rushhour.id.Coach;
 import com.duboisproject.rushhour.activities.GamePlayActivity;
 import com.duboisproject.rushhour.fragments.LoaderUiFragment;
@@ -37,20 +41,22 @@ import com.duboisproject.rushhour.fragments.ResultWrapper;
 import com.duboisproject.rushhour.database.SdbInterface;
 import com.duboisproject.rushhour.R;
 
-public final class CoachIdActivity extends IdActivity {
+public final class CoachIdActivity extends IdActivity implements HandlerActivity {
 	protected static final String LOADER_FRAGMENT_TAG = "COACH_ID";
-	protected static final String UI_FRAGMENT_ID = "LOADER";
-	public static final int MESSAGE_WHAT = CoachIdActivity.class.hashCode();
-	public LoadHandler handler = new LoadHandler();
+	protected final LoadHandler handler = new LoadHandler();
 
 	public final class LoadHandler extends BufferedHandler {
 		@Override
 		protected void processMessage(Message message) {
-			if (message.what == MESSAGE_WHAT) {
+			if (message.what == CoachLoaderFragment.MESSAGE_WHAT) {
 				ResultWrapper<Coach> result = (ResultWrapper<Coach>) message.obj;
 				CoachIdActivity.this.onLoadFinished(result);
 			}
 		}
+	}
+
+	public Handler getHandler() {
+		return handler;
 	}
 
 	@Override
@@ -69,8 +75,8 @@ public final class CoachIdActivity extends IdActivity {
 			LoaderUiFragment uiFragment = new LoaderUiFragment();
 
 			FragmentTransaction uiTransaction = manager.beginTransaction();
-			uiTransaction.add(R.id.loader_container, uiFragment, UI_FRAGMENT_ID);
-			uiTransaction.addToBackStack(UI_FRAGMENT_ID);
+			uiTransaction.add(R.id.loader_container, uiFragment, LoaderUiFragment.TAG);
+			uiTransaction.addToBackStack(LoaderUiFragment.TAG);
 			uiTransaction.commit();
 
 			FragmentTransaction loaderTransaction = manager.beginTransaction();
@@ -81,28 +87,31 @@ public final class CoachIdActivity extends IdActivity {
 
 	public void onLoadFinished(ResultWrapper<Coach> wrapper) {
 		Coach coach = null;
-		String errorPrefix = getResources().getString(R.string.error_prefix);
-		Context appContext = getApplicationContext();
+		Application app = (Application) getApplicationContext();
+		Application.Toaster toaster = app.getToaster();
 
 		try {
 			coach = wrapper.getResult();
 		} catch (IllegalArgumentException e) {
-			Toast.makeText(appContext, errorPrefix + e.getMessage(), Toast.LENGTH_LONG).show();
+			toaster.toastError(e.getMessage());
 		} catch (SdbInterface.RequestException e) {
-			String message = errorPrefix + "Request failed. Check network connection.";
-			Toast.makeText(appContext, message, Toast.LENGTH_LONG).show();
+			toaster.toastError("Request failed. Check network connection.");
+			app.logError(e);
 		} catch (Exception e) {
-			Toast.makeText(appContext, "What happened?", Toast.LENGTH_SHORT).show();
+			toaster.toastError("An unexpected error occurred.");
+			app.logError(e);
 		}
 	
 		FragmentManager manager = getFragmentManager();
-		manager.popBackStack(UI_FRAGMENT_ID, FragmentManager.POP_BACK_STACK_INCLUSIVE);
+		manager.popBackStack(LoaderUiFragment.TAG, FragmentManager.POP_BACK_STACK_INCLUSIVE);
 		FragmentTransaction uiRemoval = manager.beginTransaction();
 		uiRemoval.remove(manager.findFragmentByTag(LOADER_FRAGMENT_TAG));
 		uiRemoval.commit();
 
 		if (coach != null) {
-			startActivity(new Intent(this, GamePlayActivity.class));
+			app.pendingDescriptor = new Board.NumericDescriptor(app.getSdbInterface(), 1);
+			Intent intent = new Intent(this, GamePlayActivity.class);
+			startActivity(intent);
 		}
 	}
 }

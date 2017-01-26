@@ -26,40 +26,41 @@ import android.content.Loader;
 import android.content.AsyncTaskLoader;
 
 import com.duboisproject.rushhour.Application;
-import com.duboisproject.rushhour.id.Mathlete;
-import com.duboisproject.rushhour.activities.MathleteIdActivity;
+import com.duboisproject.rushhour.Board;
+import com.duboisproject.rushhour.BoardLoader;
+import com.duboisproject.rushhour.activities.CoachIdActivity;
 
-public final class MathleteLoaderFragment extends LoaderFragment<ResultWrapper<Mathlete>> {
+public final class BoardLoaderFragment extends LoaderFragment<ResultWrapper<Board>> {
 	/**
 	 * ID of this loader, used by the LoaderManager.
 	 * This identifies the type of loader rather than any particular loader.
 	 */
-	protected static final int LOADER_ID = MathleteLoader.class.hashCode();
+	protected static final int LOADER_ID = BoardLoader.class.hashCode();
 
 	/**
 	 * The "what" field of messages this fragment sends to its host on completion.
 	 */
-	public static final int MESSAGE_WHAT = MathleteLoader.class.hashCode();
+	public static final int MESSAGE_WHAT = BoardLoader.class.hashCode();
 
-	protected String mathleteId;
+	protected Board.Descriptor descriptor;
 
-	public MathleteLoaderFragment() {}
+	public BoardLoaderFragment() {}
 
-	protected static final class MathleteLoader extends AsyncTaskLoader<ResultWrapper<Mathlete>> {
+	protected static final class BoardLoader extends AsyncTaskLoader<ResultWrapper<Board>> {
 		protected final Context context;
-		protected final String mathleteId;
+		protected final Board.Descriptor descriptor;
 
-		public MathleteLoader(Context context, String mathleteId) {
+		public BoardLoader(Context context, Board.Descriptor descriptor) {
 			super(context);
 			this.context = context;
-			this.mathleteId = mathleteId;
+			this.descriptor = descriptor;
 		}
 
-		public ResultWrapper<Mathlete> loadInBackground() {
-			ResultWrapper<Mathlete> wrapper = new ResultWrapper<Mathlete>();
+		public ResultWrapper<Board> loadInBackground() {
+			ResultWrapper<Board> wrapper = new ResultWrapper<Board>();
 			Application app = (Application) context.getApplicationContext();
 			try {
-				wrapper.setResult(app.getSdbInterface().fetchMathlete(mathleteId));
+				wrapper.setResult(descriptor.resolve());
 			} catch (Exception exception) {
 				wrapper.setException(exception);
 			}
@@ -67,8 +68,8 @@ public final class MathleteLoaderFragment extends LoaderFragment<ResultWrapper<M
 		}
 	}
 
-	public MathleteLoaderFragment(String mathleteId) {
-		this.mathleteId = mathleteId;
+	public BoardLoaderFragment(Board.Descriptor descriptor) {
+		this.descriptor = descriptor;
 	}
 
 	@Override
@@ -88,12 +89,12 @@ public final class MathleteLoaderFragment extends LoaderFragment<ResultWrapper<M
 	}
 
 	@Override
-	public Loader<ResultWrapper<Mathlete>> onCreateLoader(int id, Bundle args) {
-		return new MathleteLoader(getActivity(), mathleteId);
+	public Loader<ResultWrapper<Board>> onCreateLoader(int id, Bundle args) {
+		return new BoardLoader(getActivity(), descriptor);
 	}
 
 	@Override
-	public void onLoadFinished(Loader<ResultWrapper<Mathlete>> loader, ResultWrapper<Mathlete> wrapper) {
+	public void onLoadFinished(Loader<ResultWrapper<Board>> loader, ResultWrapper<Board> wrapper) {
 		Message message = host.getHandler().obtainMessage(MESSAGE_WHAT);
 		message.obj = wrapper;
 		host.getHandler().sendMessage(message);
