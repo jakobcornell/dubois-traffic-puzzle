@@ -34,19 +34,18 @@ import android.view.ViewTreeObserver;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 
-// temp
-import android.util.Log;
-
 import com.duboisproject.rushhour.Application;
 import com.duboisproject.rushhour.BufferedHandler;
 import com.duboisproject.rushhour.Board;
 import com.duboisproject.rushhour.BoardLoader;
 import com.duboisproject.rushhour.DriveListener;
+import com.duboisproject.rushhour.GameStatistics;
 import com.duboisproject.rushhour.TheSoundPool;
 import com.duboisproject.rushhour.activities.HandlerActivity;
 import com.duboisproject.rushhour.database.SdbInterface;
 import com.duboisproject.rushhour.fragments.BoardLoaderFragment;
 import com.duboisproject.rushhour.fragments.LoaderUiFragment;
+import com.duboisproject.rushhour.fragments.PutStatisticsFragment;
 import com.duboisproject.rushhour.fragments.ResultWrapper;
 import com.duboisproject.rushhour.R;
 
@@ -54,7 +53,8 @@ import com.duboisproject.rushhour.R;
  * Playing the game
  */
 public class GamePlayActivity extends Activity implements Board.SolveListener, HandlerActivity {
-	public static final String LOADER_FRAGMENT_TAG = "BOARD_LOAD";
+	public static final String BOARD_LOADER_TAG = "BOARD_LOAD";
+	public static final String STATS_PUT_TAG = "STATS_PUT";
 	protected final LoadHandler handler = new LoadHandler();
 
 	public final class LoadHandler extends BufferedHandler {
@@ -62,7 +62,10 @@ public class GamePlayActivity extends Activity implements Board.SolveListener, H
 		protected void processMessage(Message message) {
 			if (message.what == BoardLoaderFragment.MESSAGE_WHAT) {
 				ResultWrapper<Board> result = (ResultWrapper<Board>) message.obj;
-				GamePlayActivity.this.onLoadFinished(result);
+				GamePlayActivity.this.onBoardLoaded(result);
+			} else if (message.what == PutStatisticsFragment.MESSAGE_WHAT) {
+				ResultWrapper<Void> result = (ResultWrapper<Void>) message.obj;
+				GamePlayActivity.this.onPutStatsResult(result);
 			}
 		}
 	}
@@ -95,7 +98,7 @@ public class GamePlayActivity extends Activity implements Board.SolveListener, H
 			uiTransaction.commit();
 
 			FragmentTransaction loaderTransaction = manager.beginTransaction();
-			loaderTransaction.add(loaderFragment, LOADER_FRAGMENT_TAG);
+			loaderTransaction.add(loaderFragment, BOARD_LOADER_TAG);
 			loaderTransaction.commit();
 		}
 	}
@@ -104,14 +107,13 @@ public class GamePlayActivity extends Activity implements Board.SolveListener, H
 	 * Called by loader fragment when a load is completed.
 	 * @param result  a wrapper around the fetched Board or the exception encountered
 	 */
-	protected void onLoadFinished(ResultWrapper<Board> result) {
+	protected void onBoardLoaded(ResultWrapper<Board> result) {
 		Application app = (Application) getApplicationContext();
 		Application.Toaster toaster = app.getToaster();
 		board = null;
 
 		try {
 			board = result.getResult();
-			app.logError(new Exception()); // testing
 		} catch (IllegalArgumentException e) {
 			toaster.toastError(e.getMessage());
 			finish();
@@ -129,11 +131,38 @@ public class GamePlayActivity extends Activity implements Board.SolveListener, H
 			FragmentManager manager = getFragmentManager();
 			FragmentTransaction transaction = manager.beginTransaction();
 			transaction.remove(manager.findFragmentByTag(LoaderUiFragment.TAG));
-			transaction.remove(manager.findFragmentByTag(LOADER_FRAGMENT_TAG));
+			transaction.remove(manager.findFragmentByTag(BOARD_LOADER_TAG));
 			transaction.commit();
 
 			setupBoard();
 		}
+	}
+
+	/**
+	 * Called by loader fragment when a stats put is completed.
+	 * @param result  a wrapper around any exception encountered
+	 */
+	protected void onPutStatsResult(ResultWrapper<Void> result) {
+		Application app = (Application) getApplicationContext();
+		Application.Toaster toaster = app.getToaster();
+		board = null;
+
+		try {
+			result.getResult();
+		} catch (IllegalArgumentException e) {
+			toaster.toastError(e.getMessage());
+			return;
+		} catch (SdbInterface.RequestException e) {
+			toaster.toastError("Request failed. Check network connection.");
+			app.logError(e);
+			return;
+		} catch (Exception e) {
+			toaster.toastError("An unexpected error occurred");
+			app.logError(e);
+			return;
+		}
+
+		toaster.toastMessage("Put success!");
 	}
 
 	/**
@@ -186,9 +215,18 @@ public class GamePlayActivity extends Activity implements Board.SolveListener, H
 
 	@Override
 	public void onSolve(int score) {
-		Intent intent = new Intent(this, FinishedActivity.class);
-		intent.putExtra("score", score);
-		startActivityForResult(intent, 0);
+		GameStatistics stats = new GameStatistics();
+		stats.levelId = 0;
+		stats.moves = 0;
+		stats.startTime = new org.joda.time.DateTime();
+		stats.totalCompletionTime = new org.joda.time.Duration(5000);
+
+		Application app = (Application) getApplicationContext();
+		PutStatisticsFragment fragment = new PutStatisticsFragment(app.player, stats);
+		FragmentManager manager = getFragmentManager();
+		FragmentTransaction transaction = manager.beginTransaction();
+		transaction.add(fragment, STATS_PUT_TAG);
+		transaction.commit();
 	}
 
 	/**

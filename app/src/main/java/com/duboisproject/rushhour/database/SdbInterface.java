@@ -22,18 +22,23 @@ package com.duboisproject.rushhour.database;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
+import java.util.ArrayList;
 import java.util.Map;
 import java.util.HashMap;
+import java.util.UUID;
 import java.io.StringReader;
 import com.amazonaws.AmazonClientException;
 import com.amazonaws.services.simpledb.AmazonSimpleDBClient;
 import com.amazonaws.auth.AWSCredentials;
 import com.amazonaws.services.simpledb.model.GetAttributesRequest;
 import com.amazonaws.services.simpledb.model.GetAttributesResult;
+import com.amazonaws.services.simpledb.model.PutAttributesRequest;
 import com.amazonaws.services.simpledb.model.Attribute;
+import com.amazonaws.services.simpledb.model.ReplaceableAttribute;
 
 import com.duboisproject.rushhour.Board;
 import com.duboisproject.rushhour.BoardLoader;
+import com.duboisproject.rushhour.GameStatistics;
 import com.duboisproject.rushhour.id.Mathlete;
 import com.duboisproject.rushhour.id.Coach;
 
@@ -42,16 +47,21 @@ public final class SdbInterface {
 	protected static final String MATHLETE_DOMAIN = "dubois_mathlete_identities";
 	protected static final String COACH_DOMAIN = "dubois_coach_identities";
 	protected static final String LEVELS_DOMAIN = "dubois_rushhour_levels";
+	protected static final String PLAYS_DOMAIN = "dubois_rushhour_games_played";
 
 	// attribute names
 	protected static final String MATHLETE_NAME = "name";
 	protected static final String MATHLETE_LAST_NAME = "last_name";
 	protected static final String COACH_NAME = "Name";
 	protected static final String LEVEL_MAP = "map";
+	protected static final String LEVEL_ID = "level_id";
+	protected static final String MOVES = "moves";
+	protected static final String START_TIME = "start_time";
+	protected static final String TOTAL_TIME = "total_time";
 
 	protected static final String REQUEST_FAILED_MESSAGE = "Unable to complete request";
 
-	protected static enum RequestDetails {
+	protected static enum GetRequestDetails {
 		MATHLETE_ID(
 			MATHLETE_DOMAIN,
 			new String[] { MATHLETE_NAME, MATHLETE_LAST_NAME }
@@ -68,7 +78,7 @@ public final class SdbInterface {
 		public final String domainName;
 		public final Collection<String> attributeNames;
 
-		private RequestDetails(String domainName, String[] attributeNames) {
+		private GetRequestDetails(String domainName, String[] attributeNames) {
 			this.domainName = domainName;
 			this.attributeNames = Arrays.asList(attributeNames);
 		}
@@ -97,7 +107,7 @@ public final class SdbInterface {
 	}
 
 	public Mathlete fetchMathlete(String id) throws IllegalArgumentException, RequestException {
-		GetAttributesRequest request = RequestDetails.MATHLETE_ID.toAttributesRequest();
+		GetAttributesRequest request = GetRequestDetails.MATHLETE_ID.toAttributesRequest();
 		request.setItemName(id);
 		GetAttributesResult result;
 		try {
@@ -114,7 +124,7 @@ public final class SdbInterface {
 	}
 
 	public Coach fetchCoach(String id) throws IllegalArgumentException, RequestException {
-		GetAttributesRequest request = RequestDetails.COACH_ID.toAttributesRequest();
+		GetAttributesRequest request = GetRequestDetails.COACH_ID.toAttributesRequest();
 		request.setItemName(id);
 		GetAttributesResult result;
 		try {
@@ -131,7 +141,7 @@ public final class SdbInterface {
 	}
 
 	public Board fetchBoard(int id) throws IllegalArgumentException, RequestException {
-		GetAttributesRequest request = RequestDetails.MAP_FETCH.toAttributesRequest();
+		GetAttributesRequest request = GetRequestDetails.MAP_FETCH.toAttributesRequest();
 		request.setItemName(Integer.toString(id));
 		GetAttributesResult result;
 		try {
@@ -148,11 +158,36 @@ public final class SdbInterface {
 		return BoardLoader.loadBoard(new StringReader(map));
 	}
 
+	public void putStats(Mathlete player, GameStatistics stats) throws RequestException {
+		Map<String, String> attributes = new HashMap<String, String>();
+		attributes.put(LEVEL_ID, Integer.toString(stats.levelId));
+		attributes.put(MOVES, Integer.toString(stats.moves));
+		attributes.put(START_TIME, stats.startTime.toString());
+		attributes.put(TOTAL_TIME, Long.toString(stats.totalCompletionTime.getMillis()));
+		PutAttributesRequest request = new PutAttributesRequest();
+		request.setDomainName(PLAYS_DOMAIN);
+		request.setItemName(player.id);
+		request.setAttributes(listify(attributes));
+		try {
+			client.putAttributes(request);
+		} catch (AmazonClientException e) {
+			throw new RequestException(REQUEST_FAILED_MESSAGE);
+		}
+	}
+
 	protected static Map<String, String> mapify(List<Attribute> attributes) {
 		Map<String, String> attributesMap = new HashMap<String, String>();
 		for (Attribute a : attributes) {
 			attributesMap.put(a.getName(), a.getValue());
 		}
 		return attributesMap;
+	}
+
+	protected static List<ReplaceableAttribute> listify(Map<String, String> attributes) {
+		List<ReplaceableAttribute> attributesList = new ArrayList<ReplaceableAttribute>();
+		for (Map.Entry<String, String> entry : attributes.entrySet()) {
+			attributesList.add(new ReplaceableAttribute(entry.getKey(), entry.getValue(), true));
+		}
+		return attributesList;
 	}
 }

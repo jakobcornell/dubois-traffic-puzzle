@@ -106,6 +106,7 @@ public final class MathleteIdActivity extends IdActivity implements HandlerActiv
 		uiRemoval.commit();
 
 		if (mathlete != null) {
+			app.player = mathlete;
 			String messageFormat = getResources().getString(R.string.welcome_message);
 			String message = String.format(messageFormat, mathlete.firstName);
 			toaster.toastMessage(message);
