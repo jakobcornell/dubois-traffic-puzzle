@@ -23,6 +23,7 @@ package com.duboisproject.rushhour;
 
 import java.util.HashSet;
 import java.util.Set;
+import java.util.Stack;
 import android.content.Context;
 import android.content.Intent;
 import android.view.ViewGroup;
@@ -50,10 +51,46 @@ public class Board {
 	private DriveListener driveListener;
 	private SolveListener solveListener;
 
+	protected Stack<Move> moves = new Stack<Move>();
 	private int score;
 
 	public int getScore() {
 		return score;
+	}
+
+	protected static class Move {
+		public final Car car;
+		public final Direction direction;
+
+		public Move(Car car, Direction direction) {
+			this.car = car;
+			this.direction = direction;
+		}
+
+		public static enum Direction {
+			RIGHT(1), UP(-1), LEFT(-1), DOWN(1);
+
+			public int offset;
+
+			private Direction(int offset) {
+				this.offset = offset;
+			}
+
+			public Direction opposite() {
+				switch (this) {
+				case RIGHT:
+					return LEFT;
+				case UP:
+					return DOWN;
+				case LEFT:
+					return RIGHT;
+				case DOWN:
+					return UP;
+				default:
+					throw new IllegalStateException();
+				}
+			}
+		}
 	}
 
 	/**
@@ -74,6 +111,13 @@ public class Board {
 				}
 			}
 			car.move(offset);
+			Move.Direction direction;
+			if (car.canMoveHorizontally()) {
+				direction = (offset == -1) ? Move.Direction.LEFT : Move.Direction.RIGHT;
+			} else {
+				direction = (offset == -1) ? Move.Direction.UP : Move.Direction.DOWN;
+			}
+			moves.push(new Move(car, direction));
 			score++;
 			if (isSolved() && solveListener != null) {
 				solveListener.onSolve(score);
@@ -109,6 +153,22 @@ public class Board {
 				context,
 				(layout.getWidth() - layout.getPaddingLeft() - layout.getPaddingRight()) / DIMENSION
 			));
+		}
+	}
+
+	/**
+	 * Undo a move
+	 */
+	protected void rollBack(Move move) {
+		move.car.move(move.direction.opposite().offset);
+	}
+
+	/**
+	 * Reset the board
+	 */
+	public void reset() {
+		while (!moves.empty()) {
+			rollBack(moves.pop());
 		}
 	}
 

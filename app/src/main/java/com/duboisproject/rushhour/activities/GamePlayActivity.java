@@ -258,12 +258,12 @@ public class GamePlayActivity extends Activity implements Board.SolveListener, H
 
 	/**
 	 * Just set up everything again for a reset
-	 * @param v
+	 * @param v  view that was clicked
 	 */
 	public void onClickHandler(View v) {
 		switch (v.getId()) {
 		case R.id.action_reset:
-			setupBoard();
+			board.reset();
 			resetMillis = SystemClock.elapsedRealtime();
 			break;
 		}
