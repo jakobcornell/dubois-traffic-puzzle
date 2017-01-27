@@ -18,13 +18,18 @@ Modified by Jakob Cornell, 2017-01-09 to -01-15
 		<activity
 			android:name="com.duboisproject.rushhour.activities.MathleteIdActivity"
 			android:launchMode="singleTop"
+			android:screenOrientation="portrait"
 		>
 			<intent-filter>
 				<action android:name="android.intent.action.MAIN" />
 				<category android:name="android.intent.category.LAUNCHER" />
 			</intent-filter>
 		</activity>
-		<activity android:name="com.duboisproject.rushhour.activities.CoachIdActivity" />
+		<activity
+			android:name="com.duboisproject.rushhour.activities.CoachIdActivity"
+			android:screenOrientation="portrait"
+		>
+		</activity>
 		<activity
 			android:name="com.duboisproject.rushhour.activities.GamePlayActivity"
 			android:configChanges="orientation|keyboardHidden|screenSize"
