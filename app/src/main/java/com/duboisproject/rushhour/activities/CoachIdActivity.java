@@ -67,6 +67,18 @@ public final class CoachIdActivity extends IdActivity implements HandlerActivity
 	}
 
 	@Override
+	public void onResume() {
+		super.onResume();
+		handler.resume();
+	}
+
+	@Override
+	public void onPause() {
+		super.onPause();
+		handler.pause();
+	}
+
+	@Override
 	protected void onNewId(String id) {
 		FragmentManager manager = getFragmentManager();
 		loaderFragment = (CoachLoaderFragment) manager.findFragmentByTag(LOADER_FRAGMENT_TAG);
@@ -109,7 +121,7 @@ public final class CoachIdActivity extends IdActivity implements HandlerActivity
 		uiRemoval.commit();
 
 		if (coach != null) {
-			app.pendingDescriptor = new Board.NumericDescriptor(app.getSdbInterface(), 1);
+			app.pendingDescriptor = new Board.ProgressDescriptor(app.player, app.getSdbInterface());
 			Intent intent = new Intent(this, GamePlayActivity.class);
 			startActivity(intent);
 		}

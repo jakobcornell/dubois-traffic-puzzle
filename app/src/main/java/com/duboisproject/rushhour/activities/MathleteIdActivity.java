@@ -64,6 +64,18 @@ public final class MathleteIdActivity extends IdActivity implements HandlerActiv
 	}
 
 	@Override
+	public void onResume() {
+		super.onResume();
+		handler.resume();
+	}
+
+	@Override
+	public void onPause() {
+		super.onPause();
+		handler.pause();
+	}
+
+	@Override
 	protected void onNewId(String id) {
 		FragmentManager manager = getFragmentManager();
 		loaderFragment = (MathleteLoaderFragment) manager.findFragmentByTag(LOADER_FRAGMENT_TAG);

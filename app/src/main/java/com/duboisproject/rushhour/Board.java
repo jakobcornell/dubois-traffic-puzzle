@@ -25,11 +25,12 @@ import java.util.HashSet;
 import java.util.Set;
 import android.content.Context;
 import android.content.Intent;
-import android.util.Log;
 import android.view.ViewGroup;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 
+import com.duboisproject.rushhour.GameStatistics;
+import com.duboisproject.rushhour.id.Mathlete;
 import com.duboisproject.rushhour.database.SdbInterface;
 
 /**
@@ -41,10 +42,19 @@ public class Board {
 
 	public static final int DIMENSION = 6;
 
+	/**
+	 * The ID of this board in the database.
+	 */
+	public int id;
+
 	private DriveListener driveListener;
 	private SolveListener solveListener;
 
 	private int score;
+
+	public int getScore() {
+		return score;
+	}
 
 	/**
 	 * Move a car if possible, and call the appropriate listeners
@@ -143,18 +153,47 @@ public class Board {
 	/**
 	 * Describes a board by its ID (i.e. SDB item name).
 	 */
-	public static class NumericDescriptor implements Descriptor {
+	public static class IdDescriptor implements Descriptor {
 		protected int id;
 		protected SdbInterface sdbInterface;
 
-		public NumericDescriptor(SdbInterface sdbInterface, int id) {
-			this.sdbInterface = sdbInterface;
+		public IdDescriptor(int id, SdbInterface sdbInterface) {
 			this.id = id;
+			this.sdbInterface = sdbInterface;
 		}
 
 		@Override
 		public Board resolve() throws SdbInterface.RequestException {
 			return sdbInterface.fetchBoard(id);
+		}
+	}
+
+	/**
+	 * Describes a board through a mathlete.
+	 * The resolved board is the next one the mathlete should play.
+	 */
+	public static class ProgressDescriptor implements Descriptor {
+		protected Mathlete player;
+		protected SdbInterface sdbInterface;
+
+		public ProgressDescriptor(Mathlete player, SdbInterface sdbInterface) {
+			this.player = player;
+			this.sdbInterface = sdbInterface;
+		}
+
+		@Override
+		public Board resolve() throws SdbInterface.RequestException {
+			GameStatistics stats = sdbInterface.fetchLastPlay(player);
+
+			int targetId;
+			if (stats == null) {
+				targetId = 0;
+			} else {
+				targetId = stats.levelId + 1;
+			}
+
+			int cappedId = Math.min(targetId, sdbInterface.fetchLevelCount() - 1);
+			return sdbInterface.fetchBoard(cappedId);
 		}
 	}
 

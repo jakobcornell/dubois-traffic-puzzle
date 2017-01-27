@@ -19,3 +19,5 @@ The app logs stacktraces where I expect interesting errors to occur. If users ge
 ## Issues
 
 * Despite my best efforts, the loader fragments in this app do not survive teardown and rebuilding by the system. For example, if the user leaves one of the NFC scanning activities or rotates the screen while the app is querying the database, the activity will fail to receive a result from the fragment on return, which causes the activity to idle with the loading spinner indefinitely. If this happens, the activity will need to be restarted.
+
+* `SdbInterface#fetchLastPlay(Mathlete)` sorts a mathlete's plays in descending order (lexicographically) by date/time. This works as expected as long as the ISO 8601 format is used (as it is in this app) and all dates recorded use the same offset from UTC (which this app currently does **not** guarantee).

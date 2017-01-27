@@ -32,4 +32,5 @@ public final class GameStatistics {
 	public int moves;
 	public DateTime startTime;
 	public Duration totalCompletionTime;
+	public Duration resetCompletionTime;
 }

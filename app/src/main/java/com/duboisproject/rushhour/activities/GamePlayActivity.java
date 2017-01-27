@@ -29,10 +29,12 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Message;
 import android.os.Handler;
+import android.os.SystemClock;
 import android.view.View;
 import android.view.ViewTreeObserver;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
+import org.joda.time.DateTime;
 
 import com.duboisproject.rushhour.Application;
 import com.duboisproject.rushhour.BufferedHandler;
@@ -74,7 +76,15 @@ public class GamePlayActivity extends Activity implements Board.SolveListener, H
 		return handler;
 	}
 
-	Board board;
+	protected Board board;
+
+	protected DateTime start;
+
+	/*
+	 * Used for timing gameplay.
+	 */
+	protected long startMillis;
+	protected long resetMillis;
 
 	boolean isFirstTime = true;
 
@@ -101,6 +111,18 @@ public class GamePlayActivity extends Activity implements Board.SolveListener, H
 			loaderTransaction.add(loaderFragment, BOARD_LOADER_TAG);
 			loaderTransaction.commit();
 		}
+	}
+
+	@Override
+	public void onResume() {
+		super.onResume();
+		handler.resume();
+	}
+
+	@Override
+	public void onPause() {
+		super.onPause();
+		handler.pause();
 	}
 
 	/**
@@ -135,6 +157,9 @@ public class GamePlayActivity extends Activity implements Board.SolveListener, H
 			transaction.commit();
 
 			setupBoard();
+			start = new DateTime();
+			startMillis = SystemClock.elapsedRealtime();
+			resetMillis = startMillis;
 		}
 	}
 
@@ -216,10 +241,12 @@ public class GamePlayActivity extends Activity implements Board.SolveListener, H
 	@Override
 	public void onSolve(int score) {
 		GameStatistics stats = new GameStatistics();
-		stats.levelId = 0;
-		stats.moves = 0;
-		stats.startTime = new org.joda.time.DateTime();
-		stats.totalCompletionTime = new org.joda.time.Duration(5000);
+		stats.levelId = board.id;
+		stats.moves = board.getScore();
+		stats.startTime = start;
+		long nowMillis = SystemClock.elapsedRealtime();
+		stats.totalCompletionTime = new org.joda.time.Duration(startMillis, nowMillis);
+		stats.resetCompletionTime = new org.joda.time.Duration(resetMillis, nowMillis);
 
 		Application app = (Application) getApplicationContext();
 		PutStatisticsFragment fragment = new PutStatisticsFragment(app.player, stats);
@@ -237,6 +264,7 @@ public class GamePlayActivity extends Activity implements Board.SolveListener, H
 		switch (v.getId()) {
 		case R.id.action_reset:
 			setupBoard();
+			resetMillis = SystemClock.elapsedRealtime();
 			break;
 		}
 	}
