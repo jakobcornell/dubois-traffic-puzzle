@@ -123,6 +123,7 @@ public final class CoachIdActivity extends IdActivity implements HandlerActivity
 		if (coach != null) {
 			app.pendingDescriptor = new Board.ProgressDescriptor(app.player, app.getSdbInterface());
 			Intent intent = new Intent(this, GamePlayActivity.class);
+			finish();
 			startActivity(intent);
 		}
 	}
