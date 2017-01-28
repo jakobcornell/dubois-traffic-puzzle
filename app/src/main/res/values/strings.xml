@@ -17,4 +17,10 @@
 
 	<!-- coach scan activity -->
 	<string name="coach_scan_message">Scan coach tag</string>
+
+	<!-- game play -->
+	<string name="solved_message">Great job! You solved that in %1$d moves.</string>
+	<string name="replay_message">Great job! You solved that in %1$d moves. Do you think you can solve it again in fewer moves?</string>
+	<string name="replay_text">Replay</string>
+	<string name="continue_text">Continue</string>
 </resources>

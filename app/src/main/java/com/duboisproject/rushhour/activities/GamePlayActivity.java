@@ -25,14 +25,18 @@ import java.io.Serializable;
 import android.app.Activity;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
+import android.app.AlertDialog;
 import android.content.Intent;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.os.Message;
 import android.os.Handler;
 import android.os.SystemClock;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
 import android.widget.RelativeLayout;
+import android.widget.Button;
 import android.widget.Toast;
 import org.joda.time.DateTime;
 
@@ -77,6 +81,7 @@ public class GamePlayActivity extends Activity implements Board.SolveListener, H
 	}
 
 	protected Board board;
+	protected boolean replay;
 
 	protected DateTime start;
 
@@ -88,29 +93,67 @@ public class GamePlayActivity extends Activity implements Board.SolveListener, H
 
 	boolean isFirstTime = true;
 
+	public interface EventListener {
+		public void onBoardDetach();
+		public void onBoardReady();
+	}
+
+	protected final class UiListener implements EventListener {
+		protected Button resetButton;
+		protected ViewGroup boardLayout;
+
+		public UiListener(Button resetButton, ViewGroup boardLayout) {
+			this.resetButton = resetButton;
+			this.boardLayout = boardLayout;
+		}
+
+		@Override
+		public void onBoardDetach() {
+			boardLayout.removeAllViews();
+			resetButton.setEnabled(false);
+		}
+
+		@Override
+		public void onBoardReady() {
+			resetButton.setEnabled(true);
+		}
+	}
+
+	protected EventListener uiListener;
+
 	@Override
 	protected void onCreate(Bundle savedState) {
 		super.onCreate(savedState);
 
 		setContentView(R.layout.activity_fullscreen);
+		Button resetButton = (Button) findViewById(R.id.action_reset);
+		ViewGroup boardLayout = (ViewGroup) findViewById(R.id.board);
+		uiListener = new UiListener(resetButton, boardLayout);
 
 		if (savedState == null) {
-			Application app = (Application) getApplicationContext();
-			Board.Descriptor descriptor = app.pendingDescriptor;
-			app.pendingDescriptor = null;
-
-			BoardLoaderFragment loaderFragment = new BoardLoaderFragment(descriptor);
-			LoaderUiFragment uiFragment = new LoaderUiFragment();
-			FragmentManager manager = getFragmentManager();
-
-			FragmentTransaction uiTransaction = manager.beginTransaction();
-			uiTransaction.add(R.id.board, uiFragment, LoaderUiFragment.TAG);
-			uiTransaction.commit();
-
-			FragmentTransaction loaderTransaction = manager.beginTransaction();
-			loaderTransaction.add(loaderFragment, BOARD_LOADER_TAG);
-			loaderTransaction.commit();
+			onNewIntent(null);
 		}
+	}
+
+	@Override
+	public void onNewIntent(Intent intent) {
+		Application app = (Application) getApplicationContext();
+		Board.Descriptor descriptor = app.pendingDescriptor;
+		app.pendingDescriptor = null;
+
+		BoardLoaderFragment loaderFragment = new BoardLoaderFragment(descriptor);
+		LoaderUiFragment uiFragment = new LoaderUiFragment();
+
+		FragmentManager manager = getFragmentManager();
+		FragmentTransaction uiTransaction = manager.beginTransaction();
+		uiTransaction.add(R.id.board, uiFragment, LoaderUiFragment.TAG);
+		uiTransaction.commit();
+
+		FragmentTransaction loaderTransaction = manager.beginTransaction();
+		loaderTransaction.add(loaderFragment, BOARD_LOADER_TAG);
+		loaderTransaction.commit();
+
+		uiListener.onBoardDetach();
 	}
 
 	@Override
@@ -123,6 +166,27 @@ public class GamePlayActivity extends Activity implements Board.SolveListener, H
 	public void onPause() {
 		super.onPause();
 		handler.pause();
+	}
+
+	@Override
+	public void onBackPressed() {
+		if (board != null && board.getScore() > 0) {
+			DialogInterface.OnClickListener finishListener = new DialogInterface.OnClickListener() {
+				@Override
+				public void onClick(DialogInterface dialog, int id) {
+					GamePlayActivity.this.finish();
+				}
+			};
+
+			AlertDialog.Builder builder = new AlertDialog.Builder(this);
+			builder.setMessage("Really exit? Your progress on this level will be lost.");
+			builder.setCancelable(false);
+			builder.setPositiveButton("Exit", finishListener);
+			builder.setNegativeButton("Cancel", null);
+			builder.show();
+		} else {
+			finish();
+		}
 	}
 
 	/**
@@ -160,20 +224,43 @@ public class GamePlayActivity extends Activity implements Board.SolveListener, H
 			start = new DateTime();
 			startMillis = SystemClock.elapsedRealtime();
 			resetMillis = startMillis;
+
+			uiListener.onBoardReady();
 		}
 	}
+
+	protected final DialogInterface.OnClickListener continueListener = new DialogInterface.OnClickListener() {
+		@Override
+		public void onClick(DialogInterface dialog, int id) {
+			Application app = (Application) getApplicationContext();
+			replay = false;
+			app.pendingDescriptor = new Board.ProgressDescriptor(app.player, app.getSdbInterface());
+			GamePlayActivity.this.onNewIntent(null);
+		}
+	};
+
+	protected final DialogInterface.OnClickListener replayListener = new DialogInterface.OnClickListener() {
+		@Override
+		public void onClick(DialogInterface dialog, int id) {
+			Application app = (Application) getApplicationContext();
+			replay = true;
+			app.pendingDescriptor = new Board.IdDescriptor(board.id, app.getSdbInterface());
+			GamePlayActivity.this.onNewIntent(null);
+		}
+	};
 
 	/**
 	 * Called by loader fragment when a stats put is completed.
 	 * @param result  a wrapper around any exception encountered
 	 */
 	protected void onPutStatsResult(ResultWrapper<Void> result) {
-		Application app = (Application) getApplicationContext();
+		final Application app = (Application) getApplicationContext();
 		Application.Toaster toaster = app.getToaster();
-		board = null;
+		boolean success = false;
 
 		try {
 			result.getResult();
+			success = true;
 		} catch (IllegalArgumentException e) {
 			toaster.toastError(e.getMessage());
 			return;
@@ -187,7 +274,24 @@ public class GamePlayActivity extends Activity implements Board.SolveListener, H
 			return;
 		}
 
-		toaster.toastMessage("Put success!");
+		if (success) {
+			if (!replay) {
+				AlertDialog.Builder builder = new AlertDialog.Builder(this);
+				String format = getResources().getString(R.string.replay_message);
+				builder.setMessage(String.format(format, board.getScore()));
+				builder.setCancelable(false);
+				builder.setPositiveButton(getString(R.string.continue_text), continueListener);
+				builder.setNegativeButton(getString(R.string.replay_text), replayListener);
+				builder.show();
+			} else {
+				AlertDialog.Builder builder = new AlertDialog.Builder(this);
+				String format = getResources().getString(R.string.solved_message);
+				builder.setMessage(String.format(format, board.getScore()));
+				builder.setCancelable(false);
+				builder.setPositiveButton(getString(R.string.continue_text), continueListener);
+				builder.show();
+			}
+		}
 	}
 
 	/**
@@ -254,6 +358,8 @@ public class GamePlayActivity extends Activity implements Board.SolveListener, H
 		FragmentTransaction transaction = manager.beginTransaction();
 		transaction.add(fragment, STATS_PUT_TAG);
 		transaction.commit();
+
+		uiListener.onBoardDetach();
 	}
 
 	/**
