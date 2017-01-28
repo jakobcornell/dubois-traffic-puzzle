@@ -1,8 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
-
-    <!-- Base application theme. -->
-    <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
-        <!-- Customize your theme here. -->
-    </style>
-
+	<style name="MathleteScan" parent="@android:Theme.Light">
+		<item name="android:windowBackground">@color/mathlete</item>
+	</style>
+	<style name="CoachScan" parent="@android:Theme.Light">
+		<item name="android:windowBackground">@color/coach</item>
+	</style>
+	<style name="Error" parent="@android:Theme.Light">
+		<item name="android:windowBackground">@color/error</item>
+	</style>
 </resources>

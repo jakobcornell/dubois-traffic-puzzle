@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
 	<string name="app_name">Rush Hour</string>
 	<string name="title_activity_main">@string/app_name</string>
@@ -15,8 +16,11 @@
 	<string name="welcome_message">Welcome, %1$s!</string>
 	<string name="anonymous_welcome_message">Welcome!</string>
 
-	<!-- coach scan activity -->
+	<!-- coach scan activities -->
 	<string name="coach_scan_message">Scan coach tag</string>
+	<string name="log_detail">DB write failed. Check logs for details.</string>
+	<string name="coach_required">Find a coach to keep playing</string>
+	<string name="time_detail">Time check</string>
 
 	<!-- game play -->
 	<string name="solved_message">Great job! You solved that in %1$d moves.</string>

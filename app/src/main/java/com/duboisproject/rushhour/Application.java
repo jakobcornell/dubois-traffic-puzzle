@@ -59,6 +59,16 @@ public final class Application extends android.app.Application {
 		Log.e(tag, "", e);
 	}
 
+	public void logStats(GameStatistics stats) {
+		String tag = getResources().getString(R.string.logging_tag);
+		Log.i(tag, "Unrecorded stats for mathlete " + player.id + ":");
+		Log.i(tag, "\tlevel id:  " + stats.levelId);
+		Log.i(tag, "\tmoves:  " + stats.moves);
+		Log.i(tag, "\tstart time:  " + stats.startTime);
+		Log.i(tag, "\ttotal time:  " + stats.totalCompletionTime);
+		Log.i(tag, "\treset time:  " + stats.resetCompletionTime);
+	}
+
 	@Override
 	public void onCreate() {
 		String accessKey = getString(R.string.access_key);

@@ -19,10 +19,7 @@
 
 package com.duboisproject.rushhour.activities;
 
-import java.io.Serializable;
 import android.os.Bundle;
-import android.os.Message;
-import android.os.Handler;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.widget.Toast;
@@ -31,70 +28,51 @@ import android.content.Context;
 import android.content.Intent;
 
 import com.duboisproject.rushhour.Application;
-import com.duboisproject.rushhour.BufferedHandler;
-import com.duboisproject.rushhour.Board;
 import com.duboisproject.rushhour.id.Coach;
-import com.duboisproject.rushhour.activities.GamePlayActivity;
 import com.duboisproject.rushhour.fragments.LoaderUiFragment;
 import com.duboisproject.rushhour.fragments.CoachLoaderFragment;
 import com.duboisproject.rushhour.fragments.ResultWrapper;
+import com.duboisproject.rushhour.fragments.TextFragment;
 import com.duboisproject.rushhour.database.SdbInterface;
 import com.duboisproject.rushhour.R;
 
-public class CoachIdActivity extends IdActivity implements HandlerActivity {
-	protected static final String LOADER_FRAGMENT_TAG = "COACH_ID";
-	protected final LoadHandler handler = new LoadHandler();
-
-	public final class LoadHandler extends BufferedHandler {
-		@Override
-		protected void processMessage(Message message) {
-			if (message.what == CoachLoaderFragment.MESSAGE_WHAT) {
-				ResultWrapper<Coach> result = (ResultWrapper<Coach>) message.obj;
-				CoachIdActivity.this.onLoadFinished(result);
-			}
-		}
-	}
-
-	public Handler getHandler() {
-		return handler;
+public class CoachCheckActivity extends CoachIdActivity {
+	// For describing why the activity was launched. Passed through intent.
+	public static final String REASON_KEY = "CHECK_REASON";
+	public static enum Reason {
+		TIME, ERROR;
 	}
 
 	@Override
 	public void onCreate(Bundle savedState) {
-		super.onCreate(savedState);
-		TextView textView = (TextView) findViewById(R.id.fragment_text);
-		textView.setText(R.string.coach_scan_message);
-	}
-
-	@Override
-	public void onResume() {
-		super.onResume();
-		handler.resume();
-	}
-
-	@Override
-	public void onPause() {
-		super.onPause();
-		handler.pause();
-	}
-
-	@Override
-	protected void onNewId(String id) {
-		FragmentManager manager = getFragmentManager();
-		loaderFragment = (CoachLoaderFragment) manager.findFragmentByTag(LOADER_FRAGMENT_TAG);
-		if (loaderFragment == null) {
-			loaderFragment = new CoachLoaderFragment(id);
-			LoaderUiFragment uiFragment = new LoaderUiFragment();
-
-			FragmentTransaction uiTransaction = manager.beginTransaction();
-			uiTransaction.add(R.id.loader_container, uiFragment, LoaderUiFragment.TAG);
-			uiTransaction.addToBackStack(LoaderUiFragment.TAG);
-			uiTransaction.commit();
-
-			FragmentTransaction loaderTransaction = manager.beginTransaction();
-			loaderTransaction.add(loaderFragment, LOADER_FRAGMENT_TAG);
-			loaderTransaction.commit();
+		Intent intent = getIntent();
+		Reason reason = (Reason) intent.getSerializableExtra(REASON_KEY);
+		if (reason == Reason.ERROR) {
+			setTheme(R.style.Error);
 		}
+
+		super.onCreate(savedState);
+		setContentView(R.layout.check_activity);
+
+		FragmentManager manager = getFragmentManager();
+		TextFragment messageFragment = (TextFragment) manager.findFragmentById(R.id.check_message);
+		messageFragment.setText(getString(R.string.coach_scan_message));
+
+		TextFragment detailFragment = (TextFragment) manager.findFragmentById(R.id.check_detail);
+		TextView detailText = (TextView) detailFragment.getView().findViewById(R.id.fragment_text);
+		detailText.setTextSize(getResources().getDimension(R.dimen.small_text));
+
+		if (reason == Reason.ERROR) {
+			detailFragment.setText(getString(R.string.log_detail));
+		} else {
+			detailFragment.setText(getString(R.string.time_detail));
+		}
+	}
+
+	@Override
+	public void onBackPressed() {
+		Application app = (Application) getApplicationContext();
+		app.getToaster().toastMessage(getString(R.string.coach_required));
 	}
 
 	public void onLoadFinished(ResultWrapper<Coach> wrapper) {
@@ -121,10 +99,8 @@ public class CoachIdActivity extends IdActivity implements HandlerActivity {
 		uiRemoval.commit();
 
 		if (coach != null) {
-			app.pendingDescriptor = new Board.ProgressDescriptor(app.player, app.getSdbInterface());
-			Intent intent = new Intent(this, GamePlayActivity.class);
+			setResult(RESULT_OK);
 			finish();
-			startActivity(intent);
 		}
 	}
 }

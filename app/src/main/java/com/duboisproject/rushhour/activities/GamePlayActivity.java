@@ -21,6 +21,8 @@
 
 package com.duboisproject.rushhour.activities;
 
+import java.util.Timer;
+import java.util.TimerTask;
 import java.io.Serializable;
 import android.app.Activity;
 import android.app.FragmentManager;
@@ -61,6 +63,12 @@ import com.duboisproject.rushhour.R;
 public class GamePlayActivity extends Activity implements Board.SolveListener, HandlerActivity {
 	public static final String BOARD_LOADER_TAG = "BOARD_LOAD";
 	public static final String STATS_PUT_TAG = "STATS_PUT";
+
+	/**
+	 * Time interval for requiring a coach tag, in milliseconds.
+	 */
+	protected static final long CHECK_INTERVAL = 15 * 60 * 1000;
+
 	protected final LoadHandler handler = new LoadHandler();
 
 	public final class LoadHandler extends BufferedHandler {
@@ -85,11 +93,53 @@ public class GamePlayActivity extends Activity implements Board.SolveListener, H
 
 	protected DateTime start;
 
-	/*
-	 * Used for timing gameplay.
-	 */
-	protected long startMillis;
-	protected long resetMillis;
+	// Used for timing gameplay for stats.
+	protected class Stopwatch {
+		protected long elapsed;
+		protected long lastStart;
+
+		public Stopwatch() {
+			elapsed = 0;
+		}
+
+		public void start() {
+			lastStart = SystemClock.elapsedRealtime();
+		}
+
+		public void stop() {
+			elapsed += SystemClock.elapsedRealtime() - lastStart;
+		}
+
+		public void reset() {
+			elapsed = 0;
+		}
+
+		public long getElapsed() {
+			return elapsed;
+		}
+	}
+
+	protected Stopwatch totalTimer;
+	protected Stopwatch resetTimer;
+
+	protected GameStatistics currentStats;
+
+	// Used for launching coach checks.
+	protected Handler checkHandler;
+	protected Timer checkTimer;
+	protected class CheckTask extends TimerTask {
+		@Override
+		public void run() {
+			handler.post(new Runnable() {
+				@Override
+				public void run() {
+					Intent intent = new Intent(GamePlayActivity.this, CoachCheckActivity.class);
+					intent.putExtra(CoachCheckActivity.REASON_KEY, CoachCheckActivity.Reason.TIME);
+					startActivity(intent);
+				}
+			});
+		}
+	}
 
 	boolean isFirstTime = true;
 
@@ -153,19 +203,32 @@ public class GamePlayActivity extends Activity implements Board.SolveListener, H
 		loaderTransaction.add(loaderFragment, BOARD_LOADER_TAG);
 		loaderTransaction.commit();
 
+		totalTimer = new Stopwatch();
+		resetTimer = new Stopwatch();
+		totalTimer.start();
+		resetTimer.start();
+
 		uiListener.onBoardDetach();
 	}
 
 	@Override
 	public void onResume() {
 		super.onResume();
+		totalTimer.start();
+		resetTimer.start();
 		handler.resume();
+		checkHandler = new Handler();
+		checkTimer = new Timer();
+		checkTimer.schedule(new CheckTask(), CHECK_INTERVAL, CHECK_INTERVAL);
 	}
 
 	@Override
 	public void onPause() {
 		super.onPause();
+		totalTimer.stop();
+		resetTimer.stop();
 		handler.pause();
+		checkTimer.cancel();
 	}
 
 	@Override
@@ -222,8 +285,8 @@ public class GamePlayActivity extends Activity implements Board.SolveListener, H
 
 			setupBoard();
 			start = new DateTime();
-			startMillis = SystemClock.elapsedRealtime();
-			resetMillis = startMillis;
+			totalTimer.reset();
+			resetTimer.reset();
 
 			uiListener.onBoardReady();
 		}
@@ -263,18 +326,22 @@ public class GamePlayActivity extends Activity implements Board.SolveListener, H
 			success = true;
 		} catch (IllegalArgumentException e) {
 			toaster.toastError(e.getMessage());
-			return;
 		} catch (SdbInterface.RequestException e) {
 			toaster.toastError("Request failed. Check network connection.");
 			app.logError(e);
-			return;
 		} catch (Exception e) {
 			toaster.toastError("An unexpected error occurred");
 			app.logError(e);
-			return;
 		}
 
+		FragmentManager manager = getFragmentManager();
+		FragmentTransaction transaction = manager.beginTransaction();
+		transaction.remove(manager.findFragmentByTag(LoaderUiFragment.TAG));
+		transaction.remove(manager.findFragmentByTag(STATS_PUT_TAG));
+		transaction.commit();
+
 		if (success) {
+			currentStats = null;
 			if (!replay) {
 				AlertDialog.Builder builder = new AlertDialog.Builder(this);
 				String format = getResources().getString(R.string.replay_message);
@@ -291,6 +358,20 @@ public class GamePlayActivity extends Activity implements Board.SolveListener, H
 				builder.setPositiveButton(getString(R.string.continue_text), continueListener);
 				builder.show();
 			}
+		} else {
+			app.logStats(currentStats);
+			Intent intent = new Intent(this, CoachCheckActivity.class);
+			intent.putExtra(CoachCheckActivity.REASON_KEY, CoachCheckActivity.Reason.ERROR);
+			startActivityForResult(intent, 0);
+		}
+	}
+
+	@Override
+	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+		if (resultCode == RESULT_OK) {
+			Application app = (Application) getApplicationContext();
+			app.pendingDescriptor = new Board.ProgressDescriptor(app.player, app.getSdbInterface());
+			onNewIntent(null);
 		}
 	}
 
@@ -335,29 +416,27 @@ public class GamePlayActivity extends Activity implements Board.SolveListener, H
 	}
 
 	@Override
-	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-		// See http://stackoverflow.com/a/13483049/1544337
-		if (resultCode == Activity.RESULT_OK) {
-			finish();
-		}
-	}
-
-	@Override
 	public void onSolve(int score) {
-		GameStatistics stats = new GameStatistics();
-		stats.levelId = board.id;
-		stats.moves = board.getScore();
-		stats.startTime = start;
-		long nowMillis = SystemClock.elapsedRealtime();
-		stats.totalCompletionTime = new org.joda.time.Duration(startMillis, nowMillis);
-		stats.resetCompletionTime = new org.joda.time.Duration(resetMillis, nowMillis);
+		currentStats = new GameStatistics();
+		currentStats.levelId = board.id;
+		currentStats.moves = board.getScore();
+		currentStats.startTime = start;
+		totalTimer.stop();
+		resetTimer.stop();
+		currentStats.totalCompletionTime = new org.joda.time.Duration(totalTimer.getElapsed());
+		currentStats.resetCompletionTime = new org.joda.time.Duration(resetTimer.getElapsed());
 
 		Application app = (Application) getApplicationContext();
-		PutStatisticsFragment fragment = new PutStatisticsFragment(app.player, stats);
+		PutStatisticsFragment fragment = new PutStatisticsFragment(app.player, currentStats);
 		FragmentManager manager = getFragmentManager();
-		FragmentTransaction transaction = manager.beginTransaction();
-		transaction.add(fragment, STATS_PUT_TAG);
-		transaction.commit();
+		FragmentTransaction putTransaction = manager.beginTransaction();
+		putTransaction.add(fragment, STATS_PUT_TAG);
+		putTransaction.commit();
+
+		LoaderUiFragment uiFragment = new LoaderUiFragment();
+		FragmentTransaction uiTransaction = manager.beginTransaction();
+		uiTransaction.replace(R.id.board, uiFragment, LoaderUiFragment.TAG);
+		uiTransaction.commit();
 
 		uiListener.onBoardDetach();
 	}
@@ -370,7 +449,8 @@ public class GamePlayActivity extends Activity implements Board.SolveListener, H
 		switch (v.getId()) {
 		case R.id.action_reset:
 			board.reset();
-			resetMillis = SystemClock.elapsedRealtime();
+			resetTimer.reset();
+			resetTimer.start();
 			break;
 		}
 	}

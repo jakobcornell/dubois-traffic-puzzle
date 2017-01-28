@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<resources>
+	<color name="mathlete">#33ffff</color>
+	<color name="coach">#faf777</color>
+	<color name="error">#ff6060</color>
+</resources>

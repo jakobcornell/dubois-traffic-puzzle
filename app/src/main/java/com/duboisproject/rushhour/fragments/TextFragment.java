@@ -23,12 +23,25 @@ import android.os.Bundle;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.LayoutInflater;
+import android.widget.TextView;
 
 import com.duboisproject.rushhour.R;
 
 public final class TextFragment extends android.app.Fragment {
+	protected TextView text;
+
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-		return inflater.inflate(R.layout.text_fragment, container, false);
+		View view = inflater.inflate(R.layout.text_fragment, container, false);
+		text = (TextView) view.findViewById(R.id.fragment_text);
+		return view;
+	}
+
+	public void setText(String message) {
+		if (text == null) {
+			throw new IllegalStateException();
+		} else {
+			text.setText(message);
+		}
 	}
 }

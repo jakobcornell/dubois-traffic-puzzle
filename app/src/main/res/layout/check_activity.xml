@@ -8,12 +8,22 @@
 >
 	<fragment
 		android:name="com.duboisproject.rushhour.fragments.TextFragment"
-		android:id="@+id/id_message"
+		android:id="@+id/check_message"
 		android:layout_width="match_parent"
 		android:layout_height="0dp"
 		android:layout_weight="1"
 	>
 	</fragment>
+
+	<fragment
+		android:name="com.duboisproject.rushhour.fragments.TextFragment"
+		android:id="@+id/check_detail"
+		android:layout_width="match_parent"
+		android:layout_height="0dp"
+		android:layout_weight="1"
+	>
+	</fragment>
+
 	<FrameLayout
 		android:id="@+id/loader_container"
 		android:layout_width="match_parent"
