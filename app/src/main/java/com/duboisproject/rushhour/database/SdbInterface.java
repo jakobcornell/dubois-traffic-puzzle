@@ -52,23 +52,32 @@ import com.duboisproject.rushhour.id.Mathlete;
 import com.duboisproject.rushhour.id.Coach;
 
 public final class SdbInterface {
+	protected static final String PRIMARY_KEY = "itemName()";
+
 	// domain names
 	protected static final String MATHLETE_DOMAIN = "dubois_mathlete_identities";
 	protected static final String COACH_DOMAIN = "dubois_coach_identities";
 	protected static final String LEVELS_DOMAIN = "dubois_rushhour_levels";
 	protected static final String PLAYS_DOMAIN = "dubois_rushhour_games_played";
 
-	// attribute names
+	// attributes: mathletes table
 	protected static final String MATHLETE_NAME = "name";
 	protected static final String MATHLETE_LAST_NAME = "last_name";
+
+	// attributes: coaches table
 	protected static final String COACH_NAME = "Name";
+
+	// attributes: levels table
 	protected static final String LEVEL_MAP = "map";
-	protected static final String MATHLETE_ID = "mathlete";
-	protected static final String LEVEL_ID = "level_id";
-	protected static final String MOVES = "moves";
-	protected static final String START_TIME = "start_time";
-	protected static final String TOTAL_TIME = "total_time";
-	protected static final String RESET_TIME = "reset_time";
+	protected static final String LEVEL_DIFFICULTY = "difficulty";
+
+	// attributes: plays table
+	protected static final String PLAYS_MATHLETE = "mathlete";
+	protected static final String PLAYS_LEVEL = "level_id";
+	protected static final String PLAYS_MOVES = "moves";
+	protected static final String PLAYS_START = "start_time";
+	protected static final String PLAYS_TOTAL_TIME = "total_time";
+	protected static final String PLAYS_RESET_TIME = "reset_time";
 
 	protected static Integer cachedLevelCount;
 
@@ -153,6 +162,9 @@ public final class SdbInterface {
 		return new Coach(id, attributes.get(COACH_NAME));
 	}
 
+	/**
+	 * Get the map for the specified level id, and construct a board.
+	 */
 	public Board fetchBoard(int id) throws RequestException {
 		GetAttributesRequest request = GetRequestDetails.MAP_FETCH.toAttributesRequest();
 		request.setItemName(Integer.toString(id));
@@ -173,6 +185,9 @@ public final class SdbInterface {
 		return board;
 	}
 
+	/**
+	 * Get the total number of levels: the number of records in the levels table.
+	 */
 	public int fetchLevelCount() throws RequestException {
 		// We don't expect this to change during app runs, so we'll cache it.
 		if (cachedLevelCount == null) {
@@ -186,14 +201,17 @@ public final class SdbInterface {
 		return cachedLevelCount;
 	}
 
+	/**
+	 * Add a play to the database.
+	 */
 	public void putStats(Mathlete player, GameStatistics stats) throws RequestException {
 		Map<String, String> attributes = new HashMap<String, String>();
-		attributes.put(MATHLETE_ID, player.id);
-		attributes.put(LEVEL_ID, Integer.toString(stats.levelId));
-		attributes.put(MOVES, Integer.toString(stats.moves));
-		attributes.put(START_TIME, stats.startTime.toString());
-		attributes.put(TOTAL_TIME, stats.totalCompletionTime.toString());
-		attributes.put(RESET_TIME, stats.resetCompletionTime.toString());
+		attributes.put(PLAYS_MATHLETE, player.id);
+		attributes.put(PLAYS_LEVEL, Integer.toString(stats.levelId));
+		attributes.put(PLAYS_MOVES, Integer.toString(stats.moves));
+		attributes.put(PLAYS_START, stats.startTime.toString());
+		attributes.put(PLAYS_TOTAL_TIME, stats.totalCompletionTime.toString());
+		attributes.put(PLAYS_RESET_TIME, stats.resetCompletionTime.toString());
 
 		PutAttributesRequest request = new PutAttributesRequest();
 		request.setDomainName(PLAYS_DOMAIN);
@@ -207,19 +225,9 @@ public final class SdbInterface {
 		}
 	}
 
-	protected static GameStatistics parseStats(Item item) {
-		Map<String, String> attributes = mapify(item.getAttributes());
-		GameStatistics stats = new GameStatistics();
-		stats.levelId = Integer.parseInt(attributes.get(LEVEL_ID));
-		stats.moves = Integer.parseInt(attributes.get(MOVES));
-		stats.startTime = DateTime.parse(attributes.get(START_TIME));
-		stats.totalCompletionTime = Duration.parse(attributes.get(TOTAL_TIME));
-		stats.resetCompletionTime = Duration.parse(attributes.get(RESET_TIME));
-		return stats;
-	}
-
 	/**
 	 * Fetch the stats for a mathlete's most recent play.
+	 *
 	 * Uses at most one query, and sorts on the database side.
 	 *
 	 * @return stats for the last play, or <code>null</code> if no plays exist
@@ -232,10 +240,10 @@ public final class SdbInterface {
 		String query = String.format(
 			format,
 			sdbEscape(PLAYS_DOMAIN, '`'),
-			sdbEscape(MATHLETE_ID, '`'),
+			sdbEscape(PLAYS_MATHLETE, '`'),
 			sdbEscape(mathlete.id, '"'),
-			sdbEscape(START_TIME, '`'),
-			sdbEscape(START_TIME, '`')
+			sdbEscape(PLAYS_START, '`'),
+			sdbEscape(PLAYS_START, '`')
 		);
 
 		SelectRequest request = new SelectRequest(query, true);
@@ -243,7 +251,6 @@ public final class SdbInterface {
 		try {
 			result = client.select(request);
 		} catch (AmazonClientException e) {
-			android.util.Log.d("RushHour", e.getClass().getName() + ": " + e.getMessage());
 			throw new RequestException(REQUEST_FAILED_MESSAGE);
 		}
 
@@ -263,7 +270,7 @@ public final class SdbInterface {
 		String query = String.format(
 			format,
 			sdbEscape(PLAYS_DOMAIN, '`'),
-			sdbEscape(MATHLETE_ID, '`'),
+			sdbEscape(PLAYS_MATHLETE, '`'),
 			sdbEscape(mathlete.id, '"')
 		);
 
@@ -284,7 +291,65 @@ public final class SdbInterface {
 	}
 
 	/**
+	 * Get the stats for all plays by a mathlete at a given difficulty.
+	 *
+	 * May be useful for determining which level in a certain difficulty should be played next.
+	 */
+	public Map<Integer, GameStatistics[]> fetchStatsAtDifficulty(Mathlete player, int difficulty) throws RequestException {
+		Map<Integer, GameStatistics[]> levelStats = new HashMap<Integer, GameStatistics[]>();
+
+		// Select all levels of the specified difficulty
+		String format = "select `%s` from `%s` where `%s` = \"%s\"";
+		String query = String.format(
+			format,
+			sdbEscape(PRIMARY_KEY, '`'),
+			sdbEscape(LEVELS_DOMAIN, '`'),
+			sdbEscape(LEVEL_DIFFICULTY, '`'),
+			sdbEscape(Integer.toString(difficulty), '"')
+		);
+
+		SelectRequest request = new SelectRequest(query, true);
+		SelectResult result;
+		try {
+			result = client.select(request);
+		} catch (AmazonClientException e) {
+			throw new RequestException(REQUEST_FAILED_MESSAGE);
+		}
+
+		// Get all stats for each such level
+		format = "select * from `%s` where `%s` = \"%s\" and `%s` = \"%s\"";
+		for (Item item : result.getItems()) {
+			int id = Integer.parseInt(item.getName());
+			query = String.format(
+				format,
+				sdbEscape(PLAYS_DOMAIN, '`'),
+				sdbEscape(PLAYS_LEVEL, '`'),
+				sdbEscape(Integer.toString(id), '"'),
+				sdbEscape(PLAYS_MATHLETE, '`'),
+				sdbEscape(player.id, '"')
+			);
+			
+			SelectRequest playsRequest = new SelectRequest(query, true);
+			SelectResult playsResult;
+			try {
+				playsResult = client.select(playsRequest);
+			} catch (AmazonClientException e) {
+				throw new RequestException(REQUEST_FAILED_MESSAGE);
+			}
+
+			List<Item> items = playsResult.getItems();
+			GameStatistics[] stats = new GameStatistics[items.size()];
+			for (int i = 0; i < items.size(); i += 1) {
+				stats[i] = parseStats(items.get(i));
+			}
+			levelStats.put(id, stats);
+		}
+		return levelStats;
+	}
+
+	/**
 	 * Escapes a string (domain name, attrubute name/value) for use in SDB select statements.
+	 *
 	 * This process involves "expanding" certain characters depending on context.
 	 * See <a href="http://docs.aws.amazon.com/AmazonSimpleDB/latest/DeveloperGuide/QuotingRulesSelect.html">quoting rules</a>.
 	 *
@@ -296,6 +361,17 @@ public final class SdbInterface {
 		String from = Character.toString(special);
 		String to = from + from;
 		return value.replace(from, to);
+	}
+
+	protected static GameStatistics parseStats(Item item) {
+		Map<String, String> attributes = mapify(item.getAttributes());
+		GameStatistics stats = new GameStatistics();
+		stats.levelId = Integer.parseInt(attributes.get(PLAYS_LEVEL));
+		stats.moves = Integer.parseInt(attributes.get(PLAYS_MOVES));
+		stats.startTime = DateTime.parse(attributes.get(PLAYS_START));
+		stats.totalCompletionTime = Duration.parse(attributes.get(PLAYS_TOTAL_TIME));
+		stats.resetCompletionTime = Duration.parse(attributes.get(PLAYS_RESET_TIME));
+		return stats;
 	}
 
 	protected static Map<String, String> mapify(List<Attribute> attributes) {

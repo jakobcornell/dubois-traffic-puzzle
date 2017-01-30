@@ -106,6 +106,7 @@ public class CoachIdActivity extends IdActivity implements HandlerActivity {
 			coach = wrapper.getResult();
 		} catch (IllegalArgumentException e) {
 			toaster.toastError(e.getMessage());
+			app.logError(e);
 		} catch (SdbInterface.RequestException e) {
 			toaster.toastError("Request failed. Check network connection.");
 			app.logError(e);

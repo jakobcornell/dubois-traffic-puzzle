@@ -42,6 +42,7 @@ public class Board {
 	Set<Car> cars = new HashSet<>();
 
 	public static final int DIMENSION = 6;
+	protected static final Coordinate GOAL = new Coordinate(DIMENSION - 1, 2);
 
 	/**
 	 * The ID of this board in the database.
@@ -177,15 +178,9 @@ public class Board {
 	 * @return
 	 */
 	public boolean isSolved() {
-		for (int x = DIMENSION - 1; x >= 0; x--) {
-			for (Car car : cars) {
-				if (car.occupies(new Coordinate(x, 2))) {
-					if (car.canMoveHorizontally()) {
-						return true;
-					} else {
-						return false;
-					}
-				}
+		for (Car car : cars) {
+			if (car.occupies(GOAL) && car.canMoveHorizontally()) {
+				return true;
 			}
 		}
 		return false;
