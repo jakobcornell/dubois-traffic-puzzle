@@ -25,6 +25,8 @@ The app logs stacktraces where I expect interesting errors to occur. If users ge
 
 `RushHour` is the debugging tag, set in the `strings.xml` resource file.
 
+If something goes wrong while publishing a mathlete's stats to the database, a coach scan activity launches to prompt the user to find a coach. At this point the application should have printed the stats for that play to the log. The coach can run the above command to get the stats and enter them in the database manually.
+
 ## Issues
 
 * Despite my best efforts, the loader fragments in this app do not survive teardown and rebuilding by the system. For example, if the user leaves one of the NFC scanning activities (probably by pressing the home button) while the app is querying the database, the activity will fail to receive a result from the fragment on return, which causes the activity to idle with the loading spinner indefinitely. If this happens, the activity will need to be restarted.
