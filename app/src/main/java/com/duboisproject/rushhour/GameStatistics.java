@@ -29,7 +29,8 @@ import org.joda.time.Duration;
  */
 public final class GameStatistics {
 	public int levelId;
-	public int moves;
+	public int totalMoves;
+	public int resetMoves;
 	public DateTime startTime;
 	public Duration totalCompletionTime;
 	public Duration resetCompletionTime;

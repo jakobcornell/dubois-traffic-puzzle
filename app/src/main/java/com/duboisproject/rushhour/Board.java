@@ -2,7 +2,7 @@
  *     Rush Hour Android app
  * Copyright (C) 2015 Randy Wanga, Jos Craaijo, Camil Staps
  *
- * Modified by Jakob Cornell, 2017-01-25 to -02-01
+ * Modified by Jakob Cornell, 2017-01-25 to -02-02
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -53,10 +53,15 @@ public class Board {
 	private SolveListener solveListener;
 
 	protected Stack<Move> moves = new Stack<Move>();
-	private int score;
+	protected int totalMoves;
+	protected int resetMoves;
 
-	public int getScore() {
-		return score;
+	public int getTotalMoves() {
+		return totalMoves;
+	}
+
+	public int getResetMoves() {
+		return resetMoves;
 	}
 
 	protected static class Move {
@@ -119,9 +124,10 @@ public class Board {
 				direction = (offset == -1) ? Move.Direction.UP : Move.Direction.DOWN;
 			}
 			moves.push(new Move(car, direction));
-			score++;
+			totalMoves += 1;
+			resetMoves += 1;
 			if (isSolved() && solveListener != null) {
-				solveListener.onSolve(score);
+				solveListener.onSolve(totalMoves);
 			}
 			driveListener.onDrive();
 		}
@@ -175,6 +181,7 @@ public class Board {
 		while (!moves.empty()) {
 			rollBack(moves.pop());
 		}
+		resetMoves = 0;
 	}
 
 	/**
@@ -252,7 +259,7 @@ public class Board {
 	}
 
 	public interface SolveListener {
-		public void onSolve(int score);
+		public void onSolve(int totalMoves);
 	}
 
 	public void setSolveListener(SolveListener sl) {

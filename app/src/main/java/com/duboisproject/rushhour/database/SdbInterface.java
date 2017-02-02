@@ -74,7 +74,8 @@ public final class SdbInterface {
 	// attributes: plays table
 	protected static final String PLAYS_MATHLETE = "mathlete";
 	protected static final String PLAYS_LEVEL = "level_id";
-	protected static final String PLAYS_MOVES = "moves";
+	protected static final String PLAYS_TOTAL_MOVES = "total_moves";
+	protected static final String PLAYS_RESET_MOVES = "reset_moves";
 	protected static final String PLAYS_START = "start_time";
 	protected static final String PLAYS_TOTAL_TIME = "total_time";
 	protected static final String PLAYS_RESET_TIME = "reset_time";
@@ -208,7 +209,8 @@ public final class SdbInterface {
 		Map<String, String> attributes = new HashMap<String, String>();
 		attributes.put(PLAYS_MATHLETE, player.id);
 		attributes.put(PLAYS_LEVEL, Integer.toString(stats.levelId));
-		attributes.put(PLAYS_MOVES, Integer.toString(stats.moves));
+		attributes.put(PLAYS_TOTAL_MOVES, Integer.toString(stats.totalMoves));
+		attributes.put(PLAYS_RESET_MOVES, Integer.toString(stats.resetMoves));
 		attributes.put(PLAYS_START, stats.startTime.toString());
 		attributes.put(PLAYS_TOTAL_TIME, stats.totalCompletionTime.toString());
 		attributes.put(PLAYS_RESET_TIME, stats.resetCompletionTime.toString());
@@ -367,7 +369,8 @@ public final class SdbInterface {
 		Map<String, String> attributes = mapify(item.getAttributes());
 		GameStatistics stats = new GameStatistics();
 		stats.levelId = Integer.parseInt(attributes.get(PLAYS_LEVEL));
-		stats.moves = Integer.parseInt(attributes.get(PLAYS_MOVES));
+		stats.totalMoves = Integer.parseInt(attributes.get(PLAYS_TOTAL_MOVES));
+		stats.resetMoves = Integer.parseInt(attributes.get(PLAYS_RESET_MOVES));
 		stats.startTime = DateTime.parse(attributes.get(PLAYS_START));
 		stats.totalCompletionTime = Duration.parse(attributes.get(PLAYS_TOTAL_TIME));
 		stats.resetCompletionTime = Duration.parse(attributes.get(PLAYS_RESET_TIME));

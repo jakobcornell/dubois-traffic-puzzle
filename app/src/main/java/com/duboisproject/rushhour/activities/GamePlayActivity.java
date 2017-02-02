@@ -233,7 +233,7 @@ public class GamePlayActivity extends Activity implements Board.SolveListener, H
 
 	@Override
 	public void onBackPressed() {
-		if (board != null && board.getScore() > 0) {
+		if (board != null && board.getResetMoves() > 0) {
 			DialogInterface.OnClickListener finishListener = new DialogInterface.OnClickListener() {
 				@Override
 				public void onClick(DialogInterface dialog, int id) {
@@ -345,7 +345,7 @@ public class GamePlayActivity extends Activity implements Board.SolveListener, H
 			if (!replay) {
 				AlertDialog.Builder builder = new AlertDialog.Builder(this);
 				String format = getResources().getString(R.string.replay_message);
-				builder.setMessage(String.format(format, board.getScore()));
+				builder.setMessage(String.format(format, board.getTotalMoves()));
 				builder.setCancelable(false);
 				builder.setPositiveButton(getString(R.string.continue_text), continueListener);
 				builder.setNegativeButton(getString(R.string.replay_text), replayListener);
@@ -353,7 +353,7 @@ public class GamePlayActivity extends Activity implements Board.SolveListener, H
 			} else {
 				AlertDialog.Builder builder = new AlertDialog.Builder(this);
 				String format = getResources().getString(R.string.solved_message);
-				builder.setMessage(String.format(format, board.getScore()));
+				builder.setMessage(String.format(format, board.getTotalMoves()));
 				builder.setCancelable(false);
 				builder.setPositiveButton(getString(R.string.continue_text), continueListener);
 				builder.show();
@@ -419,7 +419,8 @@ public class GamePlayActivity extends Activity implements Board.SolveListener, H
 	public void onSolve(int score) {
 		currentStats = new GameStatistics();
 		currentStats.levelId = board.id;
-		currentStats.moves = board.getScore();
+		currentStats.totalMoves = board.getTotalMoves();
+		currentStats.resetMoves = board.getResetMoves();
 		currentStats.startTime = start;
 		totalTimer.stop();
 		resetTimer.stop();

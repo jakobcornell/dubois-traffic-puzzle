@@ -19,6 +19,7 @@
 
 package com.duboisproject.rushhour;
 
+import java.util.UUID;
 import android.widget.Toast;
 import android.util.Log;
 import com.amazonaws.auth.AWSCredentials;
@@ -61,9 +62,11 @@ public final class Application extends android.app.Application {
 
 	public void logStats(GameStatistics stats) {
 		String tag = getResources().getString(R.string.logging_tag);
-		Log.i(tag, "Unrecorded stats for mathlete " + player.id + ":");
+		Log.i(tag, "Unrecorded stats (" + UUID.randomUUID().toString() + ")");
+		Log.i(tag, "for mathlete " + player.id + ":");
 		Log.i(tag, "\tlevel id:  " + stats.levelId);
-		Log.i(tag, "\tmoves:  " + stats.moves);
+		Log.i(tag, "\ttotal moves:  " + stats.totalMoves);
+		Log.i(tag, "\treset moves:  " + stats.resetMoves);
 		Log.i(tag, "\tstart time:  " + stats.startTime);
 		Log.i(tag, "\ttotal time:  " + stats.totalCompletionTime);
 		Log.i(tag, "\treset time:  " + stats.resetCompletionTime);
