@@ -244,17 +244,32 @@ public class Board {
 
 		@Override
 		public Board resolve() throws SdbInterface.RequestException {
+			// get most recent statistics for player
 			GameStatistics stats = sdbInterface.fetchLastPlay(player);
 
-			int targetId;
+			int difficulty;
 			if (stats == null) {
-				targetId = 0;
+
+				// if the player hasn't played before, use difficulty 0
+				difficulty = 0;
 			} else {
-				targetId = stats.levelId + 1;
+
+				// otherwise, increase the difficulty by 1 from last time
+				difficulty = sdbInterface.fetchDifficulty(stats.levelId) + 1;
 			}
 
-			int cappedId = Math.min(targetId, sdbInterface.fetchLevelCount() - 1);
-			return sdbInterface.fetchBoard(cappedId);
+			// prevent mathletes from advancing past the highest difficulty
+			int cappedDifficulty = Math.min(difficulty, sdbInterface.fetchMaxDifficulty());
+
+			// increase the difficulty until one is found that has levels
+			int[] candidates;
+			do {
+				candidates = sdbInterface.fetchLevelsAtDifficulty(cappedDifficulty);
+				cappedDifficulty += 1;
+			} while (candidates.length == 0);
+
+			// choose the first level at that difficulty
+			return sdbInterface.fetchBoard(candidates[0]);
 		}
 	}
 

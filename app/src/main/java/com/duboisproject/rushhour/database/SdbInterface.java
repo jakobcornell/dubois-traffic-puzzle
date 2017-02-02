@@ -81,6 +81,7 @@ public final class SdbInterface {
 	protected static final String PLAYS_RESET_TIME = "reset_time";
 
 	protected static Integer cachedLevelCount;
+	protected static Integer cachedMaxDifficulty;
 
 	protected static final String REQUEST_FAILED_MESSAGE = "Unable to complete request";
 
@@ -96,6 +97,10 @@ public final class SdbInterface {
 		MAP_FETCH(
 			LEVELS_DOMAIN,
 			new String[] { LEVEL_MAP }
+		),
+		DIFFICULTY_FETCH(
+			LEVELS_DOMAIN,
+			new String[] { LEVEL_DIFFICULTY }
 		);
 
 		public final String domainName;
@@ -164,7 +169,7 @@ public final class SdbInterface {
 	}
 
 	/**
-	 * Get the map for the specified level id, and construct a board.
+	 * Get the map for the specified level ID, and construct a board.
 	 */
 	public Board fetchBoard(int id) throws RequestException {
 		GetAttributesRequest request = GetRequestDetails.MAP_FETCH.toAttributesRequest();
@@ -176,7 +181,7 @@ public final class SdbInterface {
 			throw new RequestException(REQUEST_FAILED_MESSAGE);
 		}
 		List<Attribute> attributesList = result.getAttributes();
-		if (attributesList.size() == 0) {
+		if (attributesList.isEmpty()) {
 			throw new IllegalArgumentException("No such level in database");
 		}
 		Map<String, String> attributes = mapify(attributesList);
@@ -184,6 +189,27 @@ public final class SdbInterface {
 		Board board = BoardLoader.loadBoard(new StringReader(map));
 		board.id = id;
 		return board;
+	}
+
+	/**
+	 * Get the difficulty of the specified level ID.
+	 */
+	public int fetchDifficulty(int id) throws RequestException {
+		GetAttributesRequest request = GetRequestDetails.DIFFICULTY_FETCH.toAttributesRequest();
+		request.setItemName(Integer.toString(id));
+		GetAttributesResult result;
+		try {
+			result = client.getAttributes(request);
+		} catch (AmazonClientException e) {
+			throw new RequestException(REQUEST_FAILED_MESSAGE);
+		}
+
+		List<Attribute> attributesList = result.getAttributes();
+		if (attributesList.isEmpty()) {
+			throw new IllegalArgumentException("No such level in database");
+		}
+		Map<String, String> attributes = mapify(attributesList);
+		return Integer.parseInt(attributes.get(LEVEL_DIFFICULTY));
 	}
 
 	/**
@@ -200,6 +226,44 @@ public final class SdbInterface {
 			}
 		}
 		return cachedLevelCount;
+	}
+
+	/**
+	 * Get the highest difficulty value in the levels table.
+	 * This copies all level difficulties into memory to sort.
+	 * It would be simpler and more performant to pad difficulties in the database and sort (lexicographically) there.
+	 */
+	public int fetchMaxDifficulty() throws RequestException {
+		// We'll cache this too.
+		if (cachedMaxDifficulty == null) {
+			String format = "select `%s` from `%s` limit 2500";
+			String query = String.format(
+				format,
+				sdbEscape(LEVEL_DIFFICULTY, '`'),
+				sdbEscape(LEVELS_DOMAIN, '`')
+			);
+
+			SelectRequest request = new SelectRequest(query, true);
+			SelectResult result;
+			try {
+				result = client.select(request);
+			} catch (AmazonClientException e) {
+				throw new RequestException(REQUEST_FAILED_MESSAGE);
+			}
+
+			int max = Integer.MIN_VALUE;
+			for (Item i : result.getItems()) {
+				List<Attribute> attributes = i.getAttributes();
+				if (!attributes.isEmpty()) {
+					int current = Integer.parseInt(attributes.get(0).getValue());
+					if (current > max) {
+						max = current;
+					}
+				}
+			}
+			cachedMaxDifficulty = max;
+		}
+		return cachedMaxDifficulty;
 	}
 
 	/**
@@ -347,6 +411,35 @@ public final class SdbInterface {
 			levelStats.put(id, stats);
 		}
 		return levelStats;
+	}
+
+	/**
+	 * Get the IDs for all levels at a certain difficulty.
+	 */
+	public int[] fetchLevelsAtDifficulty(int difficulty) throws RequestException {
+		String format = "select `%s` from `%s` where `%s` = \"%s\" limit 2500";
+		String query = String.format(
+			format,
+			sdbEscape(PRIMARY_KEY, '`'),
+			sdbEscape(LEVELS_DOMAIN, '`'),
+			sdbEscape(LEVEL_DIFFICULTY, '`'),
+			sdbEscape(Integer.toString(difficulty), '"')
+		);
+
+		SelectRequest request = new SelectRequest(query, true);
+		SelectResult result;
+		try {
+			result = client.select(request);
+		} catch (AmazonClientException e) {
+			throw new RequestException(REQUEST_FAILED_MESSAGE);
+		}
+
+		List<Item> items = result.getItems();
+		int[] levelIds = new int[items.size()];
+		for (int i = 0; i < items.size(); i += 1) {
+			levelIds[i] = Integer.parseInt(items.get(i).getName());
+		}
+		return levelIds;
 	}
 
 	/**
