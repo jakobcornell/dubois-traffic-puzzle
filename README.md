@@ -4,7 +4,16 @@ A traffic puzzle game inspired by Rush Hour, for use by the Dubois Project
 
 ## Level format
 
-The level format of the original game by Camil Staps, et al. is still supported. Because SdbNavigator completely fails to support newlines in attribute values, the level parser is no longer line-based, so any whitespace can be used for any separator in level maps. (Newlines may still be used in maps, but any update to the corresponding record from SdbNavigator will replace them with spaces.) Semicolons are also allowed as separators in hopes that they can be used to make level maps more readable in SdbNavigator. The parsing is done in the `BoardLoader` class.
+The level format has been slightly adapted from the original format by Camil Staps, et al. In the new format, the colors are defined in application code, and the unnecessary car count line is removed. Like its predecessor, the format uses x- (horizontal, from left) and y- (vertical, from top) coordinates.
+
+The first integer is the left x-coordinate of the goal car (whose y-coordinate is assumed to be 2). All remaining integers are in groups of four, each consisting of two coordinates: the leftmost/top coordinate (x1, y1), and the rightmost/bottom coordinate (x2, y2). A level might look like this:
+
+	0
+	2 1 2 2
+	3 1 3 3
+	4 2 4 3
+
+This level has its goal car along the left edge of the board, and three other vehicles, positioned vertically, one of which is a truck. Arbitrary whitespace or a single semicolon may be used to separate each pair of integers. Newlines should be avoided when using the SdbNavigator, as updating any fields in a level record will strip newlines from the map. Under this policy, a good way of writing the above level might be `0;2 1 2 2;3 1 3 3;4 2 4 3`.
 
 [An issue](https://github.com/Reggino/SdbNavigator/issues/19) addressing newline handling has been opened on SdbNavigator's GitHub repository, so keep an eye on that if you're interested in newline support.
 
@@ -18,6 +27,8 @@ The app logs stacktraces where I expect interesting errors to occur. If users ge
 
 ## Issues
 
-* Despite my best efforts, the loader fragments in this app do not survive teardown and rebuilding by the system. For example, if the user leaves one of the NFC scanning activities or rotates the screen while the app is querying the database, the activity will fail to receive a result from the fragment on return, which causes the activity to idle with the loading spinner indefinitely. If this happens, the activity will need to be restarted.
+* Despite my best efforts, the loader fragments in this app do not survive teardown and rebuilding by the system. For example, if the user leaves one of the NFC scanning activities (probably by pressing the home button) while the app is querying the database, the activity will fail to receive a result from the fragment on return, which causes the activity to idle with the loading spinner indefinitely. If this happens, the activity will need to be restarted.
+
+	Also, if the user navigates home during gameplay and relaunches the app, the activity stack will still hold the interrupted session, below the newly launched activity. Navigating back will reveal the old session, potentially leading to an inconsistent state (e.g. if another player has scanned in since). These are the result of design flaws in the app, but as a workaround, try to prevent users from using the home button.
 
 * `SdbInterface#fetchLastPlay(Mathlete)` sorts a mathlete's plays in descending order (lexicographically) by date/time. This works as expected as long as the ISO 8601 format is used (as it is in this app) and all dates recorded use the same offset from UTC (which this app currently does **not** guarantee).

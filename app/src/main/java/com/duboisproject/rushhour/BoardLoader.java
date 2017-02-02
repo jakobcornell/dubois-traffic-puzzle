@@ -2,7 +2,7 @@
  *     Rush Hour Android app
  * Copyright (C) 2015 Randy Wanga, Jos Craaijo, Camil Staps
  *
- * Modified by Jakob Cornell, 2017-01-25 to -01-26
+ * Modified by Jakob Cornell, 2017-01-25 to -02-01
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -23,7 +23,6 @@ package com.duboisproject.rushhour;
 
 import java.io.Reader;
 import java.util.Scanner;
-import android.graphics.Color;
 
 /**
  * Created by Jos on 23-4-2015.
@@ -48,23 +47,23 @@ public final class BoardLoader {
 	public static Board loadBoard(Reader reader) {
 		Board board = new Board();
 		Scanner scanner = new Scanner(reader);
+		Car.ColorGenerator colorGenerator = new Car.ColorGenerator();
 
 		// Allow semicolons in place of line breaks (for SdbNavigator compat)
 		scanner.useDelimiter("\\p{javaWhitespace}+|;");
 
-		int numCars = scanner.nextInt();
+		int goalX = scanner.nextInt();
+		Car goalCar = new Car(new Coordinate(goalX, 2), new Coordinate(goalX + 1, 2), Car.GOAL_CAR_COLOR);
+		board.add(goalCar);
+		board.setGoalCar(goalCar);
 
-		for (int carN = 0; carN < numCars; carN += 1) {
+		while (scanner.hasNext()) {
 			int x1 = scanner.nextInt();
 			int y1 = scanner.nextInt();
 			int x2 = scanner.nextInt();
 			int y2 = scanner.nextInt();
 
-			int r = scanner.nextInt();
-			int g = scanner.nextInt();
-			int b = scanner.nextInt();
-
-			Car c = new Car(new Coordinate(x1, y1), new Coordinate(x2, y2), Color.rgb(r, g, b));
+			Car c = new Car(new Coordinate(x1, y1), new Coordinate(x2, y2), colorGenerator.next());
 			board.add(c);
 		}
 

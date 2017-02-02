@@ -2,7 +2,7 @@
  *     Rush Hour Android app
  * Copyright (C) 2015 Randy Wanga, Jos Craaijo, Camil Staps
  *
- * Modified by Jakob Cornell, 2017-01-25 to -01-26
+ * Modified by Jakob Cornell, 2017-01-25 to -02-01
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -38,8 +38,8 @@ import com.duboisproject.rushhour.database.SdbInterface;
  * Created by camilstaps on 16-4-15.
  */
 public class Board {
-
 	Set<Car> cars = new HashSet<>();
+	protected Car goalCar;
 
 	public static final int DIMENSION = 6;
 	protected static final Coordinate GOAL = new Coordinate(DIMENSION - 1, 2);
@@ -142,6 +142,10 @@ public class Board {
 		cars.add(car);
 	}
 
+	public void setGoalCar(Car car) {
+		goalCar = car;
+	}
+
 	/**
 	 * Add all cars to an existing layout
 	 * RelativeLayout is assumed, although this may work with other Layouts
@@ -178,12 +182,7 @@ public class Board {
 	 * @return
 	 */
 	public boolean isSolved() {
-		for (Car car : cars) {
-			if (car.occupies(GOAL) && car.canMoveHorizontally()) {
-				return true;
-			}
-		}
-		return false;
+		return goalCar.occupies(GOAL);
 	}
 
 	public void setDriveListener(DriveListener dl) {
