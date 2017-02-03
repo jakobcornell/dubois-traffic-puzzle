@@ -345,7 +345,7 @@ public class GamePlayActivity extends Activity implements Board.SolveListener, H
 			if (!replay) {
 				AlertDialog.Builder builder = new AlertDialog.Builder(this);
 				String format = getResources().getString(R.string.replay_message);
-				builder.setMessage(String.format(format, board.getTotalMoves()));
+				builder.setMessage(String.format(format, board.getResetMoves()));
 				builder.setCancelable(false);
 				builder.setPositiveButton(getString(R.string.continue_text), continueListener);
 				builder.setNegativeButton(getString(R.string.replay_text), replayListener);
