@@ -270,8 +270,8 @@ public class GamePlayActivity extends Activity implements Board.SolveListener, H
 			toaster.toastError("Request failed. Check network connection.");
 			app.logError(e);
 			finish();
-		} catch (Exception e) {
-			toaster.toastError("An unexpected error occurred");
+		} catch (Exception e) {  // An extra space in the wrong place in dubois_rush_hour.map can cause an error here
+			toaster.toastError("Error #1 occurred GamePlayActivity.java - check dubois_rush_hour.map");
 			app.logError(e);
 			finish();
 		}
@@ -330,7 +330,7 @@ public class GamePlayActivity extends Activity implements Board.SolveListener, H
 			toaster.toastError("Request failed. Check network connection.");
 			app.logError(e);
 		} catch (Exception e) {
-			toaster.toastError("An unexpected error occurred");
+			toaster.toastError("Error #2 occurred GamePlayActivity.java");
 			app.logError(e);
 		}
 
@@ -401,12 +401,14 @@ public class GamePlayActivity extends Activity implements Board.SolveListener, H
 		board.setDriveListener(new DriveListener() {
 			@Override
 			public void onDrive() {
-				TheSoundPool.getSoundPool(getBaseContext()).play(TheSoundPool.soundCarDriveId, 1, 1, 1, 0, 1);
+				TheSoundPool.getSoundPool(getBaseContext()).play(TheSoundPool.soundCarDriveId, TheSoundPool.basicNoiseLevel,
+						TheSoundPool.basicNoiseLevel, 1, 0, 1);
 			}
 
 			@Override
 			public void onBlocked() {
-				TheSoundPool.getSoundPool(getBaseContext()).play(TheSoundPool.soundCantMoveId, 1, 1, 1, 0, 1);
+				TheSoundPool.getSoundPool(getBaseContext()).play(TheSoundPool.soundCantMoveId, TheSoundPool.basicNoiseLevel,
+						TheSoundPool.basicNoiseLevel, 1, 0, 1);
 			}
 		});
 

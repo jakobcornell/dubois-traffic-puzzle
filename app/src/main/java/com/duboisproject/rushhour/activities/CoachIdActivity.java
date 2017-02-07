@@ -111,7 +111,7 @@ public class CoachIdActivity extends IdActivity implements HandlerActivity {
 			toaster.toastError("Request failed. Check network connection.");
 			app.logError(e);
 		} catch (Exception e) {
-			toaster.toastError("An unexpected error occurred.");
+			toaster.toastError("Error #1 occurred CoachIdActivity.java");
 			app.logError(e);
 		}
 	
