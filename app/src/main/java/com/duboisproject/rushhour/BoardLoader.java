@@ -29,6 +29,7 @@ import java.util.Scanner;
  */
 public final class BoardLoader {
 	/*
+	These are set in dubois_rushhour_levels
 	Level format:
 	1 line: number of cars
 
@@ -36,7 +37,12 @@ public final class BoardLoader {
 		x1 y1 x2 y2
 		r g b
 	*/
-
+/*
+   By convention:
+      levels 101 to 140 are the Rush Hour Junior Levels
+      levels 141 to 180 are the Rush Hour "Adult" levels
+      levels 1001 and up are the Unblock car levels
+ */
 	protected BoardLoader() {}
 
 	/**
