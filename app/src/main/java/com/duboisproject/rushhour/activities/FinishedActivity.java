@@ -30,6 +30,8 @@ import java.util.ArrayList;
  * The user has finished the game / wants to see the highscores
  * @author Camil Staps
  */
+
+
 public class FinishedActivity extends ActionBarActivity {
 
     Context context;
@@ -46,7 +48,8 @@ public class FinishedActivity extends ActionBarActivity {
         // If there is a score, we add a new highscore (user can enter name)
         final int score = getIntent().getIntExtra("score", -1);
         if (score != -1) {
-            TheSoundPool.getSoundPool(getBaseContext()).play(TheSoundPool.soundVictoryId, 1, 1, 1, 0, 1);
+            TheSoundPool.getSoundPool(getBaseContext()).play(TheSoundPool.soundVictoryId, TheSoundPool.basicNoiseLevel,
+                    TheSoundPool.basicNoiseLevel, 1, 0, 1);
             final EditText input = new EditText(this);
             new AlertDialog.Builder(this)
                     .setTitle("Congratulations!")

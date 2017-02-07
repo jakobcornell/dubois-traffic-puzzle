@@ -12,6 +12,8 @@ public class TheSoundPool {
 
     private static SoundPool soundPool;
     public static int soundBackgroundId, soundCarDriveId, soundCantMoveId, soundVictoryId;
+    public static float basicSoundLevel = 0.03f ;
+    public static float basicNoiseLevel = 0.125f ;
 
     /**
      * Initialise everything if not done yet
@@ -25,7 +27,7 @@ public class TheSoundPool {
                 @Override
                 public void onLoadComplete(SoundPool soundPool, int sampleId, int status) {
                     if (sampleId == soundBackgroundId) {
-                        soundPool.play(soundBackgroundId, 1, 1, 2, -1, 1);
+                        soundPool.play(soundBackgroundId, basicSoundLevel, basicSoundLevel, 2, -1, 1);
                     }
                 }
             });
