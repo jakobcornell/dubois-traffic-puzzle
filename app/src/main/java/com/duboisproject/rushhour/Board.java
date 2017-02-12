@@ -255,7 +255,9 @@ public class Board {
 			} else {
 
 				// otherwise, increase the difficulty by 1 from last time
-				difficulty = sdbInterface.fetchDifficulty(stats.levelId) + 1;
+				// This hack, combined with changes in dubois_rushhour_levels allows me,  level
+				// Ken Stanley, to force mathletes down to a lower level overnight.
+				difficulty = Math.abs(sdbInterface.fetchDifficulty(stats.levelId)) + 1;
 			}
 
 			// prevent mathletes from advancing past the highest difficulty
