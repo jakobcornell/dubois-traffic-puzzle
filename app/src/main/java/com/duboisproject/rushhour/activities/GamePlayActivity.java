@@ -266,6 +266,10 @@ public class GamePlayActivity extends Activity implements Board.SolveListener, H
 		} catch (IllegalArgumentException e) {
 			toaster.toastError(e.getMessage());
 			finish();
+		} catch (Board.TimeOutException e) {
+			toaster.toastMessage(e.getMessage());
+			app.logError(e);
+			finish();
 		} catch (SdbInterface.RequestException e) {
 			toaster.toastError("Request failed. Check network connection.");
 			app.logError(e);

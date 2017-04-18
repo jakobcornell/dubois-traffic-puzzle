@@ -25,19 +25,28 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.Stack;
 import android.content.Context;
-import android.content.Intent;
 import android.view.ViewGroup;
-import android.widget.RelativeLayout;
-import android.widget.Toast;
 
-import com.duboisproject.rushhour.GameStatistics;
 import com.duboisproject.rushhour.id.Mathlete;
 import com.duboisproject.rushhour.database.SdbInterface;
 
 /**
  * Created by camilstaps on 16-4-15.
  */
+
+
+
 public class Board {
+
+
+	public static final class TimeOutException extends Exception {
+		public TimeOutException() {}
+
+		public TimeOutException(String message) {
+			super(message);
+		}
+	}
+
 	Set<Car> cars = new HashSet<>();
 	protected Car goalCar;
 
@@ -208,7 +217,7 @@ public class Board {
 		/**
 		 * Get the associated board. Expect this to use the network.
 		 */
-		public Board resolve() throws SdbInterface.RequestException;
+		public Board resolve() throws SdbInterface.RequestException, Board.TimeOutException;
 	}
 
 	/**
@@ -243,7 +252,8 @@ public class Board {
 		}
 
 		@Override
-		public Board resolve() throws SdbInterface.RequestException {
+		//
+		public Board resolve()  throws SdbInterface.RequestException, Board.TimeOutException {
 			// get most recent statistics for player
 			GameStatistics stats = sdbInterface.fetchLastPlay(player);
 
@@ -258,6 +268,14 @@ public class Board {
 				// This hack, combined with changes in dubois_rushhour_levels allows me,  level
 				// Ken Stanley, to force mathletes down to a lower level overnight.
 				difficulty = Math.abs(sdbInterface.fetchDifficulty(stats.levelId)) + 1;
+				if ( stats.totalCompletionTime.getStandardSeconds()<60 )
+					difficulty = difficulty + 3 ;
+				if ( stats.totalCompletionTime.getStandardSeconds()<120 )
+					difficulty = difficulty + 1 ;
+				if ( stats.totalCompletionTime.getStandardSeconds()<180 )
+					difficulty = difficulty + 1 ;
+				if ( stats.totalCompletionTime.getStandardSeconds()>360 )
+					difficulty = difficulty - 5 ;
 			}
 
 			// prevent mathletes from advancing past the highest difficulty
@@ -270,6 +288,9 @@ public class Board {
 				cappedDifficulty += 1;
 			} while (candidates.length == 0);
 
+			if ( sdbInterface.isCoachCheckRequired() ) {
+				throw new Board.TimeOutException("Time is up. See a coach");
+			}
 			// choose the first level at that difficulty
 			return sdbInterface.fetchBoard(candidates[0]);
 		}

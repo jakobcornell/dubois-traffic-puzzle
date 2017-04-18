@@ -19,22 +19,18 @@
 
 package com.duboisproject.rushhour.activities;
 
-import java.io.Serializable;
 import android.os.Bundle;
 import android.os.Message;
 import android.os.Handler;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
-import android.widget.Toast;
 import android.widget.TextView;
-import android.content.Context;
 import android.content.Intent;
 
 import com.duboisproject.rushhour.Application;
 import com.duboisproject.rushhour.BufferedHandler;
 import com.duboisproject.rushhour.Board;
 import com.duboisproject.rushhour.id.Coach;
-import com.duboisproject.rushhour.activities.GamePlayActivity;
 import com.duboisproject.rushhour.fragments.LoaderUiFragment;
 import com.duboisproject.rushhour.fragments.CoachLoaderFragment;
 import com.duboisproject.rushhour.fragments.ResultWrapper;

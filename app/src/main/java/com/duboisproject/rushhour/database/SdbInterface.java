@@ -19,6 +19,8 @@
 
 package com.duboisproject.rushhour.database;
 
+import android.os.SystemClock;
+
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
@@ -41,7 +43,7 @@ import com.amazonaws.services.simpledb.model.SelectRequest;
 import com.amazonaws.services.simpledb.model.SelectResult;
 import com.amazonaws.services.simpledb.model.Item;
 import com.amazonaws.services.simpledb.model.DomainMetadataRequest;
-import com.amazonaws.services.simpledb.model.DomainMetadataResult;
+
 import org.joda.time.DateTime;
 import org.joda.time.Duration;
 
@@ -52,13 +54,20 @@ import com.duboisproject.rushhour.id.Mathlete;
 import com.duboisproject.rushhour.id.Coach;
 
 public final class SdbInterface {
+	protected long lastCoachScan = -13 ;
+	private long max_time_between_coach_scans  ;
+
 	protected static final String PRIMARY_KEY = "itemName()";
 
 	// domain names
+	protected static final String TIMELIMIT_DOMAIN = "dubois_rushhour_timelimit";
 	protected static final String MATHLETE_DOMAIN = "dubois_mathlete_identities";
 	protected static final String COACH_DOMAIN = "dubois_coach_identities";
 	protected static final String LEVELS_DOMAIN = "dubois_rushhour_levels";
 	protected static final String PLAYS_DOMAIN = "dubois_rushhour_games_played";
+
+	// attributes: timelimit table
+	protected static final String TIME_LIMIT = "time_limit";
 
 	// attributes: mathletes table
 	protected static final String MATHLETE_NAME = "name";
@@ -86,9 +95,13 @@ public final class SdbInterface {
 	protected static final String REQUEST_FAILED_MESSAGE = "Unable to complete request";
 
 	protected static enum GetRequestDetails {
+		TIMELIMIT(
+				TIMELIMIT_DOMAIN,
+				new String[] { TIME_LIMIT }
+		),
 		MATHLETE_ID(
-			MATHLETE_DOMAIN,
-			new String[] { MATHLETE_NAME, MATHLETE_LAST_NAME }
+				MATHLETE_DOMAIN,
+				new String[] { MATHLETE_NAME, MATHLETE_LAST_NAME }
 		),
 		COACH_ID(
 			COACH_DOMAIN,
@@ -128,10 +141,36 @@ public final class SdbInterface {
 		}
 	}
 
+	public static final class TimeoutExceptionA extends Exception {
+		public TimeoutExceptionA() {}
+
+		public TimeoutExceptionA(String message) {
+			super(message);
+		}
+	}
+
+
 	protected final AmazonSimpleDBClient client;
 
 	public SdbInterface(AWSCredentials credentials) {
 		client = new AmazonSimpleDBClient(credentials);
+	}
+
+	public int timeLimit(String id) throws RequestException {
+		GetAttributesRequest request = GetRequestDetails.TIMELIMIT.toAttributesRequest();
+		request.setItemName(id);
+		GetAttributesResult result;
+		try {
+			result = client.getAttributes(request);
+		} catch (AmazonClientException e) {
+			throw new RequestException(REQUEST_FAILED_MESSAGE);
+		}
+		List<Attribute> attributesList = result.getAttributes();
+		if (attributesList.size() == 0) {
+			throw new IllegalArgumentException("Internal error #1 timeLimit SdbInterface.java");
+		}
+		Map<String, String> attributes = mapify(attributesList);
+		return Integer.parseInt(attributes.get(TIME_LIMIT));
 	}
 
 	public Mathlete fetchMathlete(String id) throws RequestException {
@@ -165,9 +204,18 @@ public final class SdbInterface {
 			throw new IllegalArgumentException("No such coach in database");
 		}
 		Map<String, String> attributes = mapify(attributesList);
+		lastCoachScan = SystemClock.elapsedRealtime();
+		max_time_between_coach_scans = timeLimit("1");
+
 		return new Coach(id, attributes.get(COACH_NAME));
 	}
 
+	/**
+	 * Determine if another coach chip scan is necessary before continuing to play
+	 */
+	public boolean isCoachCheckRequired() {
+		return ( ( SystemClock.elapsedRealtime() - lastCoachScan ) > max_time_between_coach_scans * 1000 ) ;
+	}
 	/**
 	 * Get the map for the specified level ID, and construct a board.
 	 */

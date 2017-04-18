@@ -24,9 +24,7 @@ import android.os.Message;
 import android.os.Handler;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
-import android.widget.Toast;
 import android.widget.TextView;
-import android.content.Context;
 import android.content.Intent;
 
 import com.duboisproject.rushhour.Application;
