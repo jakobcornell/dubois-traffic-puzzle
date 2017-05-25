@@ -33,7 +33,7 @@ If something goes wrong while publishing a mathlete's stats to the database, a c
 
 	Also, if the user navigates home during gameplay and relaunches the app, the activity stack will still hold the interrupted session, below the newly launched activity. Navigating back will reveal the old session, potentially leading to an inconsistent state (e.g. if another player has scanned in since). These are the result of design flaws in the app, but as a workaround, try to prevent users from using the home button.
 
-* `SdbInterface#fetchLastPlay(Mathlete)` sorts a mathlete's plays in descending order (lexicographically) by date/time. This works as expected as long as the ISO 8601 format is used (as it is in this app) and all dates recorded use the same offset from UTC (which this app currently does **not** guarantee).
+* `SdbInterface.fetchLastPlay(Mathlete)` sorts a mathlete's plays in descending order (lexicographically) by date/time. This works as expected as long as the ISO 8601 format is used (as it is in this app) and all dates recorded use the same offset from UTC (which this app currently does **not** guarantee).
 
 ## Resources
 
