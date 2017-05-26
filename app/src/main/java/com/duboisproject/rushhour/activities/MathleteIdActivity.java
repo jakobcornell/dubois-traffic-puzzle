@@ -104,7 +104,7 @@ public final class MathleteIdActivity extends IdActivity implements HandlerActiv
 		} catch (SdbInterface.RequestException e) {
 			toaster.toastError("Request failed. Check network connection.");
 			app.logError(e);
-		} catch (Exception e) {
+		} catch (Throwable e) {
 			toaster.toastError("Error #1 occurred MathleteIdActivity.java");
 			app.logError(e);
 		}

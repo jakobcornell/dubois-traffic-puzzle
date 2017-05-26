@@ -28,25 +28,17 @@ import java.util.Scanner;
  * Created by Jos on 23-4-2015.
  */
 public final class BoardLoader {
+	// See readme for level format (set in dubois_rushhour_levels)
 	/*
-	These are set in dubois_rushhour_levels
-	Level format:
-	1 line: number of cars
-
-	2 lines for each car:
-		x1 y1 x2 y2
-		r g b
-	*/
-/*
-   By convention:
-      levels 101 to 140 are the Rush Hour Junior Levels
-         level 10x = level RHJx and the difficulty is set to 2 + 3x
-         We might change the difficulty at some point, though it is equally
-         likely that we will adjust the difficulty of the other challenges we
-         add to match this initial definition of difficulty
-      levels 141 to 180 are the Rush Hour "Adult" levels
-      levels 1001 and up are the Unblock car levels
- */
+	   By convention:
+	      levels 101 to 140 are the Rush Hour Junior Levels
+		 level 10x = level RHJx and the difficulty is set to 2 + 3x
+		 We might change the difficulty at some point, though it is equally
+		 likely that we will adjust the difficulty of the other challenges we
+		 add to match this initial definition of difficulty
+	      levels 141 to 180 are the Rush Hour "Adult" levels
+	      levels 1001 and up are the Unblock car levels
+	 */
 	protected BoardLoader() {}
 
 	/**

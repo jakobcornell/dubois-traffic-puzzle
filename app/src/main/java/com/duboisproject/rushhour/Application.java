@@ -55,7 +55,7 @@ public final class Application extends android.app.Application {
 		return toaster;
 	}
 
-	public void logError(Exception e) {
+	public void logError(Throwable e) {
 		String tag = getResources().getString(R.string.logging_tag);
 		Log.e(tag, "", e);
 	}

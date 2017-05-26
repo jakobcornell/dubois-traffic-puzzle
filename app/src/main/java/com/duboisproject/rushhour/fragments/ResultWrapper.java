@@ -24,17 +24,17 @@ package com.duboisproject.rushhour.fragments;
  */
 public final class ResultWrapper<Result> {
 	protected Result result;
-	protected Exception exception;
+	protected Throwable exception;
 
 	public void setResult(Result result) {
 		this.result = result;
 	}
 
-	public void setException(Exception exception) {
+	public void setException(Throwable exception) {
 		this.exception = exception;
 	}
 
-	public Result getResult() throws Exception {
+	public Result getResult() throws Throwable {
 		if (exception != null) {
 			throw exception;
 		}

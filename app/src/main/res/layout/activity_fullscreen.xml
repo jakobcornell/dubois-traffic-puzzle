@@ -10,7 +10,6 @@
         android:id="@+id/board"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="#eeeeee"
         android:paddingLeft="50dp"
         android:paddingRight="50dp"
         android:paddingBottom="50dp"
