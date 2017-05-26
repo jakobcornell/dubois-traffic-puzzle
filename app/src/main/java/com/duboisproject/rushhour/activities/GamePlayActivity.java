@@ -38,6 +38,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 import android.widget.Button;
 import android.widget.Toast;
 import org.joda.time.DateTime;
@@ -176,6 +177,11 @@ public class GamePlayActivity extends Activity implements Board.SolveListener, H
 		super.onCreate(savedState);
 
 		setContentView(R.layout.activity_fullscreen);
+
+		Application app = (Application) getApplicationContext();
+		TextView nameText = (TextView) findViewById(R.id.name_label);
+		nameText.setText(app.player.toString());
+
 		Button resetButton = (Button) findViewById(R.id.action_reset);
 		ViewGroup boardLayout = (ViewGroup) findViewById(R.id.board);
 		uiListener = new UiListener(resetButton, boardLayout);
