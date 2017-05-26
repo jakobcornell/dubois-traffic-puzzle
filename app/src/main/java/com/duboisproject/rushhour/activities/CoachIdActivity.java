@@ -62,8 +62,13 @@ public class CoachIdActivity extends IdActivity implements HandlerActivity {
 	@Override
 	public void onCreate(Bundle savedState) {
 		super.onCreate(savedState);
-		TextView textView = (TextView) findViewById(R.id.fragment_text);
-		textView.setText(R.string.coach_scan_message);
+		setContentView(R.layout.coach_id_activity);
+		TextView messageText = (TextView) findViewById(R.id.fragment_text);
+		messageText.setText(R.string.coach_scan_message);
+
+		Application app = (Application) getApplicationContext();
+		TextView nameText = (TextView) findViewById(R.id.name_label);
+		nameText.setText(app.player.toString());
 	}
 
 	@Override

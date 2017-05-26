@@ -43,7 +43,6 @@ public abstract class IdActivity extends android.app.Activity {
 	@Override
 	public void onCreate(Bundle savedState) {
 		super.onCreate(savedState);
-		setContentView(R.layout.id_activity);
 
 		final Intent innerIntent = new Intent(this, getClass());
 		innerIntent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);

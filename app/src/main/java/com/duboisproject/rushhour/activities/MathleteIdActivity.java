@@ -59,6 +59,7 @@ public final class MathleteIdActivity extends IdActivity implements HandlerActiv
 	@Override
 	public void onCreate(Bundle savedState) {
 		super.onCreate(savedState);
+		setContentView(R.layout.mathlete_id_activity);
 		TextView textView = (TextView) findViewById(R.id.fragment_text);
 		textView.setText(R.string.mathlete_scan_message);
 	}

@@ -28,4 +28,20 @@ public final class Mathlete implements DuboisIdentity {
 		this.firstName = firstName;
 		this.lastName = lastName;
 	}
+
+	public String toString() {
+		if (firstName == null) {
+			if (lastName == null) {
+				return "";
+			} else {
+				return lastName;
+			}
+		} else {
+			if (lastName == null) {
+				return firstName;
+			} else {
+				return String.format("%s %s", firstName, lastName);
+			}
+		}
+	}
 }
